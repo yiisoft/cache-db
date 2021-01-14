@@ -32,6 +32,9 @@
         "vimeo/psalm": "^4.3",
         "yiisoft/db-sqlite": "^3.0@dev"
     },
+    "provide": {
+        "psr/simple-cache-implementation": "1.0.0"
+    },
     "autoload": {
         "psr-4": {
             "Yiisoft\\Cache\\Db\\": "src"
