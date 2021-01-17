@@ -207,6 +207,7 @@ final class DbCache implements CacheInterface
      * @param array|string $id
      * @param array $fields
      * @param string $method
+     *
      * @return mixed
      */
     private function getData($id, array $fields, string $method)
@@ -227,6 +228,7 @@ final class DbCache implements CacheInterface
 
     /**
      * @param array|string|true $id
+     *
      * @throws CacheException
      */
     private function deleteData($id): void
@@ -248,6 +250,7 @@ final class DbCache implements CacheInterface
      * @param int $ttl
      * @param mixed $value
      * @param bool $associative
+     * 
      * @return array
      */
     private function buildDataRow(string $id, int $ttl, $value, bool $associative): array
