@@ -250,7 +250,7 @@ final class DbCache implements CacheInterface
      * @param int $ttl
      * @param mixed $value
      * @param bool $associative
-     * 
+     *
      * @return array
      */
     private function buildDataRow(string $id, int $ttl, $value, bool $associative): array
