@@ -10,8 +10,6 @@ use PDO;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
 use Traversable;
-use Yiisoft\Cache\Db\Exception\CacheException;
-use Yiisoft\Cache\Db\Exception\InvalidArgumentException;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Pdo\PdoValue;
 use Yiisoft\Db\Query\Query;
@@ -39,16 +37,9 @@ final class DbCache implements CacheInterface
     private const TTL_EXPIRED = -1;
 
     /**
-     * @var ConnectionInterface|null The database connection instance.
+     * @var ConnectionInterface The database connection instance.
      */
-    private ?ConnectionInterface $db = null;
-
-    /**
-     * @var DbFactory Factory for creating a database connection instance.
-     * Provides lazy loading of the {@see \Yiisoft\Db\Connection\ConnectionInterface} instance
-     * to prevent a circular reference to the connection when building container definitions.
-     */
-    private DbFactory $factory;
+    private ConnectionInterface $db;
 
     /**
      * @var string The name of the database table to store the cache data. Defaults to "cache".
@@ -63,17 +54,15 @@ final class DbCache implements CacheInterface
     public int $gcProbability;
 
     /**
-     * @param DbFactory $factory Factory for creating a database connection instance.
-     * Provides lazy loading of the {@see \Yiisoft\Db\Connection\ConnectionInterface} instance
-     * to prevent a circular reference to the connection when building container definitions.
+     * @param ConnectionInterface $db The database connection instance.
      * @param string $table The name of the database table to store the cache data. Defaults to "cache".
      * @param int $gcProbability The probability (parts per million) that garbage collection (GC) should
      * be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
      * This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
      */
-    public function __construct(DbFactory $factory, string $table = '{{%cache}}', int $gcProbability = 100)
+    public function __construct(ConnectionInterface $db, string $table = '{{%cache}}', int $gcProbability = 100)
     {
-        $this->factory = $factory;
+        $this->db = $db;
         $this->table = $table;
         $this->gcProbability = $gcProbability;
     }
@@ -85,10 +74,6 @@ final class DbCache implements CacheInterface
      */
     public function getDb(): ConnectionInterface
     {
-        if ($this->db === null) {
-            $this->db = $this->factory->create();
-        }
-
         return $this->db;
     }
 
@@ -119,7 +104,7 @@ final class DbCache implements CacheInterface
         }
 
         try {
-            $this->getDb()->createCommand()
+            $this->db->createCommand()
                 ->upsert($this->table, $this->buildDataRow($key, $ttl, $value, true))
                 ->noCache()
                 ->execute()
@@ -175,7 +160,7 @@ final class DbCache implements CacheInterface
             $this->deleteData($keys);
 
             if (!empty($rows) && $ttl > self::TTL_EXPIRED) {
-                $this->getDb()->createCommand()
+                $this->db->createCommand()
                     ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
                     ->noCache()
                     ->execute()
@@ -204,11 +189,13 @@ final class DbCache implements CacheInterface
     }
 
     /**
-     * @param array|string $id
-     * @param array $fields
-     * @param string $method
+     * Gets the cache data from the database.
      *
-     * @return mixed
+     * @param array|string $id One or more IDs for deleting data.
+     * @param array $fields Selectable fields.
+     * @param string $method Method of the returned data ( "all", "scalar", "exists").
+     *
+     * @return mixed The cache data.
      */
     private function getData($id, array $fields, string $method)
     {
@@ -216,7 +203,7 @@ final class DbCache implements CacheInterface
             return is_string($id) ? false : [];
         }
 
-        return (new Query($this->getDb()))
+        return (new Query($this->db))
             ->noCache()
             ->from($this->table)
             ->select($fields)
@@ -227,9 +214,12 @@ final class DbCache implements CacheInterface
     }
 
     /**
-     * @param array|string|true $id
+     * Deletes a cache data from the database.
      *
-     * @throws CacheException
+     * @param array|string|true $id One or more IDs for deleting data.
+     * If `true`, the all cache data will be deleted from the database.
+     *
+     * @throws CacheException If the cache data cannot be deleted.
      */
     private function deleteData($id): void
     {
@@ -239,19 +229,21 @@ final class DbCache implements CacheInterface
 
         try {
             $condition = $id === true ? '' : ['id' => $id];
-            $this->getDb()->createCommand()->delete($this->table, $condition)->noCache()->execute();
+            $this->db->createCommand()->delete($this->table, $condition)->noCache()->execute();
         } catch (Throwable $e) {
             throw new CacheException('Unable to delete cache data.', 0, $e);
         }
     }
 
     /**
-     * @param string $id
-     * @param int $ttl
-     * @param mixed $value
-     * @param bool $associative
+     * Builds a row of cache data to insert into the database.
      *
-     * @return array
+     * @param string $id The cache data ID.
+     * @param int $ttl The cache data TTL.
+     * @param mixed $value The cache data value.
+     * @param bool $associative If `true`, an associative array is returned. If `false`, a list is returned.
+     *
+     * @return array The row of cache data to insert into the database.
      */
     private function buildDataRow(string $id, int $ttl, $value, bool $associative): array
     {
@@ -273,7 +265,7 @@ final class DbCache implements CacheInterface
     private function gc(): void
     {
         if (random_int(0, 1000000) < $this->gcProbability) {
-            $this->getDb()->createCommand()
+            $this->db->createCommand()
                 ->delete($this->table, '[[expire]] > 0 AND [[expire]] < ' . time())
                 ->execute()
             ;

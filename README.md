@@ -22,42 +22,18 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 The package could be installed with composer:
 
 ```
-composer install yiisoft/cache-db
+composer require yiisoft/cache-db
 ```
 
 ## Configuration
 
-Creating a database factory:
+When creating an instance of `\Yiisoft\Cache\Db\DbCache`, you must pass an instance of the database connection:
 
 ```php
-$dbFactory = new \Yiisoft\Cache\Db\DbFactory($container, $config);
+$cache = new \Yiisoft\Cache\Db\DbCache($db, $table, $gcProbability);
 ```
 
-- `$container (\Psr\Container\ContainerInterface)` - Container for getting an instance of a database connection.
-- `$config (mixed)` - The configuration for creating a database connection instance.
-
-The configuration can be specified in one of the following forms:
-
-- A string: representing the class name of the object to be created.
-- A configuration array: the array  must consist of `__class` contains name of the class to be instantiated,
-  `__construct()` holds an array of constructor arguments. The rest of the config and property values and method calls.
-  They are set/called in the order they appear in the array.
-- A PHP callable: either an anonymous function or an array representing a class method (`[$class or $object, $method]`).
-  The callable should return a instance of the `\Yiisoft\Db\Connection\ConnectionInterface`.
-
-For more information about container and configuration, see the description of the
-[yiisoft/di](https://github.com/yiisoft/di) and [yiisoft/factory](https://github.com/yiisoft/factory) packages.
-
-> This factory provides lazy loading of the `Yiisoft\Db\Connection\ConnectionInterface` instance
-to prevent a circular reference to the connection when building container definitions.
-
-Creating a cache handler:
-
-```php
-$cache = new \Yiisoft\Cache\Db\DbCache($dbFactory, $table, $gcProbability);
-```
-
-- `$dbFactory (\Yiisoft\Cache\Db\DbFactory)` - Factory for creating a database connection instance.
+- `$db (\Yiisoft\Db\Connection\ConnectionInterface)` - The database connection instance.
 - `$table (string)` - The name of the database table to store the cache data. Defaults to "cache".
 - `$gcProbability (int)` - The probability (parts per million) that garbage collection (GC) should
   be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
@@ -69,7 +45,7 @@ The package does not contain any additional functionality for interacting with t
 except those defined in the [PSR-16](https://www.php-fig.org/psr/psr-16/) interface.
 
 ```php
-$cache = new \Yiisoft\Cache\Db\DbCache($dbFactory);
+$cache = new \Yiisoft\Cache\Db\DbCache($db);
 $parameters = ['user_id' => 42];
 $key = 'demo';
 

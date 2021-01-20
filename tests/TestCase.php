@@ -15,7 +15,6 @@ use Yiisoft\Aliases\Aliases;
 use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\DbFactory;
 use Yiisoft\Db\Cache\SchemaCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Sqlite\Connection as SqlLiteConnection;
@@ -61,7 +60,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 ],
 
                 DbCache::class => static function (ContainerInterface $container) {
-                    return new DbCache(new DbFactory($container, ConnectionInterface::class), 'test-table');
+                    return new DbCache($container->get(ConnectionInterface::class), 'test-table');
                 },
 
                 ConnectionInterface::class => [
@@ -69,8 +68,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                     '__construct()' => [
                         'dsn' => 'sqlite:' . self::DB_FILE,
                     ],
+                    'setEnableProfiling()' => [false],
                 ],
 
+                // TEMPORARILY
                 SchemaCache::class => static function (CacheInterface $cache) {
                     $schemaCache = new SchemaCache($cache);
                     $schemaCache->setEnable(false);

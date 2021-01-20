@@ -12,8 +12,7 @@ use ReflectionException;
 use ReflectionObject;
 use stdClass;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\DbFactory;
-use Yiisoft\Cache\Db\Exception\CacheException;
+use Yiisoft\Cache\Db\CacheException;
 use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
 use Yiisoft\Db\Command\Command;
 use Yiisoft\Db\Connection\ConnectionInterface;
@@ -505,7 +504,7 @@ final class DbCacheTest extends TestCase
         $db = $this->createMock(ConnectionInterface::class);
         $db->method('createCommand')->willReturn($command);
 
-        return new DbCache(new DbFactory($this->getContainer(), $db));
+        return new DbCache($db);
     }
 
     private function getDataProviderData(): array
