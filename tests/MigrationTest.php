@@ -7,13 +7,17 @@ namespace Yiisoft\Cache\Db\Tests;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Yii\Db\Migration\Informer\MigrationInformerInterface;
 use Yiisoft\Yii\Db\Migration\MigrationBuilder;
 
 final class MigrationTest extends TestCase
 {
     public function testUpAndDown(): void
     {
-        $migration = new M202101140204CreateCache($this->getContainer()->get(DbCache::class));
+        $migration = new M202101140204CreateCache(
+            $this->getContainer()->get(DbCache::class),
+            $this->getContainer()->get(MigrationInformerInterface::class),
+        );
 
         $migration->up($this->getContainer()->get(MigrationBuilder::class));
 

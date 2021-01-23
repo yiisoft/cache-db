@@ -17,6 +17,7 @@ use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
 use Yiisoft\Db\Command\Command;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Yii\Db\Migration\Informer\MigrationInformerInterface;
 use Yiisoft\Yii\Db\Migration\MigrationBuilder;
 
 use function array_keys;
@@ -33,7 +34,12 @@ final class DbCacheTest extends TestCase
         parent::setUp();
 
         $this->cache = $this->getContainer()->get(DbCache::class);
-        $migration = new M202101140204CreateCache($this->cache);
+
+        $migration = new M202101140204CreateCache(
+            $this->cache,
+            $this->getContainer()->get(MigrationInformerInterface::class),
+        );
+
         $migration->up($this->getContainer()->get(MigrationBuilder::class));
     }
 

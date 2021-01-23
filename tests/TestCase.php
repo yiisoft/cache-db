@@ -10,7 +10,6 @@ use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Yiisoft\Aliases\Aliases;
 use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
@@ -23,7 +22,8 @@ use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
 use Yiisoft\Profiler\Profiler;
 use Yiisoft\Profiler\ProfilerInterface;
-use Yiisoft\Yii\Db\Migration\Helper\ConsoleHelper;
+use Yiisoft\Yii\Db\Migration\Informer\MigrationInformerInterface;
+use Yiisoft\Yii\Db\Migration\Informer\NullMigrationInformer;
 
 use function dirname;
 
@@ -32,11 +32,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected const DB_FILE = __DIR__ . '/runtime/test.sq3';
 
     private ?Container $container = null;
-
-    protected function setUp(): void
-    {
-        $this->getContainer()->get(ConsoleHelper::class)->output()->setVerbosity(OutputInterface::VERBOSITY_QUIET);
-    }
 
     protected function tearDown(): void
     {
@@ -78,6 +73,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                     return $schemaCache;
                 },
 
+                MigrationInformerInterface::class => NullMigrationInformer::class,
                 EventDispatcherInterface::class => Dispatcher::class,
                 ListenerProviderInterface::class => Provider::class,
                 LoggerInterface::class => NullLogger::class,
