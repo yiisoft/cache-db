@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests;
 
-use Psr\Log\NullLogger;
-use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\ListenerProviderInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 use Yiisoft\Aliases\Aliases;
+use Yiisoft\Cache\ArrayCache;
 use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Cache\SchemaCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Factory\DatabaseFactory;
 use Yiisoft\Db\Sqlite\Connection as SqlLiteConnection;
+use Yiisoft\Definitions\Reference;
 use Yiisoft\Di\Container;
 use Yiisoft\EventDispatcher\Dispatcher\Dispatcher;
 use Yiisoft\EventDispatcher\Provider\Provider;
@@ -49,9 +52,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         if ($this->container === null) {
             $this->container = new Container([
                 Aliases::class => [
-                    '@root' => dirname(__DIR__, 2),
-                    '@runtime' => __DIR__ . '/runtime',
-                    '@yiisoft/yii/db/migration' => '@root',
+                    "class" => Aliases::class,
+                    "__construct()" => [
+                        '@root' => dirname(__DIR__, 2),
+                        '@runtime' => __DIR__ . '/runtime',
+                        '@yiisoft/yii/db/migration' => '@root',
+                    ],
+                ],
+
+                CacheInterface::class => [
+                    'class' => Cache::class,
+                    '__construct()' => [
+                        Reference::to(ArrayCache::class),
+                    ],
                 ],
 
                 DbCache::class => static function (ContainerInterface $container) {
@@ -59,19 +72,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 },
 
                 ConnectionInterface::class => [
-                    '__class' => SqlLiteConnection::class,
+                    'class' => SqlLiteConnection::class,
                     '__construct()' => [
                         'dsn' => 'sqlite:' . self::DB_FILE,
                     ],
                     'setEnableProfiling()' => [false],
                 ],
-
-                // TEMPORARILY
-                SchemaCache::class => static function (CacheInterface $cache) {
-                    $schemaCache = new SchemaCache($cache);
-                    $schemaCache->setEnable(false);
-                    return $schemaCache;
-                },
 
                 MigrationInformerInterface::class => NullMigrationInformer::class,
                 EventDispatcherInterface::class => Dispatcher::class,
@@ -79,9 +85,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 LoggerInterface::class => NullLogger::class,
                 ProfilerInterface::class => Profiler::class,
                 PsrCacheInterface::class => DbCache::class,
-                CacheInterface::class => Cache::class,
             ]);
         }
+
+        DatabaseFactory::initialize($this->container, []);
 
         return $this->container;
     }
