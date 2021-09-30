@@ -17,7 +17,6 @@ use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Cache\SchemaCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
-use Yiisoft\Db\Factory\DatabaseFactory;
 use Yiisoft\Db\Sqlite\Connection as SqlLiteConnection;
 use Yiisoft\Definitions\Reference;
 use Yiisoft\Di\Container;
@@ -76,7 +75,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                     '__construct()' => [
                         'dsn' => 'sqlite:' . self::DB_FILE,
                     ],
-                    'setEnableProfiling()' => [false],
                 ],
 
                 MigrationInformerInterface::class => NullMigrationInformer::class,
@@ -87,8 +85,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 PsrCacheInterface::class => DbCache::class,
             ]);
         }
-
-        DatabaseFactory::initialize($this->container, []);
 
         return $this->container;
     }
