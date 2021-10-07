@@ -15,7 +15,6 @@ use Yiisoft\Cache\ArrayCache;
 use Yiisoft\Cache\Cache;
 use Yiisoft\Cache\CacheInterface;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Db\Cache\SchemaCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Sqlite\Connection as SqlLiteConnection;
 use Yiisoft\Definitions\Reference;
@@ -51,8 +50,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         if ($this->container === null) {
             $this->container = new Container([
                 Aliases::class => [
-                    "class" => Aliases::class,
-                    "__construct()" => [
+                    'class' => Aliases::class,
+                    '__construct()' => [
                         '@root' => dirname(__DIR__, 2),
                         '@runtime' => __DIR__ . '/runtime',
                         '@yiisoft/yii/db/migration' => '@root',
