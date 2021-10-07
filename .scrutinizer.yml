@@ -18,7 +18,7 @@ build:
         override:
           - php-scrutinizer-run
 
-    tests-and-coverage:
+    phpunit:
       dependencies:
         override:
           - wget https://sqlite.org/2021/sqlite-autoconf-3340100.tar.gz --no-check-certificate
