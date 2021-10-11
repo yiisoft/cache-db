@@ -49,21 +49,6 @@ jobs:
       - name: Create MS SQL Database
         run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
 
-      - name: Setup cache environment
-        id: cache
-        uses: shivammathur/cache-extensions@v1
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.extensions }}
-          key: ${{ env.key }}
-
-      - name: Cache extensions
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.cache.outputs.dir }}
-          key: ${{ steps.cache.outputs.key }}
-          restore-keys: ${{ steps.cache.outputs.key }}
-
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2
         with:
