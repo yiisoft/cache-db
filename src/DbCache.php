@@ -146,6 +146,7 @@ final class DbCache implements CacheInterface
     }
 
     /**
+     * @param iterable $values A list of key => value pairs for a multiple-set operation.
      * @param DateInterval|int|string|null $ttl The cache data TTL.
      */
     public function setMultiple($values, $ttl = null): bool
