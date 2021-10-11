@@ -11,9 +11,8 @@ use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use ReflectionObject;
 use stdClass;
-use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\CacheException;
-use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
+use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Command\Command;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
@@ -25,28 +24,12 @@ use function array_map;
 use function is_array;
 use function is_object;
 
-final class DbCacheTest extends TestCase
+abstract class DbCacheTest extends TestCase
 {
-    private DbCache $cache;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->cache = $this->getContainer()->get(DbCache::class);
-
-        $migration = new M202101140204CreateCache(
-            $this->cache,
-            $this->getContainer()->get(MigrationInformerInterface::class),
-        );
-
-        $migration->up($this->getContainer()->get(MigrationBuilder::class));
-    }
-
     public function testGetters(): void
     {
-        $this->assertSame('test-table', $this->cache->getTable());
-        $this->assertSame($this->getContainer()->get(ConnectionInterface::class), $this->cache->getDb());
+        $this->assertSame('test-table', $this->dbCache->getTable());
+        $this->assertSame($this->db, $this->dbCache->getDb());
     }
 
     public function dataProvider(): array
@@ -81,7 +64,7 @@ final class DbCacheTest extends TestCase
     public function testSet($key, $value): void
     {
         for ($i = 0; $i < 2; $i++) {
-            $this->assertTrue($this->cache->set($key, $value));
+            $this->assertTrue($this->dbCache->set($key, $value));
         }
     }
 
@@ -95,8 +78,8 @@ final class DbCacheTest extends TestCase
      */
     public function testGet($key, $value): void
     {
-        $this->cache->set($key, $value);
-        $valueFromCache = $this->cache->get($key, 'default');
+        $this->dbCache->set($key, $value);
+        $valueFromCache = $this->dbCache->get($key, 'default');
 
         $this->assertSameExceptObject($value, $valueFromCache);
     }
@@ -111,8 +94,8 @@ final class DbCacheTest extends TestCase
      */
     public function testValueInCacheCannotBeChanged($key, $value): void
     {
-        $this->cache->set($key, $value);
-        $valueFromCache = $this->cache->get($key, 'default');
+        $this->dbCache->set($key, $value);
+        $valueFromCache = $this->dbCache->get($key, 'default');
 
         $this->assertSameExceptObject($value, $valueFromCache);
 
@@ -120,7 +103,7 @@ final class DbCacheTest extends TestCase
             $originalValue = clone $value;
             $valueFromCache->test_field = 'changed';
             $value->test_field = 'changed';
-            $valueFromCacheNew = $this->cache->get($key, 'default');
+            $valueFromCacheNew = $this->dbCache->get($key, 'default');
             $this->assertSameExceptObject($originalValue, $valueFromCacheNew);
         }
     }
@@ -135,19 +118,19 @@ final class DbCacheTest extends TestCase
      */
     public function testHas($key, $value): void
     {
-        $this->cache->set($key, $value);
+        $this->dbCache->set($key, $value);
 
-        $this->assertTrue($this->cache->has($key));
+        $this->assertTrue($this->dbCache->has($key));
         // check whether exists affects the value
-        $this->assertSameExceptObject($value, $this->cache->get($key));
+        $this->assertSameExceptObject($value, $this->dbCache->get($key));
 
-        $this->assertTrue($this->cache->has($key));
-        $this->assertFalse($this->cache->has('not_exists'));
+        $this->assertTrue($this->dbCache->has($key));
+        $this->assertFalse($this->dbCache->has('not_exists'));
     }
 
     public function testGetNonExistent(): void
     {
-        $this->assertNull($this->cache->get('non_existent_key'));
+        $this->assertNull($this->dbCache->get('non_existent_key'));
     }
 
     /**
@@ -160,11 +143,11 @@ final class DbCacheTest extends TestCase
      */
     public function testDelete($key, $value): void
     {
-        $this->cache->set($key, $value);
+        $this->dbCache->set($key, $value);
 
-        $this->assertSameExceptObject($value, $this->cache->get($key));
-        $this->assertTrue($this->cache->delete($key));
-        $this->assertNull($this->cache->get($key));
+        $this->assertSameExceptObject($value, $this->dbCache->get($key));
+        $this->assertTrue($this->dbCache->delete($key));
+        $this->assertNull($this->dbCache->get($key));
     }
 
     /**
@@ -178,11 +161,11 @@ final class DbCacheTest extends TestCase
     public function testClear($key, $value): void
     {
         foreach ($this->dataProvider() as $datum) {
-            $this->cache->set($datum[0], $datum[1]);
+            $this->dbCache->set($datum[0], $datum[1]);
         }
 
-        $this->assertTrue($this->cache->clear());
-        $this->assertNull($this->cache->get($key));
+        $this->assertTrue($this->dbCache->clear());
+        $this->assertNull($this->dbCache->get($key));
     }
 
     /**
@@ -206,10 +189,10 @@ final class DbCacheTest extends TestCase
     public function testSetMultiple(?int $ttl): void
     {
         $data = $this->getDataProviderData();
-        $this->cache->setMultiple($data, $ttl);
+        $this->dbCache->setMultiple($data, $ttl);
 
         foreach ($data as $key => $value) {
-            $this->assertSameExceptObject($value, $this->cache->get((string) $key));
+            $this->assertSameExceptObject($value, $this->dbCache->get((string) $key));
         }
     }
 
@@ -217,37 +200,37 @@ final class DbCacheTest extends TestCase
     {
         $data = $this->getDataProviderData();
         $keys = array_map('strval', array_keys($data));
-        $this->cache->setMultiple($data);
+        $this->dbCache->setMultiple($data);
 
-        $this->assertSameExceptObject($data, $this->cache->getMultiple($keys));
+        $this->assertSameExceptObject($data, $this->dbCache->getMultiple($keys));
     }
 
     public function testDeleteMultiple(): void
     {
         $data = $this->getDataProviderData();
         $keys = array_map('strval', array_keys($data));
-        $this->cache->setMultiple($data);
+        $this->dbCache->setMultiple($data);
 
-        $this->assertSameExceptObject($data, $this->cache->getMultiple($keys));
+        $this->assertSameExceptObject($data, $this->dbCache->getMultiple($keys));
 
-        $this->cache->deleteMultiple($keys);
+        $this->dbCache->deleteMultiple($keys);
         $emptyData = array_map(static fn () => null, $data);
 
-        $this->assertSameExceptObject($emptyData, $this->cache->getMultiple($keys));
+        $this->assertSameExceptObject($emptyData, $this->dbCache->getMultiple($keys));
     }
 
     public function testZeroAndNegativeTtl(): void
     {
-        $this->cache->setMultiple(['a' => 1, 'b' => 2]);
+        $this->dbCache->setMultiple(['a' => 1, 'b' => 2]);
 
-        $this->assertTrue($this->cache->has('a'));
-        $this->assertTrue($this->cache->has('b'));
+        $this->assertTrue($this->dbCache->has('a'));
+        $this->assertTrue($this->dbCache->has('b'));
 
-        $this->cache->set('a', 11, -1);
-        $this->assertFalse($this->cache->has('a'));
+        $this->dbCache->set('a', 11, -1);
+        $this->assertFalse($this->dbCache->has('a'));
 
-        $this->cache->set('b', 22, 0);
-        $this->assertFalse($this->cache->has('b'));
+        $this->dbCache->set('b', 22, 0);
+        $this->assertFalse($this->dbCache->has('b'));
     }
 
     /**
@@ -262,9 +245,9 @@ final class DbCacheTest extends TestCase
         return [
             [123, 123],
             ['123', 123],
-            ['', -1],
-            [null, 0],
-            [0, -1],
+            ['', 0], // expired
+            [null, null], // infinity
+            [0, 0], // expired
             [new DateInterval('PT6H8M'), 6 * 3600 + 8 * 60],
             [new DateInterval('P2Y4D'), 2 * 365 * 24 * 3600 + 4 * 24 * 3600],
         ];
@@ -280,10 +263,10 @@ final class DbCacheTest extends TestCase
      */
     public function testNormalizeTtl($ttl, $expectedResult): void
     {
-        $reflection = new ReflectionObject($this->cache);
+        $reflection = new ReflectionObject($this->dbCache);
         $method = $reflection->getMethod('normalizeTtl');
         $method->setAccessible(true);
-        $result = $method->invokeArgs($this->cache, [$ttl]);
+        $result = $method->invokeArgs($this->dbCache, [$ttl]);
         $method->setAccessible(false);
 
         $this->assertSameExceptObject($expectedResult, $result);
@@ -329,25 +312,25 @@ final class DbCacheTest extends TestCase
      */
     public function testValuesAsIterable(array $array, iterable $iterable): void
     {
-        $this->cache->setMultiple($iterable);
+        $this->dbCache->setMultiple($iterable);
 
-        $this->assertSameExceptObject($array, $this->cache->getMultiple(array_keys($array)));
+        $this->assertSameExceptObject($array, $this->dbCache->getMultiple(array_keys($array)));
     }
 
     public function testSetWithDateIntervalTtl(): void
     {
-        $this->cache->set('a', 1, new DateInterval('PT1H'));
-        $this->assertSameExceptObject(1, $this->cache->get('a'));
+        $this->dbCache->set('a', 1, new DateInterval('PT1H'));
+        $this->assertSameExceptObject(1, $this->dbCache->get('a'));
 
-        $this->cache->setMultiple(['b' => 2]);
-        $this->assertSameExceptObject(['b' => 2], $this->cache->getMultiple(['b']));
+        $this->dbCache->setMultiple(['b' => 2]);
+        $this->assertSameExceptObject(['b' => 2], $this->dbCache->getMultiple(['b']));
     }
 
     public function testDeleteForCacheItemNotExist(): void
     {
-        $this->assertNull($this->cache->get('key'));
-        $this->assertTrue($this->cache->delete('key'));
-        $this->assertNull($this->cache->get('key'));
+        $this->assertNull($this->dbCache->get('key'));
+        $this->assertTrue($this->dbCache->delete('key'));
+        $this->assertNull($this->dbCache->get('key'));
     }
 
     public function invalidKeyProvider(): array
@@ -372,7 +355,7 @@ final class DbCacheTest extends TestCase
     public function testGetThrowExceptionForInvalidKey($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->get($key);
+        $this->dbCache->get($key);
     }
 
     /**
@@ -383,7 +366,7 @@ final class DbCacheTest extends TestCase
     public function testSetThrowExceptionForInvalidKey($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->set($key, 'value');
+        $this->dbCache->set($key, 'value');
     }
 
     /**
@@ -394,7 +377,7 @@ final class DbCacheTest extends TestCase
     public function testDeleteThrowExceptionForInvalidKey($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->delete($key);
+        $this->dbCache->delete($key);
     }
 
     /**
@@ -405,7 +388,7 @@ final class DbCacheTest extends TestCase
     public function testGetMultipleThrowExceptionForInvalidKeys($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->getMultiple([$key]);
+        $this->dbCache->getMultiple([$key]);
     }
 
     /**
@@ -416,7 +399,7 @@ final class DbCacheTest extends TestCase
     public function testGetMultipleThrowExceptionForInvalidKeysNotIterable($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->getMultiple($key);
+        $this->dbCache->getMultiple($key);
     }
 
     /**
@@ -427,7 +410,7 @@ final class DbCacheTest extends TestCase
     public function testSetMultipleThrowExceptionForInvalidKeysNotIterable($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->setMultiple($key);
+        $this->dbCache->setMultiple($key);
     }
 
     /**
@@ -438,7 +421,7 @@ final class DbCacheTest extends TestCase
     public function testDeleteMultipleThrowExceptionForInvalidKeys($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->deleteMultiple([$key]);
+        $this->dbCache->deleteMultiple([$key]);
     }
 
     /**
@@ -449,7 +432,7 @@ final class DbCacheTest extends TestCase
     public function testDeleteMultipleThrowExceptionForInvalidKeysNotIterable($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->deleteMultiple($key);
+        $this->dbCache->deleteMultiple($key);
     }
 
     /**
@@ -460,7 +443,7 @@ final class DbCacheTest extends TestCase
     public function testHasThrowExceptionForInvalidKey($key): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->cache->has($key);
+        $this->dbCache->has($key);
     }
 
     public function testSetThrowExceptionForFailExecuteCommand(): void
