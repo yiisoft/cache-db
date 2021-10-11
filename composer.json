@@ -21,6 +21,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.4|^8.0",
+        "ext-pdo": "*",
         "psr/simple-cache": "~1.0.1",
         "yiisoft/db": "^3.0@dev",
         "yiisoft/yii-db-migration": "^1.0@dev"
