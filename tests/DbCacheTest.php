@@ -250,45 +250,6 @@ final class DbCacheTest extends TestCase
         $this->assertFalse($this->cache->has('b'));
     }
 
-    /**
-     * Data provider for {@see testNormalizeTtl()}
-     *
-     * @throws Exception
-     *
-     * @return array test data
-     */
-    public function dataProviderNormalizeTtl(): array
-    {
-        return [
-            [123, 123],
-            ['123', 123],
-            ['', -1],
-            [null, 0],
-            [0, -1],
-            [new DateInterval('PT6H8M'), 6 * 3600 + 8 * 60],
-            [new DateInterval('P2Y4D'), 2 * 365 * 24 * 3600 + 4 * 24 * 3600],
-        ];
-    }
-
-    /**
-     * @dataProvider dataProviderNormalizeTtl
-     *
-     * @param mixed $ttl
-     * @param mixed $expectedResult
-     *
-     * @throws ReflectionException
-     */
-    public function testNormalizeTtl($ttl, $expectedResult): void
-    {
-        $reflection = new ReflectionObject($this->cache);
-        $method = $reflection->getMethod('normalizeTtl');
-        $method->setAccessible(true);
-        $result = $method->invokeArgs($this->cache, [$ttl]);
-        $method->setAccessible(false);
-
-        $this->assertSameExceptObject($expectedResult, $result);
-    }
-
     public function iterableProvider(): array
     {
         return [
