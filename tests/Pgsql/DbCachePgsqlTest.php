@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Pgsql;
 
-use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\Tests\DbCacheTest;
-use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\TestUtility\TestTrait;
 
 final class DbCachePgsqlTest extends DbCacheTest
