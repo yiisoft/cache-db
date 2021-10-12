@@ -30,9 +30,7 @@
         "phpunit/phpunit": "^9.4",
         "roave/infection-static-analysis-plugin": "^1.6",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.4",
-        "yiisoft/di": "^3.0@dev",
-        "yiisoft/cache-file": "^1.0"
+        "vimeo/psalm": "^4.4"
     },
     "provide": {
         "psr/simple-cache-implementation": "1.0.0"
