@@ -6,6 +6,8 @@
     <br>
 </p>
 
+[![Latest Stable Version](https://poser.pugx.org/yiisoft/cache-db/v/stable.png)](https://packagist.org/packages/yiisoft/cache-db)
+[![Total Downloads](https://poser.pugx.org/yiisoft/cache-db/downloads.png)](https://packagist.org/packages/yiisoft/cache-db)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/cache-db/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/cache-db/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/yiisoft/cache-db/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/cache-db/?branch=master)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Fcache-db%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/cache-db/master)
@@ -18,11 +20,11 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 |Packages|  PHP | Versions            |  CI-Actions
 |:------:|:----:|:------------------------:|:-----------:|
-[[db-mssql]](https://github.com/yiisoft/db-mssql)|**7.4 - 8.0**| **2017 - 2019**|[![mssql](https://github.com/terabytesoftw/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/terabytesoftw/cache-db/actions/workflows/mssql.yml) | |
-[[db-mysql]](https://github.com/yiisoft/db-mysql)|**7.4 - 8.0**| **5.7 - 8.0**|[![mysql](https://github.com/terabytesoftw/cache-db/actions/workflows/mysql.yml/badge.svg)](https://github.com/terabytesoftw/cache-db/actions/workflows/mysql.yml)|
-[[db-oracle]](https://github.com/yiisoft/db-oracle)|**7.4 - 8.0**| **11c - 12c**|[![oracle](https://github.com/terabytesoftw/cache-db/actions/workflows/oracle.yml/badge.svg)](https://github.com/terabytesoftw/cache-db/actions/workflows/oracle.yml)|
-|[[db-pgsql]](https://github.com/yiisoft/db-pgsql)|**7.4 - 8.0**| **9.0 - 14.0**|[![pgsql](https://github.com/terabytesoftw/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/terabytesoftw/cache-db/actions/workflows/pgsql.yml)|
-|[[db-sqlite]](https://github.com/yiisoft/db-sqlite)|**7.4 - 8.0**| **3:latest**|[![sqlite](https://github.com/terabytesoftw/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/terabytesoftw/cache-db/actions/workflows/sqlite.yml)|
+[[db-mssql]](https://github.com/yiisoft/db-mssql)|**7.4 - 8.0**| **2017 - 2019**|[![mssql](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml) | |
+[[db-mysql]](https://github.com/yiisoft/db-mysql)|**7.4 - 8.0**| **5.7 - 8.0**|[![mysql](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml)|
+[[db-oracle]](https://github.com/yiisoft/db-oracle)|**7.4 - 8.0**| **11c - 12c**|[![oracle](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml)|
+|[[db-pgsql]](https://github.com/yiisoft/db-pgsql)|**7.4 - 8.0**| **9.0 - 14.0**|[![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml)|
+|[[db-sqlite]](https://github.com/yiisoft/db-sqlite)|**7.4 - 8.0**| **3:latest**|[![sqlite](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml)|
 
 ## Installation
 
