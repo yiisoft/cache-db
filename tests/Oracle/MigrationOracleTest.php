@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Oracle;
 
-use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\TestUtility\TestTrait;

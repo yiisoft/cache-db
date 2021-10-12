@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests;
 
-use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
-use Yiisoft\Db\Connection\ConnectionInterface;
-use Yiisoft\Yii\Db\Migration\Informer\MigrationInformerInterface;
-use Yiisoft\Yii\Db\Migration\MigrationBuilder;
-
 abstract class MigrationTest extends TestCase
 {
     public function testUpAndDown(): void
