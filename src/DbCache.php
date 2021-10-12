@@ -272,7 +272,7 @@ final class DbCache implements CacheInterface
     {
         if (random_int(0, 1000000) < $this->gcProbability) {
             $this->db->createCommand()
-                ->delete($this->table, 'expire > 0 AND expire < ' . time())
+                ->delete($this->table, ['AND', ['>', 'expire', 0], ['<', 'expire', time()]])
                 ->execute()
             ;
         }
