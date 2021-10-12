@@ -29,7 +29,7 @@ build:
           - export PATH="/usr/local/lib:$PATH"
           - sqlite3 --version  && cd ..
           - composer self-update
-          - composer update --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
+          - composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
       tests:
         override:
