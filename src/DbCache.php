@@ -214,7 +214,7 @@ final class DbCache implements CacheInterface
             ->from($this->table)
             ->select($fields)
             ->where(['id' => $id])
-            ->andWhere('(expire IS NULL OR expire > ' . time() . ')')
+            ->andWhere(['OR', ['expire' => null], ['>', 'expire', time()]])
             ->{$method}()
         ;
     }
