@@ -262,9 +262,9 @@ final class DbCacheTest extends TestCase
         return [
             [123, 123],
             ['123', 123],
-            ['', -1],
-            [null, 0],
-            [0, -1],
+            ['', 0], // expired
+            [null, null], // infinity
+            [0, 0], // expired
             [new DateInterval('PT6H8M'), 6 * 3600 + 8 * 60],
             [new DateInterval('P2Y4D'), 2 * 365 * 24 * 3600 + 4 * 24 * 3600],
         ];

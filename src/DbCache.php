@@ -33,9 +33,6 @@ use function unserialize;
  */
 final class DbCache implements CacheInterface
 {
-    private const TTL_INFINITY = 0;
-    private const TTL_EXPIRED = -1;
-
     /**
      * @var ConnectionInterface The database connection instance.
      */
@@ -94,12 +91,17 @@ final class DbCache implements CacheInterface
         return $value === false ? $default : unserialize($value);
     }
 
+    /**
+     * @param string $key The cache data ID.
+     * @param mixed $value The cache data value.
+     * @param DateInterval|int|string|null $ttl The cache data TTL.
+     */
     public function set($key, $value, $ttl = null): bool
     {
         $this->validateKey($key);
         $ttl = $this->normalizeTtl($ttl);
 
-        if ($ttl <= self::TTL_EXPIRED) {
+        if ($this->isExpiredTtl($ttl)) {
             return $this->delete($key);
         }
 
@@ -143,6 +145,10 @@ final class DbCache implements CacheInterface
         return $values;
     }
 
+    /**
+     * @param iterable $values A list of key => value pairs for a multiple-set operation.
+     * @param DateInterval|int|string|null $ttl The cache data TTL.
+     */
     public function setMultiple($values, $ttl = null): bool
     {
         $ttl = $this->normalizeTtl($ttl);
@@ -159,7 +165,7 @@ final class DbCache implements CacheInterface
         try {
             $this->deleteData($keys);
 
-            if (!empty($rows) && $ttl > self::TTL_EXPIRED) {
+            if (!empty($rows) && !$this->isExpiredTtl($ttl)) {
                 $this->db->createCommand()
                     ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
                     ->noCache()
@@ -208,7 +214,7 @@ final class DbCache implements CacheInterface
             ->from($this->table)
             ->select($fields)
             ->where(['id' => $id])
-            ->andWhere('([[expire]] = ' . self::TTL_INFINITY . ' OR [[expire]] > ' . time() . ')')
+            ->andWhere('(expire IS NULL OR expire > ' . time() . ')')
             ->{$method}()
         ;
     }
@@ -239,15 +245,15 @@ final class DbCache implements CacheInterface
      * Builds a row of cache data to insert into the database.
      *
      * @param string $id The cache data ID.
-     * @param int $ttl The cache data TTL.
+     * @param int|null $ttl The cache data TTL.
      * @param mixed $value The cache data value.
      * @param bool $associative If `true`, an associative array is returned. If `false`, a list is returned.
      *
      * @return array The row of cache data to insert into the database.
      */
-    private function buildDataRow(string $id, int $ttl, $value, bool $associative): array
+    private function buildDataRow(string $id, ?int $ttl, $value, bool $associative): array
     {
-        $expire = $ttl > 0 ? $ttl + time() : 0;
+        $expire = $this->isInfinityTtl($ttl) ? null : ($ttl + time());
         $data = new PdoValue(serialize($value), PDO::PARAM_LOB);
 
         if ($associative) {
@@ -266,7 +272,7 @@ final class DbCache implements CacheInterface
     {
         if (random_int(0, 1000000) < $this->gcProbability) {
             $this->db->createCommand()
-                ->delete($this->table, '[[expire]] > 0 AND [[expire]] < ' . time())
+                ->delete($this->table, 'expire > 0 AND expire < ' . time())
                 ->execute()
             ;
         }
@@ -279,18 +285,27 @@ final class DbCache implements CacheInterface
      *
      * @return int TTL value as UNIX timestamp.
      */
-    private function normalizeTtl($ttl): int
+    private function normalizeTtl($ttl): ?int
     {
         if ($ttl === null) {
-            return self::TTL_INFINITY;
+            return null;
         }
 
         if ($ttl instanceof DateInterval) {
             return (new DateTime('@0'))->add($ttl)->getTimestamp();
         }
 
-        $ttl = (int) $ttl;
-        return $ttl > 0 ? $ttl : self::TTL_EXPIRED;
+        return (int) $ttl;
+    }
+
+    private function isExpiredTtl(?int $ttl): bool
+    {
+        return $ttl !== null && $ttl <= 0;
+    }
+
+    private function isInfinityTtl(?int $ttl): bool
+    {
+        return $ttl === null;
     }
 
     /**
