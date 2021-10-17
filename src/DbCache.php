@@ -139,11 +139,7 @@ final class DbCache implements CacheInterface
         $values = array_fill_keys($keys, $default);
 
         foreach ($this->getData($keys, ['id', 'data'], 'all') as $value) {
-            if (is_resource($value['data']) && get_resource_type($value['data']) === 'stream') {
-                $values[$value['id']] = unserialize(stream_get_contents($value['data']));
-            } else {
-                $values[$value['id']] = unserialize($value['data']);
-            }
+            $values[$value['id']] = unserialize($value['data']);
         }
 
         return $values;

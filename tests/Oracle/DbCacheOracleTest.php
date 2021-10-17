@@ -25,6 +25,7 @@ final class DbCacheOracleTest extends DbCacheTest
 
         // create connection dbms specific
         $this->db = $this->createConnection(self::DB_DSN);
+        $this->db->setAttributes([\PDO::ATTR_STRINGIFY_FETCHES => true]);
 
         // create cache instance
         $this->dbCache = $this->createDbCache();
