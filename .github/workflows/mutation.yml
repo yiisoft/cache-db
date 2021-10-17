@@ -22,7 +22,7 @@ jobs:
 
     services:
       mssql:
-        image: mcr.microsoft.com/mssql/${{ matrix.mssql }}
+        image: mcr.microsoft.com/mssql/server:2019-latest
         env:
           SA_PASSWORD: YourStrong!Passw0rd
           ACCEPT_EULA: Y
@@ -32,7 +32,7 @@ jobs:
         options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
 
       mysql:
-        image: mysql:${{ matrix.mysql }}
+        image: mysql:latest
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_PASSWORD: ''
@@ -42,7 +42,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
       postgres:
-        image: postgres:${{ matrix.pgsql }}
+        image: postgres:14
         env:
           POSTGRES_USER: scrutinizer
           POSTGRES_PASSWORD: scrutinizer
