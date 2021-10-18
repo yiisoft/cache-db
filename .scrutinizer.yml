@@ -56,8 +56,15 @@ build:
 
       tests:
         override:
-          - command: "./vendor/bin/phpunit --group Sqlite,Pgsql --coverage-clover ./coverage.xml"
+          - command: ./vendor/bin/phpunit --group Sqlite --coverage-clover ./coverage1.xml
             on_node: 1
             coverage:
-              file: coverage.xml
+              file: coverage1.xml
               format: php-clover
+
+          - command: ./vendor/bin/phpunit --group Pgsql --coverage-clover ./coverage2.xml
+            on_node: 2
+            coverage:
+              file: coverage2.xml
+              format: php-clover
+
