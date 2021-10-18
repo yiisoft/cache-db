@@ -8,7 +8,7 @@ use Yiisoft\Cache\Db\Tests\DbCacheTest;
 use Yiisoft\Db\TestUtility\TestTrait;
 
 /**
- * @group mssql
+ * @group Mssql
  */
 final class DbCacheMssqlTest extends DbCacheTest
 {

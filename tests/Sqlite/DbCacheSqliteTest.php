@@ -7,6 +7,9 @@ namespace Yiisoft\Cache\Db\Tests\Sqlite;
 use Yiisoft\Cache\Db\Tests\DbCacheTest;
 use Yiisoft\Db\TestUtility\TestTrait;
 
+/**
+ * @group Sqlite
+ */
 final class DbCacheSqliteTest extends DbCacheTest
 {
     use TestTrait;
@@ -15,8 +18,8 @@ final class DbCacheSqliteTest extends DbCacheTest
     protected const DB_DRIVERNAME = 'sqlite';
     protected const DB_DSN = 'sqlite:' . __DIR__ . '/../runtime/test.sq3';
     protected const DB_FIXTURES_PATH = '';
-    protected const DB_USERNAME = 'scrutinizer';
-    protected const DB_PASSWORD = 'scrutinizer';
+    protected const DB_USERNAME = '';
+    protected const DB_PASSWORD = '';
     protected const DB_CHARSET = 'UTF8';
 
     public function setUp(): void

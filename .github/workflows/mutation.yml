@@ -33,7 +33,6 @@ jobs:
         ports:
           - 1433:1433
         options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
-
       mysql:
         image: mysql:latest
         env:
@@ -43,7 +42,6 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
       postgres:
         image: postgres:14
         env:
@@ -53,7 +51,6 @@ jobs:
         ports:
           - 5432:5432
         options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-
       oci:
           image: wnameless/oracle-xe-11g-r2:latest
           ports:
@@ -73,11 +70,8 @@ jobs:
           php-version: "${{ matrix.php }}"
           extensions: ${{ env.extensions }}
           ini-values: memory_limit=-1
-          coverage: "pcov"
+          coverage: pcov
           tools: composer:v2
-
-      - name: Determine composer cache directory
-        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
 
       - name: Cache dependencies installed with composer
         uses: actions/cache@v2

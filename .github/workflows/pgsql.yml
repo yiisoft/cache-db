@@ -35,9 +35,9 @@ jobs:
       postgres:
         image: postgres:${{ matrix.pgsql }}
         env:
-          POSTGRES_USER: scrutinizer
-          POSTGRES_PASSWORD: scrutinizer
-          POSTGRES_DB: scrutinizer
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: yiitest
         ports:
           - 5432:5432
         options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -55,13 +55,9 @@ jobs:
           coverage: pcov
           tools: composer:v2
 
-      - name: Determine composer cache directory on Linux
+      - name: Determine composer cache directory
         if: matrix.os == 'ubuntu-latest'
         run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
-
-      - name: Determine composer cache directory on Windows
-        if: matrix.os == 'windows-latest'
-        run: echo "COMPOSER_CACHE_DIR=~\AppData\Local\Composer" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Cache dependencies installed with composer
         uses: actions/cache@v2
@@ -78,4 +74,4 @@ jobs:
         run: composer require yiisoft/db-pgsql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
       - name: Run tests with phpunit
-        run: vendor/bin/phpunit --testsuite Pgsql --colors=always
+        run: vendor/bin/phpunit --group Pgsql --colors=always

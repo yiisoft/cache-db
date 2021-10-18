@@ -37,13 +37,9 @@ jobs:
           coverage: pcov
           tools: composer:v2
 
-      - name: Determine composer cache directory on Linux
+      - name: Determine composer cache directory
         if: matrix.os == 'ubuntu-latest'
         run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
-
-      - name: Determine composer cache directory on Windows
-        if: matrix.os == 'windows-latest'
-        run: ECHO "COMPOSER_CACHE_DIR=~\AppData\Local\Composer" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Cache dependencies installed with composer
         uses: actions/cache@v2
@@ -60,4 +56,4 @@ jobs:
         run: composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
       - name: Run tests with phpunit
-        run: vendor/bin/phpunit --testsuite Sqlite --colors=always
+        run: vendor/bin/phpunit --group Sqlite --colors=always

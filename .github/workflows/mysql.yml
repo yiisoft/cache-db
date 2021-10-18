@@ -31,8 +31,7 @@ jobs:
       mysql:
         image: mysql:${{ matrix.mysql }}
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
-          MYSQL_PASSWORD: ''
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: yiitest
         ports:
           - 3306:3306
@@ -50,13 +49,9 @@ jobs:
           ini-values: date.timezone='UTC'
           coverage: pcov
 
-      - name: Determine composer cache directory on Linux
+      - name: Determine composer cache directory
         if: matrix.os == 'ubuntu-latest'
         run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
-
-      - name: Determine composer cache directory on Windows
-        if: matrix.os == 'windows-latest'
-        run: echo "COMPOSER_CACHE_DIR=~\AppData\Local\Composer" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Cache dependencies installed with composer
         uses: actions/cache@v2
@@ -73,5 +68,5 @@ jobs:
         run: composer require yiisoft/db-mysql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
       - name: Run tests with phpunit
-        run: vendor/bin/phpunit --testsuite Mysql --colors=always
+        run: vendor/bin/phpunit --group Mysql --colors=always
 

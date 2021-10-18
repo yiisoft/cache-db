@@ -8,6 +8,9 @@ use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\TestUtility\TestTrait;
 
+/**
+ * @group Sqlite
+ */
 final class MigrationSqliteTest extends MigrationTest
 {
     use TestTrait;
