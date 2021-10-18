@@ -19,6 +19,28 @@ build:
           - php-scrutinizer-run
 
     phpunit:
+      services:
+        db-pgsql:
+          image: postgres:14
+
+          # Define any additional environment variables that are needed by the service.
+          env:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: yiitest
+
+          # We automatically forward these ports from your localhost to the service's port.
+          # Alternatively, you can also access the service on the "$SERVICE_SOME_NAME_IP"
+          # environment variable.
+          ports:
+            # Forward 127.0.0.1:12345 -> SERVICE_IP:12345
+            - 5432
+
+          # If your service writes data to disk like most databases do, you can significantly
+          # speed up tests by mounting a ramdisk at those paths.
+          ramdisks:
+            - /var/lib/data
+
       dependencies:
         override:
           - wget https://sqlite.org/2021/sqlite-autoconf-3340100.tar.gz --no-check-certificate
@@ -30,11 +52,19 @@ build:
           - sqlite3 --version  && cd ..
           - composer self-update
           - composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
+          - composer require yiisoft/db-pgsql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
       tests:
         override:
-          - command: "./vendor/bin/phpunit --testsuite Sqlite --coverage-clover ./coverage.xml"
+          - command: ./vendor/bin/phpunit --group Sqlite --coverage-clover ./coverage1.xml
             on_node: 1
             coverage:
-              file: coverage.xml
+              file: coverage1.xml
               format: php-clover
+
+          - command: ./vendor/bin/phpunit --group Pgsql --coverage-clover ./coverage2.xml
+            on_node: 2
+            coverage:
+              file: coverage2.xml
+              format: php-clover
+

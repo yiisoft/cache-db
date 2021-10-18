@@ -7,6 +7,9 @@ namespace Yiisoft\Cache\Db\Tests\Oracle;
 use Yiisoft\Cache\Db\Tests\DbCacheTest;
 use Yiisoft\Db\TestUtility\TestTrait;
 
+/**
+ * @group Oracle
+ */
 final class DbCacheOracleTest extends DbCacheTest
 {
     use TestTrait;
