@@ -54,7 +54,7 @@
             "source-directory": "config"
         },
         "config-plugin": {
-            "params": "config/params.php"
+            "params": "params.php"
         }
     },
     "config": {
