@@ -39,6 +39,7 @@ jobs:
         php:
           - 7.4
           - 8.0
+          - 8.1
 
         mysql:
           - 5.7
@@ -86,4 +87,3 @@ jobs:
 
       - name: Run tests with phpunit
         run: vendor/bin/phpunit --group Mysql --colors=always
-
