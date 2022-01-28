@@ -26,12 +26,17 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 |[[db-pgsql]](https://github.com/yiisoft/db-pgsql)|**7.4 - 8.0**| **9.0 - 14.0**|[![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml)|
 |[[db-sqlite]](https://github.com/yiisoft/db-sqlite)|**7.4 - 8.0**| **3:latest**|[![sqlite](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml)|
 
+## Requirements
+
+- PHP 7.4 or higher.
+- `PDO` PHP extension.
+
 ## Installation
 
 The package could be installed with composer:
 
 ```
-composer require yiisoft/cache-db
+composer require yiisoft/cache-db --prefer-dist
 ```
 
 ## Configuration
@@ -87,6 +92,8 @@ To work with values in a more efficient manner, batch operations should be used:
 - `deleteMultiple()`
 
 This package can be used as a cache handler for the [Yii Caching Library](https://github.com/yiisoft/cache).
+
+## Testing
 
 ### Unit testing
 
