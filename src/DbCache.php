@@ -106,7 +106,8 @@ final class DbCache implements CacheInterface
         }
 
         try {
-            $this->db->createCommand()
+            $this->db
+                ->createCommand()
                 ->upsert($this->table, $this->buildDataRow($key, $ttl, $value, true))
                 ->noCache()
                 ->execute()
@@ -169,7 +170,8 @@ final class DbCache implements CacheInterface
             $this->deleteData($keys);
 
             if (!empty($rows) && !$this->isExpiredTtl($ttl)) {
-                $this->db->createCommand()
+                $this->db
+                    ->createCommand()
                     ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
                     ->noCache()
                     ->execute()
@@ -238,7 +240,11 @@ final class DbCache implements CacheInterface
 
         try {
             $condition = $id === true ? '' : ['id' => $id];
-            $this->db->createCommand()->delete($this->table, $condition)->noCache()->execute();
+            $this->db
+                ->createCommand()
+                ->delete($this->table, $condition)
+                ->noCache()
+                ->execute();
         } catch (Throwable $e) {
             throw new CacheException('Unable to delete cache data.', 0, $e);
         }
@@ -274,7 +280,8 @@ final class DbCache implements CacheInterface
     private function gc(): void
     {
         if (random_int(0, 1000000) < $this->gcProbability) {
-            $this->db->createCommand()
+            $this->db
+                ->createCommand()
                 ->delete($this->table, ['AND', ['>', 'expire', 0], ['<', 'expire', time()]])
                 ->execute()
             ;
@@ -295,7 +302,9 @@ final class DbCache implements CacheInterface
         }
 
         if ($ttl instanceof DateInterval) {
-            return (new DateTime('@0'))->add($ttl)->getTimestamp();
+            return (new DateTime('@0'))
+                ->add($ttl)
+                ->getTimestamp();
         }
 
         return (int) $ttl;
