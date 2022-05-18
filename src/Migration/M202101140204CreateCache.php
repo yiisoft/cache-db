@@ -32,7 +32,9 @@ final class M202101140204CreateCache implements RevertibleMigrationInterface
         $builder = new MigrationBuilder($this->cache->getDb(), $this->migrationInformer);
 
         $builder->createTable($this->cache->getTable(), [
-            'id' => $builder->string(128)->notNull(),
+            'id' => $builder
+                ->string(128)
+                ->notNull(),
             'expire' => $builder->integer(),
             'data' => $builder->binary(),
             'PRIMARY KEY ([[id]])',

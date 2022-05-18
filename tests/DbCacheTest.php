@@ -481,15 +481,20 @@ abstract class DbCacheTest extends TestCase
 
     private function createDbCacheWithFailConnection(): DbCache
     {
-        $command = $this->getMockBuilder(Command::class)
+        $command = $this
+            ->getMockBuilder(Command::class)
             ->onlyMethods(['execute'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass()
         ;
-        $command->method('execute')->willThrowException(new Exception('Some error.'));
+        $command
+            ->method('execute')
+            ->willThrowException(new Exception('Some error.'));
 
         $db = $this->createMock(ConnectionInterface::class);
-        $db->method('createCommand')->willReturn($command);
+        $db
+            ->method('createCommand')
+            ->willReturn($command);
 
         return new DbCache($db);
     }
