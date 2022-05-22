@@ -22,6 +22,8 @@ abstract class MigrationTest extends TestCase
 
     private function tableExists(string $tableName): bool
     {
-        return $this->db->getSchema()->getTableSchema($tableName) !== null;
+        return $this->db
+                ->getSchema()
+                ->getTableSchema($tableName) !== null;
     }
 }
