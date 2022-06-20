@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Support;
 
 use PDO;
-use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Oracle\ConnectionPDO;
 use Yiisoft\Db\Oracle\PDODriver;
