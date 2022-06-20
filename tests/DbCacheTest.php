@@ -11,10 +11,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use ReflectionObject;
 use stdClass;
-use Yiisoft\Cache\Db\CacheException;
-use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Db\Command\Command;
-use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
 
 use function array_keys;
