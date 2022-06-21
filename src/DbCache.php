@@ -10,8 +10,8 @@ use PDO;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
 use Traversable;
+use Yiisoft\Db\Command\Param;
 use Yiisoft\Db\Connection\ConnectionInterface;
-use Yiisoft\Db\Pdo\PdoValue;
 use Yiisoft\Db\Query\Query;
 
 use function array_fill_keys;
@@ -88,6 +88,7 @@ final class DbCache implements CacheInterface
     {
         $this->validateKey($key);
         $value = $this->getData($key, ['data'], 'scalar');
+
         return $value === false ? $default : unserialize($value);
     }
 
@@ -105,31 +106,29 @@ final class DbCache implements CacheInterface
             return $this->delete($key);
         }
 
-        try {
-            $this->db
-                ->createCommand()
-                ->upsert($this->table, $this->buildDataRow($key, $ttl, $value, true))
-                ->noCache()
-                ->execute()
-            ;
+        $this->db
+            ->createCommand()
+            ->upsert($this->table, $this->buildDataRow($key, $ttl, $value, true))
+            ->noCache()
+            ->execute();
 
-            $this->gc();
-            return true;
-        } catch (Throwable $e) {
-            throw new CacheException('Unable to update or insert cache data.', 0, $e);
-        }
+        $this->gc();
+
+        return true;
     }
 
     public function delete($key): bool
     {
         $this->validateKey($key);
         $this->deleteData($key);
+
         return true;
     }
 
     public function clear(): bool
     {
         $this->deleteData(true);
+
         return true;
     }
 
@@ -166,23 +165,19 @@ final class DbCache implements CacheInterface
             $keys[] = $key;
         }
 
-        try {
-            $this->deleteData($keys);
+        $this->deleteData($keys);
 
-            if (!empty($rows) && !$this->isExpiredTtl($ttl)) {
-                $this->db
-                    ->createCommand()
-                    ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
-                    ->noCache()
-                    ->execute()
-                ;
-            }
-
-            $this->gc();
-            return true;
-        } catch (Throwable $e) {
-            throw new CacheException('Unable to update or insert cache data.', 0, $e);
+        if (!empty($rows) && !$this->isExpiredTtl($ttl)) {
+            $this->db
+                ->createCommand()
+                ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
+                ->noCache()
+                ->execute();
         }
+
+        $this->gc();
+
+        return true;
     }
 
     public function deleteMultiple($keys): bool
@@ -190,12 +185,14 @@ final class DbCache implements CacheInterface
         $keys = $this->iterableToArray($keys);
         $this->validateKeys($keys);
         $this->deleteData($keys);
+
         return true;
     }
 
     public function has($key): bool
     {
         $this->validateKey($key);
+
         return $this->getData($key, ['id'], 'exists');
     }
 
@@ -220,8 +217,7 @@ final class DbCache implements CacheInterface
             ->select($fields)
             ->where(['id' => $id])
             ->andWhere(['OR', ['expire' => null], ['>', 'expire', time()]])
-            ->{$method}()
-        ;
+            ->{$method}();
     }
 
     /**
@@ -229,8 +225,6 @@ final class DbCache implements CacheInterface
      *
      * @param array|string|true $id One or more IDs for deleting data.
      * If `true`, the all cache data will be deleted from the database.
-     *
-     * @throws CacheException If the cache data cannot be deleted.
      */
     private function deleteData($id): void
     {
@@ -238,16 +232,12 @@ final class DbCache implements CacheInterface
             return;
         }
 
-        try {
-            $condition = $id === true ? '' : ['id' => $id];
-            $this->db
-                ->createCommand()
-                ->delete($this->table, $condition)
-                ->noCache()
-                ->execute();
-        } catch (Throwable $e) {
-            throw new CacheException('Unable to delete cache data.', 0, $e);
-        }
+        $condition = $id === true ? '' : ['id' => $id];
+        $this->db
+            ->createCommand()
+            ->delete($this->table, $condition)
+            ->noCache()
+            ->execute();
     }
 
     /**
@@ -263,7 +253,7 @@ final class DbCache implements CacheInterface
     private function buildDataRow(string $id, ?int $ttl, $value, bool $associative): array
     {
         $expire = $this->isInfinityTtl($ttl) ? null : ($ttl + time());
-        $data = new PdoValue(serialize($value), PDO::PARAM_LOB);
+        $data = new Param(serialize($value), PDO::PARAM_LOB);
 
         if ($associative) {
             return ['id' => $id, 'expire' => $expire, 'data' => $data];
@@ -283,8 +273,7 @@ final class DbCache implements CacheInterface
             $this->db
                 ->createCommand()
                 ->delete($this->table, ['AND', ['>', 'expire', 0], ['<', 'expire', time()]])
-                ->execute()
-            ;
+                ->execute();
         }
     }
 

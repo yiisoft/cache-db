@@ -11,10 +11,6 @@ use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use ReflectionObject;
 use stdClass;
-use Yiisoft\Cache\Db\CacheException;
-use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Db\Command\Command;
-use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
 
 use function array_keys;
@@ -442,61 +438,6 @@ abstract class DbCacheTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->has($key);
-    }
-
-    public function testSetThrowExceptionForFailExecuteCommand(): void
-    {
-        $cache = $this->createDbCacheWithFailConnection();
-        $this->expectException(CacheException::class);
-        $cache->set('key', 'value');
-    }
-
-    public function testDeleteThrowExceptionForFailExecuteCommand(): void
-    {
-        $cache = $this->createDbCacheWithFailConnection();
-        $this->expectException(CacheException::class);
-        $cache->delete('key');
-    }
-
-    public function testClearThrowExceptionForFailExecuteCommand(): void
-    {
-        $cache = $this->createDbCacheWithFailConnection();
-        $this->expectException(CacheException::class);
-        $cache->clear();
-    }
-
-    public function testSetMultipleThrowExceptionForFailExecuteCommand(): void
-    {
-        $cache = $this->createDbCacheWithFailConnection();
-        $this->expectException(CacheException::class);
-        $cache->setMultiple(['key-1' => 'value-1', 'key-2' => 'value-2']);
-    }
-
-    public function testDeleteMultipleThrowExceptionForFailExecuteCommand(): void
-    {
-        $cache = $this->createDbCacheWithFailConnection();
-        $this->expectException(CacheException::class);
-        $cache->deleteMultiple(['key-1', 'key-2']);
-    }
-
-    private function createDbCacheWithFailConnection(): DbCache
-    {
-        $command = $this
-            ->getMockBuilder(Command::class)
-            ->onlyMethods(['execute'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass()
-        ;
-        $command
-            ->method('execute')
-            ->willThrowException(new Exception('Some error.'));
-
-        $db = $this->createMock(ConnectionInterface::class);
-        $db
-            ->method('createCommand')
-            ->willReturn($command);
-
-        return new DbCache($db);
     }
 
     private function getDataProviderData(): array
