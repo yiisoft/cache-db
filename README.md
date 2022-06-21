@@ -20,15 +20,15 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 |Packages|  PHP | Versions            |  CI-Actions
 |:------:|:----:|:------------------------:|:-----------:|
-[[db-mssql]](https://github.com/yiisoft/db-mssql)|**7.4 - 8.1**| **2017 - 2019**|[![mssql](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml) | |
-[[db-mysql]](https://github.com/yiisoft/db-mysql)|**7.4 - 8.1**| **5.7 - 8.0**|[![mysql](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml)|
-[[db-oracle]](https://github.com/yiisoft/db-oracle)|**7.4 - 8.1**| **11c - 12c**|[![oracle](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml)|
-|[[db-pgsql]](https://github.com/yiisoft/db-pgsql)|**7.4 - 8.1**| **9.0 - 14.0**|[![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml)|
-|[[db-sqlite]](https://github.com/yiisoft/db-sqlite)|**7.4 - 8.1**| **3:latest**|[![sqlite](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml)|
+[[db-mssql]](https://github.com/yiisoft/db-mssql)|**8.0 - 8.1**| **2017 - 2019**|[![mssql](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml) | |
+[[db-mysql]](https://github.com/yiisoft/db-mysql)|**8.0 - 8.1**| **5.7 - 8.0**|[![mysql](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml)|
+[[db-oracle]](https://github.com/yiisoft/db-oracle)|**8.0 - 8.1**| **11c - 12c**|[![oracle](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml)|
+|[[db-pgsql]](https://github.com/yiisoft/db-pgsql)|**8.0 - 8.1**| **9.0 - 14.0**|[![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml)|
+|[[db-sqlite]](https://github.com/yiisoft/db-sqlite)|**8,0 - 8.1**| **3:latest**|[![sqlite](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml)|
 
 ## Requirements
 
-- PHP 7.4 or higher.
+- PHP 8.0 or higher.
 - `PDO` PHP extension.
 
 ## Installation
@@ -105,10 +105,11 @@ The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
 ### Mutation testing
 
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
+The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
+[Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
 
 ```shell
-./vendor/bin/infection
+./vendor/bin/roave-infection-static-analysis-plugin
 ```
 
 ### Static analysis
