@@ -6,11 +6,13 @@ namespace Yiisoft\Cache\Db\Tests;
 
 use ArrayIterator;
 use DateInterval;
+use InvalidArgumentException;
 use IteratorAggregate;
-use Psr\SimpleCache\InvalidArgumentException;
 use ReflectionException;
 use ReflectionObject;
 use stdClass;
+use Yiisoft\Cache\Db\CacheException;
+use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Exception\Exception;
 
 use function array_keys;
@@ -438,6 +440,49 @@ abstract class DbCacheTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->has($key);
+    }
+
+    public function testSetThrowExceptionForFailExecuteCommand(): void
+    {
+        $cache = new DbCache($this->db, 'noExist');
+        $this->expectException(CacheException::class);
+        $cache->set('key', 'value');
+    }
+
+    public function testDeleteThrowExceptionForFailExecuteCommand(): void
+    {
+        $cache = new DbCache($this->db, 'noExist');
+        $this->expectException(CacheException::class);
+        $cache->delete('key');
+    }
+
+    public function testClearThrowExceptionForFailExecuteCommand(): void
+    {
+        $cache = new DbCache($this->db, 'noExist');
+        $this->expectException(CacheException::class);
+        $cache->clear();
+    }
+
+    public function testSetMultipleThrowExceptionForFailExecuteCommand(): void
+    {
+        $cache = new DbCache($this->db, 'noExist');
+        $this->expectException(CacheException::class);
+        $cache->setMultiple(['key-1' => 'value-1', 'key-2' => 'value-2']);
+    }
+
+    public function testGetDataEmptyKey(): void
+    {
+        $getData = $this->invokeMethod($this->dbCache, 'getData', ['', [], 'all']);
+        $this->assertFalse($getData);
+
+        $getData = $this->invokeMethod($this->dbCache, 'getData', [[], [], 'all']);
+        $this->assertSame([], $getData);
+    }
+
+    public function testDeleteDataEmptyKey(): void
+    {
+        $getData = $this->invokeMethod($this->dbCache, 'deleteData', ['', [], 'all']);
+        $this->assertNull($getData);
     }
 
     private function getDataProviderData(): array
