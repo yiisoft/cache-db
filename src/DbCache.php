@@ -162,7 +162,6 @@ final class DbCache implements CacheInterface
     {
         $ttl = $this->normalizeTtl($ttl);
         $values = $this->iterableToArray($values);
-        $result = 0;
         $rows = $keys = [];
 
         foreach ($values as $key => $value) {
