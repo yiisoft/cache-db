@@ -106,7 +106,7 @@ final class DbCache implements CacheInterface
             return $this->delete($key);
         }
 
-        $result = $this->db
+        $this->db
             ->createCommand()
             ->upsert($this->table, $this->buildDataRow($key, $ttl, $value, true))
             ->noCache()
@@ -168,7 +168,7 @@ final class DbCache implements CacheInterface
         $this->deleteData($keys);
 
         if (!empty($rows) && !$this->isExpiredTtl($ttl)) {
-            $result = $this->db
+            $this->db
                 ->createCommand()
                 ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
                 ->noCache()
