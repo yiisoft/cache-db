@@ -23,8 +23,23 @@
         </include>
     </coverage>
     <testsuites>
-        <testsuite name="Cache-Db">
+        <testsuite name="CacheDb">
             <directory>./tests</directory>
+        </testsuite>
+        <testsuite name="Mssql">
+            <directory>./tests/Mssql</directory>
+        </testsuite>
+        <testsuite name="Mysql">
+            <directory>./tests/Mysql</directory>
+        </testsuite>
+        <testsuite name="Oracle">
+            <directory>./tests/Oracle</directory>
+        </testsuite>
+        <testsuite name="Pgsql">
+            <directory>./tests/Pgsql</directory>
+        </testsuite>
+        <testsuite name="Sqlite">
+            <directory>./tests/Sqlite</directory>
         </testsuite>
     </testsuites>
 </phpunit>
