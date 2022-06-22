@@ -6,11 +6,11 @@ namespace Yiisoft\Cache\Db;
 
 use DateInterval;
 use DateTime;
-use InvalidArgumentException;
 use PDO;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
 use Traversable;
+use Yiisoft\Cache\Db\InvalidArgumentException;
 use Yiisoft\Db\Command\Param;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Query\Query;
