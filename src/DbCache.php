@@ -10,7 +10,6 @@ use PDO;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
 use Traversable;
-use Yiisoft\Cache\Db\InvalidArgumentException;
 use Yiisoft\Db\Command\Param;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Query\Query;
