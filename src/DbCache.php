@@ -8,6 +8,8 @@ use DateInterval;
 use DateTime;
 use InvalidArgumentException;
 use PDO;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LogLevel;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;
 use Traversable;
@@ -35,6 +37,8 @@ use function unserialize;
  */
 final class DbCache implements CacheInterface
 {
+    use LoggerAwareTrait;
+
     /**
      * @var ConnectionInterface The database connection instance.
      */
@@ -119,7 +123,9 @@ final class DbCache implements CacheInterface
 
             return true;
         } catch (Throwable $e) {
-            throw new CacheException('Unable to update or insert cache data.', 0, $e);
+            $this->logger?->log(LogLevel::ERROR, (string) $e, [__METHOD__]);
+
+            return false;
         }
     }
 
@@ -186,7 +192,9 @@ final class DbCache implements CacheInterface
 
             return true;
         } catch (Throwable $e) {
-            throw new CacheException('Unable to update or insert cache data.', 0, $e);
+            $this->logger?->log(LogLevel::ERROR, (string) $e, [__METHOD__]);
+
+            return false;
         }
     }
 
@@ -251,7 +259,7 @@ final class DbCache implements CacheInterface
                 ->noCache()
                 ->execute();
         } catch (Throwable $e) {
-            throw new CacheException('Unable to delete cache data.', 0, $e);
+            $this->logger?->log(LogLevel::ERROR, (string) $e, [__METHOD__]);
         }
     }
 

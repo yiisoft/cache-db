@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests;
 
 use PHPUnit\Framework\TestCase as AbstractTestCase;
+use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Log\Logger;
 use Yiisoft\Yii\Db\Migration\Informer\NullMigrationInformer;
 use Yiisoft\Yii\Db\Migration\MigrationBuilder;
 
@@ -17,6 +19,7 @@ abstract class TestCase extends AbstractTestCase
 {
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
+    protected Logger|null $logger = null;
 
     protected function createDbCache(): DbCache
     {
@@ -31,6 +34,45 @@ abstract class TestCase extends AbstractTestCase
     protected function createMigrationBuilder(): MigrationBuilder
     {
         return new MigrationBuilder($this->db, new NullMigrationInformer());
+    }
+
+    protected function getLogger(): Logger
+    {
+        if ($this->logger === null) {
+            $this->logger = new Logger();
+        }
+
+        return $this->logger;
+    }
+
+    /**
+     * Gets an inaccessible object property.
+     *
+     * @param object $object
+     * @param string $propertyName
+     * @param bool $revoke whether to make property inaccessible after getting.
+     *
+     * @return mixed
+     */
+    protected function getInaccessibleProperty(object $object, string $propertyName, bool $revoke = true): mixed
+    {
+        $class = new ReflectionClass($object);
+
+        while (!$class->hasProperty($propertyName)) {
+            $class = $class->getParentClass();
+        }
+
+        $property = $class->getProperty($propertyName);
+
+        $property->setAccessible(true);
+
+        $result = $property->getValue($object);
+
+        if ($revoke) {
+            $property->setAccessible(false);
+        }
+
+        return $result;
     }
 
     /**
