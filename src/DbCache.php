@@ -6,7 +6,6 @@ namespace Yiisoft\Cache\Db;
 
 use DateInterval;
 use DateTime;
-use InvalidArgumentException;
 use PDO;
 use Psr\SimpleCache\CacheInterface;
 use Throwable;

@@ -6,13 +6,13 @@ namespace Yiisoft\Cache\Db\Tests;
 
 use ArrayIterator;
 use DateInterval;
-use InvalidArgumentException;
 use IteratorAggregate;
 use ReflectionException;
 use ReflectionObject;
 use stdClass;
 use Yiisoft\Cache\Db\CacheException;
 use Yiisoft\Cache\Db\DbCache;
+use Yiisoft\Cache\Db\InvalidArgumentException;
 use Yiisoft\Db\Exception\Exception;
 
 use function array_keys;
