@@ -19,7 +19,7 @@ final class PgsqlHelper extends ConnectionHelper
     public function createConnection(): ConnectionInterface
     {
         $pdoDriver = new PDODriver($this->dsn, $this->username, $this->password);
-        $pdoDriver->charset($this->charset);
+        $pdoDriver->setCharset($this->charset);
 
         return new ConnectionPDO($pdoDriver, $this->createQueryCache(), $this->createSchemaCache());
     }

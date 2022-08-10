@@ -445,14 +445,42 @@ abstract class DbCacheTest extends TestCase
     {
         $cache = $this->createCacheDbFail();
         $cache->set('key', 'value');
-        $this->assertCount(1, $this->getInaccessibleProperty($this->getLogger(), 'messages'));
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Unable to update cache data: ', $message);
+    }
+
+    public function testSetThrowExceptionForFailExecuteCommandWithLoggerCustomMessageUpdate(): void
+    {
+        $cache = $this->createCacheDbFail();
+        $cache->setLoggerMessageUpdate('Custom message update: ');
+        $cache->set('key', 'value');
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Custom message update: ', $message);
     }
 
     public function testDeleteThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
         $cache->delete('key');
-        $this->assertCount(1, $this->getInaccessibleProperty($this->getLogger(), 'messages'));
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Unable to delete cache data: ', $message);
+    }
+
+    public function testDeleteThrowExceptionForFailExecuteCommandWithLoggerCustomMessageDelete(): void
+    {
+        $cache = $this->createCacheDbFail();
+        $cache->setLoggerMessageDelete('Custom message delete: ');
+        $cache->delete('key');
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Custom message delete: ', $message);
     }
 
     public function testClearThrowExceptionForFailExecuteCommand(): void

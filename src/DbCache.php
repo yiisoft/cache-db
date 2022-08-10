@@ -44,6 +44,9 @@ final class DbCache implements CacheInterface
      */
     private ConnectionInterface $db;
 
+    private string $loggerMessageDelete = 'Unable to delete cache data: ';
+    private string $loggerMessageUpdate = 'Unable to update cache data: ';
+
     /**
      * @var string The name of the database table to store the cache data. Defaults to "cache".
      */
@@ -123,7 +126,7 @@ final class DbCache implements CacheInterface
 
             return true;
         } catch (Throwable $e) {
-            $this->logger?->log(LogLevel::ERROR, (string) $e, [__METHOD__]);
+            $this->logger?->log(LogLevel::ERROR, $this->loggerMessageUpdate . $e->getMessage(), [__METHOD__]);
 
             return false;
         }
@@ -192,7 +195,7 @@ final class DbCache implements CacheInterface
 
             return true;
         } catch (Throwable $e) {
-            $this->logger?->log(LogLevel::ERROR, (string) $e, [__METHOD__]);
+            $this->logger?->log(LogLevel::ERROR, $this->loggerMessageUpdate . $e->getMessage(), [__METHOD__]);
 
             return false;
         }
@@ -212,6 +215,26 @@ final class DbCache implements CacheInterface
         $this->validateKey($key);
 
         return $this->getData($key, ['id'], 'exists');
+    }
+
+    /**
+     * Set logger message for delete operation failure.
+     *
+     * @param string $value The message.
+     */
+    public function setLoggerMessageDelete(string $value): void
+    {
+        $this->loggerMessageDelete = $value;
+    }
+
+    /**
+     * Set logger message for update operation failure.
+     *
+     * @param string $value The message.
+     */
+    public function setLoggerMessageUpdate(string $value): void
+    {
+        $this->loggerMessageUpdate = $value;
     }
 
     /**
@@ -259,7 +282,7 @@ final class DbCache implements CacheInterface
                 ->noCache()
                 ->execute();
         } catch (Throwable $e) {
-            $this->logger?->log(LogLevel::ERROR, (string) $e, [__METHOD__]);
+            $this->logger?->log(LogLevel::ERROR, $this->loggerMessageDelete . $e->getMessage(), [__METHOD__]);
         }
     }
 
