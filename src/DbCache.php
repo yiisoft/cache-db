@@ -17,8 +17,6 @@ use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Query\Query;
 
 use function array_fill_keys;
-use function gettype;
-use function is_iterable;
 use function is_string;
 use function iterator_to_array;
 use function random_int;
