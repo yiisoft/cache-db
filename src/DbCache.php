@@ -218,10 +218,8 @@ final class DbCache implements CacheInterface
     public function has(string $key): bool
     {
         $this->validateKey($key);
-        /** @var bool */
-        $has = $this->getData($key, ['id'], 'exists');
 
-        return $has;
+        return (bool) $this->getData($key, ['id'], 'exists');
     }
 
     /**
