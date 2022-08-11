@@ -94,7 +94,7 @@ final class DbCache implements CacheInterface
     {
         $this->validateKey($key);
 
-        /** @var bool|int|null|string|float */
+        /** @var bool|float|int|string|null */
         $value = $this->getData($key, ['data'], 'scalar');
 
         return $value === false ? $default : unserialize((string) $value);
@@ -219,9 +219,7 @@ final class DbCache implements CacheInterface
     {
         $this->validateKey($key);
         /** @var bool */
-        $has = $this->getData($key, ['id'], 'exists');
-
-        return $has;
+        return $this->getData($key, ['id'], 'exists');
     }
 
     /**
@@ -271,7 +269,7 @@ final class DbCache implements CacheInterface
     /**
      * Deletes a cache data from the database.
      *
-     * @param array|string|bool $id One or more IDs for deleting data.
+     * @param array|bool|string $id One or more IDs for deleting data.
      *
      * If `true`, the all cache data will be deleted from the database.
      */
