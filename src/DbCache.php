@@ -92,12 +92,14 @@ final class DbCache implements CacheInterface
         return $this->table;
     }
 
-    public function get($key, $default = null): mixed
+    public function get(string $key, mixed $default = null): mixed
     {
         $this->validateKey($key);
+
+        /** @var bool|int|null|string|float */
         $value = $this->getData($key, ['data'], 'scalar');
 
-        return $value === false ? $default : unserialize($value);
+        return $value === false ? $default : unserialize((string) $value);
     }
 
     /**
@@ -105,7 +107,7 @@ final class DbCache implements CacheInterface
      * @param mixed $value The cache data value.
      * @param DateInterval|int|string|null $ttl The cache data TTL.
      */
-    public function set($key, $value, $ttl = null): bool
+    public function set(string $key, mixed $value, DateInterval|int|string|null $ttl = null): bool
     {
         $this->validateKey($key);
         $ttl = $this->normalizeTtl($ttl);
@@ -131,7 +133,7 @@ final class DbCache implements CacheInterface
         }
     }
 
-    public function delete($key): bool
+    public function delete(string $key): bool
     {
         $this->validateKey($key);
         $this->deleteData($key);
@@ -146,19 +148,24 @@ final class DbCache implements CacheInterface
         return true;
     }
 
-    public function getMultiple($keys, $default = null): iterable
+    public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
+        /** @psalm-var array<array-key,array-key> */
         $keys = $this->iterableToArray($keys);
         $this->validateKeys($keys);
         $values = array_fill_keys($keys, $default);
 
+        /** @psalm-var array<string, string|resource> */
         foreach ($this->getData($keys, ['id', 'data'], 'all') as $value) {
             if (is_resource($value['data']) && get_resource_type($value['data']) === 'stream') {
                 $value['data'] = stream_get_contents($value['data']);
             }
-            $values[$value['id']] = unserialize($value['data']);
+
+            /** @var string */
+            $values[$value['id']] = unserialize((string) $value['data']);
         }
 
+        /** @psalm-var iterable<string,mixed> */
         return $values;
     }
 
@@ -166,12 +173,13 @@ final class DbCache implements CacheInterface
      * @param iterable $values A list of key => value pairs for a multiple-set operation.
      * @param DateInterval|int|string|null $ttl The cache data TTL.
      */
-    public function setMultiple($values, $ttl = null): bool
+    public function setMultiple(iterable $values, DateInterval|int|string|null $ttl = null): bool
     {
         $ttl = $this->normalizeTtl($ttl);
         $values = $this->iterableToArray($values);
         $rows = $keys = [];
 
+        /** @var mixed $value */
         foreach ($values as $key => $value) {
             $key = (string) $key;
             $this->validateKey($key);
@@ -200,7 +208,7 @@ final class DbCache implements CacheInterface
         }
     }
 
-    public function deleteMultiple($keys): bool
+    public function deleteMultiple(iterable $keys): bool
     {
         $keys = $this->iterableToArray($keys);
         $this->validateKeys($keys);
@@ -209,11 +217,13 @@ final class DbCache implements CacheInterface
         return true;
     }
 
-    public function has($key): bool
+    public function has(string $key): bool
     {
         $this->validateKey($key);
+        /** @var bool */
+        $has = $this->getData($key, ['id'], 'exists');
 
-        return $this->getData($key, ['id'], 'exists');
+        return $has;
     }
 
     /**
@@ -245,7 +255,7 @@ final class DbCache implements CacheInterface
      *
      * @return mixed The cache data.
      */
-    private function getData($id, array $fields, string $method)
+    private function getData(array|string $id, array $fields, string $method): mixed
     {
         if (empty($id)) {
             return is_string($id) ? false : [];
@@ -263,11 +273,11 @@ final class DbCache implements CacheInterface
     /**
      * Deletes a cache data from the database.
      *
-     * @param array|string|true $id One or more IDs for deleting data.
+     * @param array|string|bool $id One or more IDs for deleting data.
      *
      * If `true`, the all cache data will be deleted from the database.
      */
-    private function deleteData($id): void
+    private function deleteData(array|string|bool $id): void
     {
         if (empty($id)) {
             return;
@@ -297,7 +307,7 @@ final class DbCache implements CacheInterface
      */
     private function buildDataRow(string $id, ?int $ttl, $value, bool $associative): array
     {
-        $expire = $this->isInfinityTtl($ttl) ? null : ($ttl + time());
+        $expire = $this->isInfinityTtl($ttl) ? null : ((int) $ttl + time());
         $data = new Param(serialize($value), PDO::PARAM_LOB);
 
         if ($associative) {
@@ -329,7 +339,7 @@ final class DbCache implements CacheInterface
      *
      * @return int TTL value as UNIX timestamp.
      */
-    private function normalizeTtl($ttl): ?int
+    private function normalizeTtl(DateInterval|int|string|null $ttl): ?int
     {
         if ($ttl === null) {
             return null;
@@ -356,17 +366,9 @@ final class DbCache implements CacheInterface
 
     /**
      * Converts iterable to array. If provided value is not iterable it throws an InvalidArgumentException.
-     *
-     * @param mixed $iterable
-     *
-     * @return array
      */
-    private function iterableToArray($iterable): array
+    private function iterableToArray(iterable $iterable): array
     {
-        if (!is_iterable($iterable)) {
-            throw new InvalidArgumentException('Iterable is expected, got ' . gettype($iterable));
-        }
-
         /** @psalm-suppress RedundantCast */
         return $iterable instanceof Traversable ? iterator_to_array($iterable) : (array) $iterable;
     }
@@ -374,7 +376,7 @@ final class DbCache implements CacheInterface
     /**
      * @param mixed $key
      */
-    private function validateKey($key): void
+    private function validateKey(mixed $key): void
     {
         if (!is_string($key) || $key === '' || strpbrk($key, '{}()/\@:')) {
             throw new InvalidArgumentException('Invalid key value.');
@@ -386,6 +388,7 @@ final class DbCache implements CacheInterface
      */
     private function validateKeys(array $keys): void
     {
+        /** @var mixed $key */
         foreach ($keys as $key) {
             $this->validateKey($key);
         }
