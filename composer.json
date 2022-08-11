@@ -26,7 +26,6 @@
         "psr/log": "^2.0|^3.0",
         "psr/simple-cache": "^2.0|^3.0",
         "yiisoft/db": "^3.0@dev",
-        "yiisoft/db-sqlite": "3.0.x-dev",
         "yiisoft/yii-db-migration": "^1.0@dev"
     },
     "suggest": {
