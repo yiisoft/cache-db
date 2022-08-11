@@ -10,7 +10,6 @@ use IteratorAggregate;
 use ReflectionException;
 use ReflectionObject;
 use stdClass;
-use Yiisoft\Cache\Db\CacheException;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\InvalidArgumentException;
 use Yiisoft\Db\Exception\Exception;
@@ -444,30 +443,58 @@ abstract class DbCacheTest extends TestCase
 
     public function testSetThrowExceptionForFailExecuteCommand(): void
     {
-        $cache = new DbCache($this->db, 'noExist');
-        $this->expectException(CacheException::class);
+        $cache = $this->createCacheDbFail();
         $cache->set('key', 'value');
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Unable to update cache data: ', $message);
+    }
+
+    public function testSetThrowExceptionForFailExecuteCommandWithLoggerCustomMessageUpdate(): void
+    {
+        $cache = $this->createCacheDbFail();
+        $cache->setLoggerMessageUpdate('Custom message update: ');
+        $cache->set('key', 'value');
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Custom message update: ', $message);
     }
 
     public function testDeleteThrowExceptionForFailExecuteCommand(): void
     {
-        $cache = new DbCache($this->db, 'noExist');
-        $this->expectException(CacheException::class);
+        $cache = $this->createCacheDbFail();
         $cache->delete('key');
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Unable to delete cache data: ', $message);
+    }
+
+    public function testDeleteThrowExceptionForFailExecuteCommandWithLoggerCustomMessageDelete(): void
+    {
+        $cache = $this->createCacheDbFail();
+        $cache->setLoggerMessageDelete('Custom message delete: ');
+        $cache->delete('key');
+        $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
+        $message = $this->getInaccessibleProperty($logger[0], 'message');
+        $this->assertCount(1, $logger);
+        $this->assertStringContainsString('Custom message delete: ', $message);
     }
 
     public function testClearThrowExceptionForFailExecuteCommand(): void
     {
-        $cache = new DbCache($this->db, 'noExist');
-        $this->expectException(CacheException::class);
+        $cache = $this->createCacheDbFail();
         $cache->clear();
+        $this->assertCount(1, $this->getInaccessibleProperty($this->getLogger(), 'messages'));
     }
 
     public function testSetMultipleThrowExceptionForFailExecuteCommand(): void
     {
-        $cache = new DbCache($this->db, 'noExist');
-        $this->expectException(CacheException::class);
+        $cache = $this->createCacheDbFail();
         $cache->setMultiple(['key-1' => 'value-1', 'key-2' => 'value-2']);
+        $this->assertCount(2, $this->getInaccessibleProperty($this->getLogger(), 'messages'));
     }
 
     public function testGetDataEmptyKey(): void
@@ -520,5 +547,15 @@ abstract class DbCacheTest extends TestCase
                 $this->assertEquals($expected[$key], $actual[$key]);
             }
         }
+    }
+
+    private function createCacheDbFail(): DbCache
+    {
+        $logger = $this->getLogger();
+        $logger->flush();
+        $cache = new DbCache($this->db, 'noExist');
+        $cache->setLogger($logger);
+
+        return $cache;
     }
 }

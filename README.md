@@ -93,6 +93,17 @@ To work with values in a more efficient manner, batch operations should be used:
 
 This package can be used as a cache handler for the [Yii Caching Library](https://github.com/yiisoft/cache).
 
+## Additional logging
+
+In order to log details about failures you may set a logger instance. It should be `Psr\Log\LoggerInterface::class`. For example, you can use [yiisoft\Log](https://github.com/yiisoft/log):
+
+```php
+$cache = new \Yiisoft\Cache\Db\DbCache($db, $table, $gcProbability);
+$cache->setLogger(new \Yiisoft\Log\Logger());
+```
+
+This allows you to log cache operations, when ocurring errors, etc.
+
 ## Testing
 
 ### Unit testing
