@@ -218,10 +218,8 @@ final class DbCache implements CacheInterface
     public function has(string $key): bool
     {
         $this->validateKey($key);
-        /** @var bool */
-        $has = $this->getData($key, ['id'], 'exists');
 
-        return $has;
+        return (bool) $this->getData($key, ['id'], 'exists');
     }
 
     /**
@@ -303,7 +301,7 @@ final class DbCache implements CacheInterface
      *
      * @return array The row of cache data to insert into the database.
      */
-    private function buildDataRow(string $id, ?int $ttl, $value, bool $associative): array
+    private function buildDataRow(string $id, ?int $ttl, mixed $value, bool $associative): array
     {
         $expire = $this->isInfinityTtl($ttl) ? null : ((int) $ttl + time());
         $data = new Param(serialize($value), PDO::PARAM_LOB);
@@ -335,7 +333,7 @@ final class DbCache implements CacheInterface
      *
      * @param DateInterval|int|string|null $ttl The raw TTL.
      *
-     * @return int TTL value as UNIX timestamp.
+     * @return int|null TTL value as UNIX timestamp.
      */
     private function normalizeTtl(DateInterval|int|string|null $ttl): ?int
     {
