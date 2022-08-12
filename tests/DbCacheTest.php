@@ -51,12 +51,12 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param mixed $key
+     * @param string $key
      * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
-    public function testSet($key, $value): void
+    public function testSet(string $key, mixed $value): void
     {
         for ($i = 0; $i < 2; $i++) {
             $this->assertTrue($this->dbCache->set($key, $value));
@@ -66,12 +66,12 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param mixed $key
+     * @param string $key
      * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
-    public function testGet($key, $value): void
+    public function testGet(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
         $valueFromCache = $this->dbCache->get($key, 'default');
@@ -82,12 +82,12 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param mixed $key
+     * @param string $key
      * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
-    public function testValueInCacheCannotBeChanged($key, $value): void
+    public function testValueInCacheCannotBeChanged(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
         $valueFromCache = $this->dbCache->get($key, 'default');
@@ -106,12 +106,12 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param mixed $key
+     * @param string $key
      * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
-    public function testHas($key, $value): void
+    public function testHas(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
 
@@ -131,12 +131,12 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
-    public function testDelete($key, $value): void
+    public function testDelete(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
 
@@ -148,12 +148,12 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
-    public function testClear($key, $value): void
+    public function testClear(string $key, mixed $value): void
     {
         foreach ($this->dataProvider() as $datum) {
             $this->dbCache->set($datum[0], $datum[1]);
@@ -256,7 +256,7 @@ abstract class DbCacheTest extends TestCase
      *
      * @throws ReflectionException
      */
-    public function testNormalizeTtl($ttl, $expectedResult): void
+    public function testNormalizeTtl(mixed $ttl, mixed $expectedResult): void
     {
         $reflection = new ReflectionObject($this->dbCache);
         $method = $reflection->getMethod('normalizeTtl');
@@ -331,12 +331,6 @@ abstract class DbCacheTest extends TestCase
     public function invalidKeyProvider(): array
     {
         return [
-            'int' => [1],
-            'float' => [1.1],
-            'null' => [null],
-            'bool' => [true],
-            'object' => [new stdClass()],
-            'callable' => [fn () => 'key'],
             'psr-reserved' => ['{}()/\@:'],
             'empty-string' => [''],
         ];
@@ -345,9 +339,9 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider invalidKeyProvider
      *
-     * @param mixed $key
+     * @param string $key
      */
-    public function testGetThrowExceptionForInvalidKey($key): void
+    public function testGetThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->get($key);
@@ -356,9 +350,9 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider invalidKeyProvider
      *
-     * @param mixed $key
+     * @param string $key
      */
-    public function testSetThrowExceptionForInvalidKey($key): void
+    public function testSetThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->set($key, 'value');
@@ -367,9 +361,9 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider invalidKeyProvider
      *
-     * @param mixed $key
+     * @param string $key
      */
-    public function testDeleteThrowExceptionForInvalidKey($key): void
+    public function testDeleteThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->delete($key);
@@ -378,9 +372,9 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider invalidKeyProvider
      *
-     * @param mixed $key
+     * @param string $key
      */
-    public function testGetMultipleThrowExceptionForInvalidKeys($key): void
+    public function testGetMultipleThrowExceptionForInvalidKeys(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->getMultiple([$key]);
@@ -389,31 +383,9 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider invalidKeyProvider
      *
-     * @param mixed $key
+     * @param string $key
      */
-    public function testGetMultipleThrowExceptionForInvalidKeysNotIterable($key): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->dbCache->getMultiple($key);
-    }
-
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @param mixed $key
-     */
-    public function testSetMultipleThrowExceptionForInvalidKeysNotIterable($key): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->dbCache->setMultiple($key);
-    }
-
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @param mixed $key
-     */
-    public function testDeleteMultipleThrowExceptionForInvalidKeys($key): void
+    public function testDeleteMultipleThrowExceptionForInvalidKeys(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->deleteMultiple([$key]);
@@ -422,20 +394,9 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider invalidKeyProvider
      *
-     * @param mixed $key
+     * @param string $key
      */
-    public function testDeleteMultipleThrowExceptionForInvalidKeysNotIterable($key): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->dbCache->deleteMultiple($key);
-    }
-
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @param mixed $key
-     */
-    public function testHasThrowExceptionForInvalidKey($key): void
+    public function testHasThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->has($key);
