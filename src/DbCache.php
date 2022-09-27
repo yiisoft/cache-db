@@ -36,25 +36,8 @@ final class DbCache implements CacheInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var ConnectionInterface The database connection instance.
-     */
-    private ConnectionInterface $db;
-
     private string $loggerMessageDelete = 'Unable to delete cache data: ';
     private string $loggerMessageUpdate = 'Unable to update cache data: ';
-
-    /**
-     * @var string The name of the database table to store the cache data. Defaults to "cache".
-     */
-    private string $table;
-
-    /**
-     * @var int The probability (parts per million) that garbage collection (GC) should be performed
-     * when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
-     * This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
-     */
-    public int $gcProbability;
 
     /**
      * @param ConnectionInterface $db The database connection instance.
@@ -63,17 +46,12 @@ final class DbCache implements CacheInterface
      * be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
      * This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
      */
-    public function __construct(ConnectionInterface $db, string $table = '{{%cache}}', int $gcProbability = 100)
+    public function __construct(private ConnectionInterface $db, private string $table = '{{%cache}}', public int $gcProbability = 100)
     {
-        $this->db = $db;
-        $this->table = $table;
-        $this->gcProbability = $gcProbability;
     }
 
     /**
      * Gets an instance of a database connection.
-     *
-     * @return ConnectionInterface
      */
     public function getDb(): ConnectionInterface
     {
@@ -82,8 +60,6 @@ final class DbCache implements CacheInterface
 
     /**
      * Gets the name of the database table to store the cache data.
-     *
-     * @return string
      */
     public function getTable(): string
     {
@@ -320,7 +296,7 @@ final class DbCache implements CacheInterface
      */
     private function gc(): void
     {
-        if (random_int(0, 1000000) < $this->gcProbability) {
+        if (random_int(0, 1_000_000) < $this->gcProbability) {
             $this->db
                 ->createCommand()
                 ->delete($this->table, ['AND', ['>', 'expire', 0], ['<', 'expire', time()]])
@@ -369,9 +345,6 @@ final class DbCache implements CacheInterface
         return $iterable instanceof Traversable ? iterator_to_array($iterable) : (array) $iterable;
     }
 
-    /**
-     * @param mixed $key
-     */
     private function validateKey(mixed $key): void
     {
         if (!is_string($key) || $key === '' || strpbrk($key, '{}()/\@:')) {
@@ -379,9 +352,6 @@ final class DbCache implements CacheInterface
         }
     }
 
-    /**
-     * @param array $keys
-     */
     private function validateKeys(array $keys): void
     {
         /** @var mixed $key */
