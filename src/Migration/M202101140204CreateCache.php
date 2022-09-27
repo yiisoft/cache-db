@@ -20,8 +20,7 @@ final class M202101140204CreateCache implements RevertibleMigrationInterface
          */
         private DbCache $cache,
         private MigrationInformerInterface $migrationInformer
-    )
-    {
+    ) {
     }
 
     public function up(MigrationBuilder $b): void

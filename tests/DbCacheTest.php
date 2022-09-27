@@ -51,7 +51,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     *
      * @throws InvalidArgumentException
      */
     public function testSet(string $key, mixed $value): void
@@ -63,7 +62,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider dataProvider
-     *
      *
      * @throws InvalidArgumentException
      */
@@ -77,7 +75,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider dataProvider
-     *
      *
      * @throws InvalidArgumentException
      */
@@ -99,7 +96,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider dataProvider
-     *
      *
      * @throws InvalidArgumentException
      */
@@ -123,7 +119,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     *
      * @throws InvalidArgumentException
      */
     public function testDelete(string $key, mixed $value): void
@@ -137,7 +132,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider dataProvider
-     *
      *
      * @throws InvalidArgumentException
      */
@@ -164,7 +158,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider dataProviderSetMultiple
-     *
      *
      * @throws InvalidArgumentException
      */
@@ -238,7 +231,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProviderNormalizeTtl
      *
-     *
      * @throws ReflectionException
      */
     public function testNormalizeTtl(mixed $ttl, mixed $expectedResult): void
@@ -284,7 +276,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider iterableProvider
-     *
      *
      * @throws InvalidArgumentException
      */

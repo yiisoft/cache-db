@@ -49,7 +49,6 @@ abstract class TestCase extends AbstractTestCase
      * Gets an inaccessible object property.
      *
      * @param bool $revoke whether to make property inaccessible after getting.
-     *
      */
     protected function getInaccessibleProperty(object $object, string $propertyName, bool $revoke = true): mixed
     {
