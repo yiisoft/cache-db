@@ -48,11 +48,8 @@ abstract class TestCase extends AbstractTestCase
     /**
      * Gets an inaccessible object property.
      *
-     * @param object $object
-     * @param string $propertyName
      * @param bool $revoke whether to make property inaccessible after getting.
      *
-     * @return mixed
      */
     protected function getInaccessibleProperty(object $object, string $propertyName, bool $revoke = true): mixed
     {
@@ -83,8 +80,6 @@ abstract class TestCase extends AbstractTestCase
      * @param array $args The arguments to pass to the method.
      *
      * @throws ReflectionException
-     *
-     * @return mixed
      */
     protected function invokeMethod(object $object, string $method, array $args = []): mixed
     {

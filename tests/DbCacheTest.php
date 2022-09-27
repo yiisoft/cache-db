@@ -51,8 +51,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param string $key
-     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
@@ -66,8 +64,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param string $key
-     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
@@ -82,8 +78,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param string $key
-     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
@@ -106,8 +100,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param string $key
-     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
@@ -131,8 +123,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param string $key
-     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
@@ -148,8 +138,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProvider
      *
-     * @param string $key
-     * @param mixed $value
      *
      * @throws InvalidArgumentException
      */
@@ -177,7 +165,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProviderSetMultiple
      *
-     * @param int|null $ttl
      *
      * @throws InvalidArgumentException
      */
@@ -251,8 +238,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider dataProviderNormalizeTtl
      *
-     * @param mixed $ttl
-     * @param mixed $expectedResult
      *
      * @throws ReflectionException
      */
@@ -274,11 +259,11 @@ abstract class DbCacheTest extends TestCase
                 ['a' => 1, 'b' => 2,],
                 ['a' => 1, 'b' => 2,],
             ],
-            'ArrayIterator' => [
+            \ArrayIterator::class => [
                 ['a' => 1, 'b' => 2,],
                 new ArrayIterator(['a' => 1, 'b' => 2,]),
             ],
-            'IteratorAggregate' => [
+            \IteratorAggregate::class => [
                 ['a' => 1, 'b' => 2,],
                 new class () implements IteratorAggregate {
                     public function getIterator(): ArrayIterator
@@ -300,8 +285,6 @@ abstract class DbCacheTest extends TestCase
     /**
      * @dataProvider iterableProvider
      *
-     * @param array $array
-     * @param iterable $iterable
      *
      * @throws InvalidArgumentException
      */
@@ -338,8 +321,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     *
-     * @param string $key
      */
     public function testGetThrowExceptionForInvalidKey(string $key): void
     {
@@ -349,8 +330,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     *
-     * @param string $key
      */
     public function testSetThrowExceptionForInvalidKey(string $key): void
     {
@@ -360,8 +339,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     *
-     * @param string $key
      */
     public function testDeleteThrowExceptionForInvalidKey(string $key): void
     {
@@ -371,8 +348,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     *
-     * @param string $key
      */
     public function testGetMultipleThrowExceptionForInvalidKeys(string $key): void
     {
@@ -382,8 +357,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     *
-     * @param string $key
      */
     public function testDeleteMultipleThrowExceptionForInvalidKeys(string $key): void
     {
@@ -393,8 +366,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider invalidKeyProvider
-     *
-     * @param string $key
      */
     public function testHasThrowExceptionForInvalidKey(string $key): void
     {
