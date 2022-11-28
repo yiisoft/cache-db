@@ -42,10 +42,10 @@ jobs:
 
     services:
       oci:
-          image: wnameless/oracle-xe-11g-r2:latest
-          ports:
-              - 1521:1521
-          options: --name=oci
+        image: wnameless/oracle-xe-11g-r2:latest
+        ports:
+          - 1521:1521
+        options: --name=oci
 
     steps:
       - name: Checkout

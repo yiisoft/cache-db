@@ -14,17 +14,13 @@ use Yiisoft\Yii\Db\Migration\RevertibleMigrationInterface;
  */
 final class M202101140204CreateCache implements RevertibleMigrationInterface
 {
-    private MigrationInformerInterface $migrationInformer;
-
-    /**
-     * @var DbCache An instance for creating a cache table.
-     */
-    private DbCache $cache;
-
-    public function __construct(DbCache $cache, MigrationInformerInterface $migrationInformer)
-    {
-        $this->cache = $cache;
-        $this->migrationInformer = $migrationInformer;
+    public function __construct(
+        /**
+         * @var DbCache An instance for creating a cache table.
+         */
+        private DbCache $cache,
+        private MigrationInformerInterface $migrationInformer
+    ) {
     }
 
     public function up(MigrationBuilder $b): void
