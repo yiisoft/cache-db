@@ -17,8 +17,8 @@ final class SqliteHelper extends ConnectionHelper
     public function createConnection(): ConnectionInterface
     {
         $pdoDriver = new PDODriver($this->dsn, '', '');
-        $pdoDriver->setCharset($this->charset);
+        $pdoDriver->charset($this->charset);
 
-        return new ConnectionPDO($pdoDriver, $this->createQueryCache(), $this->createSchemaCache());
+        return new ConnectionPDO($pdoDriver, $this->createSchemaCache());
     }
 }
