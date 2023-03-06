@@ -20,9 +20,9 @@ final class OracleHelper extends ConnectionHelper
     public function createConnection(): ConnectionInterface
     {
         $pdoDriver = new PDODriver($this->dsn, $this->username, $this->password);
-        $pdoDriver->setCharset($this->charset);
+        $pdoDriver->charset($this->charset);
         $pdoDriver->attributes([PDO::ATTR_STRINGIFY_FETCHES => true]);
 
-        return new ConnectionPDO($pdoDriver, $this->createQueryCache(), $this->createSchemaCache());
+        return new ConnectionPDO($pdoDriver, $this->createSchemaCache());
     }
 }

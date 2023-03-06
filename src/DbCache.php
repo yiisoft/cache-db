@@ -97,7 +97,6 @@ final class DbCache implements CacheInterface
             $this->db
                 ->createCommand()
                 ->upsert($this->table, $this->buildDataRow($key, $ttl, $value, true))
-                ->noCache()
                 ->execute();
 
             $this->gc();
@@ -171,7 +170,6 @@ final class DbCache implements CacheInterface
                 $this->db
                     ->createCommand()
                     ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
-                    ->noCache()
                     ->execute();
             }
 
@@ -237,7 +235,6 @@ final class DbCache implements CacheInterface
         }
 
         return (new Query($this->db))
-            ->noCache()
             ->from($this->table)
             ->select($fields)
             ->where(['id' => $id])
@@ -263,7 +260,6 @@ final class DbCache implements CacheInterface
             $this->db
                 ->createCommand()
                 ->delete($this->table, $condition)
-                ->noCache()
                 ->execute();
         } catch (Throwable $e) {
             $this->logger?->log(LogLevel::ERROR, $this->loggerMessageDelete . $e->getMessage(), [__METHOD__]);
