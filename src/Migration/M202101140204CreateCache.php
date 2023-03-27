@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Migration;
 
 use Yiisoft\Cache\Db\DbCache;
+use Yiisoft\Db\Exception\InvalidConfigException;
+use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Yii\Db\Migration\Informer\MigrationInformerInterface;
 use Yiisoft\Yii\Db\Migration\MigrationBuilder;
 use Yiisoft\Yii\Db\Migration\RevertibleMigrationInterface;
@@ -23,6 +25,10 @@ final class M202101140204CreateCache implements RevertibleMigrationInterface
     ) {
     }
 
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     public function up(MigrationBuilder $b): void
     {
         $builder = new MigrationBuilder($this->cache->getDb(), $this->migrationInformer);
@@ -37,6 +43,10 @@ final class M202101140204CreateCache implements RevertibleMigrationInterface
         ]);
     }
 
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     public function down(MigrationBuilder $b): void
     {
         $builder = new MigrationBuilder($this->cache->getDb(), $this->migrationInformer);

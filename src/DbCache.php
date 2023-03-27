@@ -10,6 +10,7 @@ use PDO;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LogLevel;
 use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use Throwable;
 use Traversable;
 use Yiisoft\Db\Command\Param;
@@ -73,7 +74,7 @@ final class DbCache implements CacheInterface
     {
         $this->validateKey($key);
 
-        /** @var bool|float|int|string|null */
+        /** @var bool|float|int|string|null $value */
         $value = $this->getData($key, ['data'], 'scalar');
 
         return $value === false ? $default : unserialize((string) $value);
@@ -83,6 +84,8 @@ final class DbCache implements CacheInterface
      * @param string $key The cache data ID.
      * @param mixed $value The cache data value.
      * @param DateInterval|int|string|null $ttl The cache data TTL.
+     *
+     * @throws InvalidArgumentException
      */
     public function set(string $key, mixed $value, DateInterval|int|string|null $ttl = null): bool
     {
@@ -126,7 +129,7 @@ final class DbCache implements CacheInterface
 
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
-        /** @psalm-var array<array-key,array-key> */
+        /** @psalm-var array<array-key,array-key> $keys */
         $keys = $this->iterableToArray($keys);
         $this->validateKeys($keys);
         $values = array_fill_keys($keys, $default);
@@ -137,7 +140,7 @@ final class DbCache implements CacheInterface
                 $value['data'] = stream_get_contents($value['data']);
             }
 
-            /** @var string */
+            /** @psalm-var string */
             $values[$value['id']] = unserialize((string) $value['data']);
         }
 
@@ -148,6 +151,8 @@ final class DbCache implements CacheInterface
     /**
      * @param iterable $values A list of key => value pairs for a multiple-set operation.
      * @param DateInterval|int|string|null $ttl The cache data TTL.
+     *
+     * @throws InvalidArgumentException
      */
     public function setMultiple(iterable $values, DateInterval|int|string|null $ttl = null): bool
     {
@@ -155,7 +160,7 @@ final class DbCache implements CacheInterface
         $values = $this->iterableToArray($values);
         $rows = $keys = [];
 
-        /** @var mixed $value */
+        /** @psalm-var mixed $value */
         foreach ($values as $key => $value) {
             $key = (string) $key;
             $this->validateKey($key);
@@ -224,7 +229,7 @@ final class DbCache implements CacheInterface
      *
      * @param array|string $id One or more IDs for deleting data.
      * @param array $fields Selectable fields.
-     * @param string $method Method of the returned data ( "all", "scalar", "exists").
+     * @param string $method Method of the returned data ("all", "scalar", "exists").
      *
      * @return mixed The cache data.
      */
@@ -243,7 +248,7 @@ final class DbCache implements CacheInterface
     }
 
     /**
-     * Deletes a cache data from the database.
+     * Deletes cache data from the database.
      *
      * @param array|bool|string $id One or more IDs for deleting data.
      *
@@ -336,7 +341,7 @@ final class DbCache implements CacheInterface
     }
 
     /**
-     * Converts iterable to array. If provided value is not iterable it throws an InvalidArgumentException.
+     * Converts iterable to array. If provided value isn't iterable, it throws an InvalidArgumentException.
      */
     private function iterableToArray(iterable $iterable): array
     {
@@ -344,16 +349,22 @@ final class DbCache implements CacheInterface
         return $iterable instanceof Traversable ? iterator_to_array($iterable) : (array) $iterable;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function validateKey(mixed $key): void
     {
         if (!is_string($key) || $key === '' || strpbrk($key, '{}()/\@:')) {
-            throw new InvalidArgumentException('Invalid key value.');
+            throw new \Yiisoft\Cache\Db\InvalidArgumentException('Invalid key value.');
         }
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function validateKeys(array $keys): void
     {
-        /** @var mixed $key */
+        /** @psalm-var mixed $key */
         foreach ($keys as $key) {
             $this->validateKey($key);
         }

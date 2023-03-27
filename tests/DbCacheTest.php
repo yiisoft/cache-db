@@ -27,7 +27,7 @@ abstract class DbCacheTest extends TestCase
         $this->assertSame($this->db, $this->dbCache->getDb());
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         $object = new stdClass();
         $object->test_field = 'test_value';
@@ -148,7 +148,7 @@ abstract class DbCacheTest extends TestCase
     /**
      * @return array testing multiSet with and without expiry
      */
-    public function dataProviderSetMultiple(): array
+    public static function dataProviderSetMultiple(): array
     {
         return [
             [null],
@@ -215,7 +215,7 @@ abstract class DbCacheTest extends TestCase
      *
      * @return array test data
      */
-    public function dataProviderNormalizeTtl(): array
+    public static function dataProviderNormalizeTtl(): array
     {
         return [
             [123, 123],
@@ -244,7 +244,7 @@ abstract class DbCacheTest extends TestCase
         $this->assertSameExceptObject($expectedResult, $result);
     }
 
-    public function iterableProvider(): array
+    public static function iterableProvider(): array
     {
         return [
             'array' => [
@@ -302,7 +302,7 @@ abstract class DbCacheTest extends TestCase
         $this->assertNull($this->dbCache->get('key'));
     }
 
-    public function invalidKeyProvider(): array
+    public static function invalidKeyProvider(): array
     {
         return [
             'psr-reserved' => ['{}()/\@:'],
