@@ -244,7 +244,6 @@ abstract class DbCacheTest extends TestCase
 
     /**
      * @dataProvider dataProviderNormalizeTtl
-     *
      */
     public function testNormalizeTtl(mixed $ttl, mixed $expectedResult): void
     {
@@ -288,7 +287,6 @@ abstract class DbCacheTest extends TestCase
      * @dataProvider iterableProvider
      *
      * @throws InvalidArgumentException
-     *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testValuesAsIterable(array $array, iterable $iterable): void
