@@ -61,11 +61,13 @@ abstract class TestCase extends AbstractTestCase
 
         $property->setAccessible(true);
 
+        $result = $property->getValue($object);
+
         if ($revoke) {
             $property->setAccessible(false);
         }
 
-        return $property->getValue($object);
+        return $result;
     }
 
     /**

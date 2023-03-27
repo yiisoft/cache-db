@@ -250,7 +250,11 @@ abstract class DbCacheTest extends TestCase
         $reflection = new ReflectionObject($this->dbCache);
         $method = $reflection->getMethod('normalizeTtl');
 
-        $this->assertSameExceptObject($expectedResult, $method->invokeArgs($this->dbCache, [$ttl]));
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->dbCache, [$ttl]);
+        $method->setAccessible(false);
+
+        $this->assertSameExceptObject($expectedResult, $result);
     }
 
     public static function iterableProvider(): array
