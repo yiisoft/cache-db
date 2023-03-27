@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Sqlite;
+namespace Yiisoft\Cache\Db\Tests\Driver\Sqlite;
 
 use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\SqliteHelper;
@@ -16,7 +16,6 @@ final class MigrationSqliteTest extends MigrationTest
     {
         parent::setUp();
 
-        /** @var ConnectionInterface */
         $this->db = (new SqliteHelper())->createConnection();
 
         // create cache instance

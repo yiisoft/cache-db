@@ -2,22 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Pgsql;
+namespace Yiisoft\Cache\Db\Tests\Driver\Sqlite;
 
 use Yiisoft\Cache\Db\Tests\DbCacheTest;
-use Yiisoft\Cache\Db\Tests\Support\PgsqlHelper;
+use Yiisoft\Cache\Db\Tests\Support\SqliteHelper;
+use Yiisoft\Db\Exception\InvalidConfigException;
+use Yiisoft\Db\Exception\NotSupportedException;
 
 /**
- * @group Pgsql
+ * @group Sqlite
  */
-final class DbCachePgsqlTest extends DbCacheTest
+final class DbCacheSqliteTest extends DbCacheTest
 {
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        // create connection dbms specific
-        $this->db = (new PgsqlHelper())->createConnection();
+        // create connection dbms-specific
+        $this->db = (new SqliteHelper())->createConnection();
 
         // create cache instance
         $this->dbCache = $this->createDbCache();
@@ -27,6 +33,10 @@ final class DbCachePgsqlTest extends DbCacheTest
         $migration->up($this->createMigrationBuilder());
     }
 
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     protected function tearDown(): void
     {
         // remove migration table

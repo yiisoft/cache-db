@@ -10,22 +10,22 @@
   </coverage>
   <testsuites>
     <testsuite name="CacheDb">
-      <directory>./tests</directory>
+      <directory>./tests/Driver</directory>
     </testsuite>
     <testsuite name="Mssql">
-      <directory>./tests/Mssql</directory>
+      <directory>./tests/Driver/Mssql</directory>
     </testsuite>
     <testsuite name="Mysql">
-      <directory>./tests/Mysql</directory>
+      <directory>./tests/Driver/Mysql</directory>
     </testsuite>
     <testsuite name="Oracle">
-      <directory>./tests/Oracle</directory>
+      <directory>./tests/Driver/Oracle</directory>
     </testsuite>
     <testsuite name="Pgsql">
-      <directory>./tests/Pgsql</directory>
+      <directory>./tests/Driver/Pgsql</directory>
     </testsuite>
     <testsuite name="Sqlite">
-      <directory>./tests/Sqlite</directory>
+      <directory>./tests/Driver/Sqlite</directory>
     </testsuite>
   </testsuites>
 </phpunit>

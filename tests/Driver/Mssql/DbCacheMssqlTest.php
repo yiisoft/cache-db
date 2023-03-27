@@ -2,22 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Mysql;
+namespace Yiisoft\Cache\Db\Tests\Driver\Mssql;
 
 use Yiisoft\Cache\Db\Tests\DbCacheTest;
-use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
+use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
+use Yiisoft\Db\Exception\InvalidConfigException;
+use Yiisoft\Db\Exception\NotSupportedException;
 
 /**
- * @group Mysql
+ * @group Mssql
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbCacheMysqlTest extends DbCacheTest
+final class DbCacheMssqlTest extends DbCacheTest
 {
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        // create connection dbms specific
-        $this->db = (new MysqlHelper())->createConnection();
+        // create connection dbms-specific
+        $this->db = (new MssqlHelper())->createConnection();
 
         // create cache instance
         $this->dbCache = $this->createDbCache();
@@ -27,6 +35,10 @@ final class DbCacheMysqlTest extends DbCacheTest
         $migration->up($this->createMigrationBuilder());
     }
 
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     protected function tearDown(): void
     {
         // remove migration table

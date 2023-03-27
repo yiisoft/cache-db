@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Mysql;
+namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 
 use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
 
 /**
  * @group Mysql
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 final class MigrationMysqlTest extends MigrationTest
 {
@@ -16,7 +18,6 @@ final class MigrationMysqlTest extends MigrationTest
     {
         parent::setUp();
 
-        /** @var ConnectionInterface */
         $this->db = (new MysqlHelper())->createConnection();
 
         // create cache instance

@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests;
 
+use Yiisoft\Db\Exception\InvalidConfigException;
+use Yiisoft\Db\Exception\NotSupportedException;
+
 abstract class MigrationTest extends TestCase
 {
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     public function testUpAndDown(): void
     {
         $migration = $this->createMigration();
