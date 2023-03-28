@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Oracle;
+namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
 use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
@@ -16,7 +16,6 @@ final class MigrationOracleTest extends MigrationTest
     {
         parent::setUp();
 
-        /** @var ConnectionInterface */
         $this->db = (new OracleHelper())->createConnection();
 
         // create cache instance

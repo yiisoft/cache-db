@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Pgsql;
+namespace Yiisoft\Cache\Db\Tests\Driver\Pgsql;
 
 use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\PgsqlHelper;
@@ -16,7 +16,6 @@ final class MigrationPgsqlTest extends MigrationTest
     {
         parent::setUp();
 
-        /** @var ConnectionInterface */
         $this->db = (new PgsqlHelper())->createConnection();
 
         // create cache instance

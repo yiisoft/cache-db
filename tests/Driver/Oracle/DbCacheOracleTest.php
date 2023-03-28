@@ -2,22 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Mssql;
+namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
 use Yiisoft\Cache\Db\Tests\DbCacheTest;
-use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
+use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
+use Yiisoft\Db\Exception\InvalidConfigException;
+use Yiisoft\Db\Exception\NotSupportedException;
 
 /**
- * @group Mssql
+ * @group Oracle
  */
-final class DbCacheMssqlTest extends DbCacheTest
+final class DbCacheOracleTest extends DbCacheTest
 {
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        // create connection dbms specific
-        $this->db = (new MssqlHelper())->createConnection();
+        // create connection dbms-specific
+        $this->db = (new OracleHelper())->createConnection();
 
         // create cache instance
         $this->dbCache = $this->createDbCache();
@@ -27,6 +33,10 @@ final class DbCacheMssqlTest extends DbCacheTest
         $migration->up($this->createMigrationBuilder());
     }
 
+    /**
+     * @throws InvalidConfigException
+     * @throws NotSupportedException
+     */
     protected function tearDown(): void
     {
         // remove migration table
