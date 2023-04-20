@@ -65,6 +65,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 DbCache::class => [
                     '__construct()' => [
                         'table' => '{{%test-table}}',
+                        'gcProbability' => 500_000,
                     ],
                 ],
             ],

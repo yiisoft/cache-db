@@ -68,7 +68,7 @@ final class CreateCacheMigration extends Command
         return Command::SUCCESS;
     }
 
-    public function dropTable(CommandInterface $command, string $table, SymfonyStyle $io): void
+    private function dropTable(CommandInterface $command, string $table, SymfonyStyle $io): void
     {
         $command->dropTable($table)->execute();
 
