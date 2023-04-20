@@ -407,7 +407,7 @@ abstract class DbCacheTest extends TestCase
         /** @psalm-var Logger[] $logger */
         $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
 
-        /** @psalm-var string $message */
+        /** @psalm-var string $context */
         $context = $this->getInaccessibleProperty($logger[0], 'context');
 
         $this->assertSame('Yiisoft\\Cache\\Db\\DbCache::set', $context[0]);
@@ -449,11 +449,16 @@ abstract class DbCacheTest extends TestCase
         /** @psalm-var Logger[] $logger */
         $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
 
+        /** @psalm-var string $context */
+        $context = $this->getInaccessibleProperty($logger[0], 'context');
+
+        $this->assertSame('Yiisoft\\Cache\\Db\\DbCache::deleteData', $context[0]);
+
         /** @psalm-var string $message */
         $message = $this->getInaccessibleProperty($logger[0], 'message');
 
         $this->assertCount(1, $logger);
-        $this->assertStringContainsString('Unable to delete cache data: ', $message);
+        $this->assertStringContainsString('Unable to delete cache data: SQLSTATE[', $message);
     }
 
     /**
