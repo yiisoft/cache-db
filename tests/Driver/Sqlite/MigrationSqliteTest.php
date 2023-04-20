@@ -6,7 +6,6 @@ namespace Yiisoft\Cache\Db\Tests\Driver\Sqlite;
 
 use Yiisoft\Cache\Db\Tests\Support\SqliteHelper;
 use Yiisoft\Cache\Db\Tests\TestCase;
-use Yiisoft\Db\Connection\ConnectionInterface;
 
 /**
  * @group Sqlite

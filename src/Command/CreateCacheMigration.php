@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Command;
 
-use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -61,8 +60,8 @@ final class CreateCacheMigration extends Command
             ],
         )->execute();
 
-        $io->writeln('<fg=green>>>> Table'  . $this->cache->getTable() . ' created.');
-        $io->writeln("");
+        $io->writeln('<fg=green>>>> Table' . $this->cache->getTable() . ' created.');
+        $io->writeln('');
         $io->success('Migration created successfully.');
 
         return Command::SUCCESS;
@@ -73,6 +72,6 @@ final class CreateCacheMigration extends Command
         $command->dropTable($this->cache->getTable())->execute();
 
         $io->title('Cache table dropped');
-        $io->writeln('<fg=green>>>> Table: ' . $this->cache->getTable() . " dropped.</>");
+        $io->writeln('<fg=green>>>> Table: ' . $this->cache->getTable() . ' dropped.</>');
     }
 }

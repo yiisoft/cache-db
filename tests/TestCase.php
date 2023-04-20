@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests;
 
-use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionObject;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Config\ConfigInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Di\Container;
 use Yiisoft\Di\ContainerConfig;
