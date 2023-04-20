@@ -58,4 +58,20 @@ abstract class MigrationTest extends TestCase
         $this->assertStringContainsString('>>> Table: {{%test-table}} created.', $output);
         $this->assertStringContainsString('[OK] Migration created successfully.', $output);
     }
+
+    public function testVerifyTableStructure(): void
+    {
+        $this->createMigration($this->db);
+
+        $table = $this->db->getTableSchema('{{%test-table}}');
+
+        $this->assertNotNull($table);
+
+        $this->assertSame('test-table', $table->getName());
+        $this->assertSame(['id'], $table->getPrimaryKey());
+        $this->assertSame('string', $table->getColumn('id')->getType());
+        $this->assertSame(128, $table->getColumn('id')->getSize());
+        $this->assertSame('binary', $table->getColumn('data')->getType());
+        $this->assertSame('integer', $table->getColumn('expire')->getType());
+    }
 }
