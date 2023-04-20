@@ -11,7 +11,6 @@ use Yiisoft\Db\Oracle\Driver;
 
 final class OracleHelper extends ConnectionHelper
 {
-    private string $drivername = 'oci';
     private string $dsn = 'oci:dbname=localhost/XE;';
     private string $username = 'system';
     private string $password = 'root';

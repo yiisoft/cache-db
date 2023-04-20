@@ -10,7 +10,6 @@ use Yiisoft\Db\Mssql\Driver;
 
 final class MssqlHelper extends ConnectionHelper
 {
-    private string $drivername = 'sqlsrv';
     private string $dsn = 'sqlsrv:Server=127.0.0.1,1433;Database=yiitest';
     private string $username = 'SA';
     private string $password = 'YourStrong!Passw0rd';

@@ -67,10 +67,18 @@ jobs:
           - 5432:5432
         options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
       oci:
-          image: wnameless/oracle-xe-11g-r2:latest
-          ports:
-              - 1521:1521
-          options: --name=oci
+        image: gvenzl/oracle-xe:21
+        ports:
+          - 1521:1521
+        env:
+          ORACLE_DATABASE : yiitest
+          ORACLE_PASSWORD : root
+        options: >-
+          --name=oci
+          --health-cmd healthcheck.sh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Checkout
