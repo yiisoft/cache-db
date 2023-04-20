@@ -415,7 +415,11 @@ abstract class DbCacheTest extends TestCase
         /** @psalm-var string $message */
         $message = $this->getInaccessibleProperty($logger[0], 'message');
 
+        /** @psalm-var string $loggerMessageUpdate */
+        $loggerMessageUpdate = $this->getInaccessibleProperty($cache, 'loggerMessageUpdate');
+
         $this->assertCount(1, $logger);
+        $this->assertStringContainsString($loggerMessageUpdate, $message);
         $this->assertStringContainsString('Unable to update cache data: SQLSTATE', $message);
     }
 
@@ -457,7 +461,11 @@ abstract class DbCacheTest extends TestCase
         /** @psalm-var string $message */
         $message = $this->getInaccessibleProperty($logger[0], 'message');
 
+        /** @psalm-var string $loggerMessageDelete */
+        $loggerMessageDelete = $this->getInaccessibleProperty($cache, 'loggerMessageDelete');
+
         $this->assertCount(1, $logger);
+        $this->assertStringContainsString($loggerMessageDelete, $message);
         $this->assertStringContainsString('Unable to delete cache data: SQLSTATE[', $message);
     }
 

@@ -182,7 +182,8 @@ final class DbCache implements CacheInterface
 
             return true;
         } catch (Throwable $e) {
-            $this->logger?->log(LogLevel::ERROR, $this->loggerMessageUpdate . $e->getMessage(), [__METHOD__]);
+            $message = $e->getMessage();
+            $this->logger?->log(LogLevel::ERROR, "$this->loggerMessageUpdate$message", [__METHOD__]);
 
             return false;
         }
@@ -267,7 +268,8 @@ final class DbCache implements CacheInterface
                 ->delete($this->table, $condition)
                 ->execute();
         } catch (Throwable $e) {
-            $this->logger?->log(LogLevel::ERROR, $this->loggerMessageDelete . $e->getMessage(), [__METHOD__]);
+            $message = $e->getMessage();
+            $this->logger?->log(LogLevel::ERROR, "$this->loggerMessageDelete$message", [__METHOD__]);
         }
     }
 
