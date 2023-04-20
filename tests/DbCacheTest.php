@@ -402,16 +402,21 @@ abstract class DbCacheTest extends TestCase
     public function testSetThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
-        $cache->set('key', 'value');
+        $this->assertFalse($cache->set('key', 'value'));
 
         /** @psalm-var Logger[] $logger */
         $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
 
         /** @psalm-var string $message */
+        $context = $this->getInaccessibleProperty($logger[0], 'context');
+
+        $this->assertSame('Yiisoft\\Cache\\Db\\DbCache::set', $context[0]);
+
+        /** @psalm-var string $message */
         $message = $this->getInaccessibleProperty($logger[0], 'message');
 
         $this->assertCount(1, $logger);
-        $this->assertStringContainsString('Unable to update cache data: ', $message);
+        $this->assertStringContainsString('Unable to update cache data: SQLSTATE', $message);
     }
 
     /**
