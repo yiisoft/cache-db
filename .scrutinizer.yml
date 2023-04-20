@@ -10,7 +10,7 @@ build:
 
   environment:
     php:
-      version: 8.0.20
+      version: 8.1.18
       ini:
         xdebug.mode: coverage
 
@@ -131,10 +131,10 @@ build:
           - make
           - sudo make install
           - sudo ldconfig
-          - curl -k -L --output /home/scrutinizer/php-8.0.20.tar.gz https://www.php.net/distributions/php-8.0.20.tar.gz
+          - curl -k -L --output /home/scrutinizer/php-8.1.18.tar.gz https://www.php.net/distributions/php-8.1.18.tar.gz
           - cd /home/scrutinizer
-          - tar -zxf php-8.0.20.tar.gz
-          - cd php-8.0.20/ext/pdo_oci
+          - tar -zxf php-8.1.18.tar.gz
+          - cd php-8.1.18/ext/pdo_oci
           - phpize
           - ./configure --with-pdo-oci=instantclient,/opt/oracle/instantclient_21_3
           - make
@@ -146,7 +146,7 @@ build:
           - composer require yiisoft/db-oracle --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
           - composer require yiisoft/db-pgsql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
           - composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
-          - echo 'extension=pdo_oci' >> /home/scrutinizer/.phpenv/versions/8.0.20/etc/php.ini
+          - echo 'extension=pdo_oci' >> /home/scrutinizer/.phpenv/versions/8.1.18/etc/php.ini
 
         override:
           - command: ./vendor/bin/phpunit --coverage-clover ./coverage.xml
