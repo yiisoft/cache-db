@@ -4,27 +4,26 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Pgsql;
 
+use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\PgsqlHelper;
-use Yiisoft\Cache\Db\Tests\TestCase;
 
 /**
  * @group Pgsql
  */
-final class MigrationPgsqlTest extends TestCase
+final class MigrationPgsqlTest extends MigrationTest
 {
-    public function testCreateMigration(): void
+    protected function setUp(): void
     {
-        $db = (new PgsqlHelper())->createConnection();
-        $result = $this->createMigration($db);
+        parent::setUp();
 
-        $this->assertSame(0, $result);
+        // create connection dbms-specific
+        $this->db = (new PgsqlHelper())->createConnection();
     }
 
-    public function testCreateMigrationWithForce(): void
+    protected function tearDown(): void
     {
-        $db = (new PgsqlHelper())->createConnection();
-        $result = $this->createMigration($db, true);
+        parent::tearDown();
 
-        $this->assertSame(0, $result);
+        $this->db->close();
     }
 }

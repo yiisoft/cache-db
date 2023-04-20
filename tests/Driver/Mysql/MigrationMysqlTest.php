@@ -5,28 +5,27 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
-use Yiisoft\Cache\Db\Tests\TestCase;
+use Yiisoft\Cache\Db\Tests\MigrationTest;
 
 /**
  * @group Mysql
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class MigrationMysqlTest extends TestCase
+final class MigrationMysqlTest extends MigrationTest
 {
-    public function testCreateMigration(): void
+    protected function setup(): void
     {
-        $db = (new MysqlHelper())->createConnection();
-        $result = $this->createMigration($db);
+        parent::setUp();
 
-        $this->assertSame(0, $result);
+        // create connection dbms-specific
+        $this->db = (new MysqlHelper())->createConnection();
     }
 
-    public function testCreateMigrationWithForce(): void
+    protected function tearDown(): void
     {
-        $db = (new MysqlHelper())->createConnection();
-        $result = $this->createMigration($db, true);
+        parent::tearDown();
 
-        $this->assertSame(0, $result);
+        $this->db->close();
     }
 }

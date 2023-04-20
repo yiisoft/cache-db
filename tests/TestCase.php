@@ -8,6 +8,7 @@ use ReflectionClass;
 use ReflectionObject;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Yiisoft\Cache\Db\Command\CreateCacheMigration;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Di\Container;
@@ -21,6 +22,31 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
+    protected CommandTester $commandTester;
+
+    /**
+     * Asserting two strings equality ignoring line endings.
+     *
+     * @param string $expected The expected string.
+     * @param string $actual The actual string.
+     * @param string $message The message to display if the assertion fails.
+     */
+    public function equalsWithoutLE(string $expected, string $actual, string $message = ''): void
+    {
+        $expected = str_replace("\r\n", "\n", $expected);
+        $actual = str_replace("\r\n", "\n", $actual);
+
+        $this->assertEquals($expected, $actual, $message);
+    }
+
+    protected function createApplication(ConnectionInterface $db): Application
+    {
+        $app = new Application();
+        $command = new CreateCacheMigration(new DbCache($db, 'test-table'));
+        $app->add($command);
+
+        return $app;
+    }
 
     protected function createMigration(ConnectionInterface $db, bool $force = false): int
     {
@@ -59,11 +85,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $app->setCommandLoader($loader);
         $command = $app->find('cache/migrate');
 
-        $commandCreate = new CommandTester($command);
+        $this->commandTester = new CommandTester($command);
 
         return match ($force) {
-            true => $commandCreate->execute(['--force' => true]),
-            default => $commandCreate->execute([]),
+            true => $this->commandTester->execute(['--force' => true]),
+            default => $this->commandTester->execute([]),
         };
     }
 

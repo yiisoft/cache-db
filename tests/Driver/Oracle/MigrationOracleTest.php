@@ -5,26 +5,25 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
 use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
-use Yiisoft\Cache\Db\Tests\TestCase;
+use Yiisoft\Cache\Db\Tests\MigrationTest;
 
 /**
  * @group Oracle
  */
-final class MigrationOracleTest extends TestCase
+final class MigrationOracleTest extends MigrationTest
 {
-    public function testCreateMigration(): void
+    protected function setup(): void
     {
-        $db = (new OracleHelper())->createConnection();
-        $result = $this->createMigration($db);
+        parent::setUp();
 
-        $this->assertSame(0, $result);
+        // create connection dbms-specific
+        $this->db = (new OracleHelper())->createConnection();
     }
 
-    public function testCreateMigrationWithForce(): void
+    protected function tearDown(): void
     {
-        $db = (new OracleHelper())->createConnection();
-        $result = $this->createMigration($db, true);
+        parent::tearDown();
 
-        $this->assertSame(0, $result);
+        $this->db->close();
     }
 }
