@@ -22,7 +22,7 @@ abstract class DbCacheTest extends TestCase
 {
     public function testGetters(): void
     {
-        $this->assertSame('test-table', $this->dbCache->getTable());
+        $this->assertSame('{{%test-table}}', $this->dbCache->getTable());
         $this->assertSame($this->db, $this->dbCache->getDb());
     }
 

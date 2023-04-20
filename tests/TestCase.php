@@ -64,7 +64,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 ConnectionInterface::class => $db,
                 DbCache::class => [
                     '__construct()' => [
-                        'table' => 'test-table',
+                        'table' => '{{%test-table}}',
                     ],
                 ],
             ],
