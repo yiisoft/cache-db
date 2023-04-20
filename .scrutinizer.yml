@@ -86,7 +86,7 @@ build:
             - /var/lib/data
 
         db-oracle:
-          image: wnameless/oracle-xe-11g-r2:latest
+          image: gvenzl/oracle-xe:21
 
           # We automatically forward these ports from your localhost to the service's port.
           # Alternatively, you can also access the service on the "$SERVICE_SOME_NAME_IP"
@@ -94,6 +94,10 @@ build:
           ports:
             # Forward 127.0.0.1:12345 -> SERVICE_IP:12345
             - 1521
+
+          env:
+            ORACLE_DATABASE : yiitest
+            ORACLE_PASSWORD : root
 
           # If your service writes data to disk like most databases do, you can significantly
           # speed up tests by mounting a ramdisk at those paths.
