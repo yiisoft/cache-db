@@ -48,4 +48,11 @@ return [
             ],
         ],
     ],
+    'tests' => [
+        'di' => [
+            '/' => [
+                'tests/Support/config/*.php',
+            ],
+        ],
+    ],
 ];
