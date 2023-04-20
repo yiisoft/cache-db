@@ -77,4 +77,10 @@ jobs:
         run: composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
       - name: Run tests with phpunit
-        run: vendor/bin/phpunit --group Sqlite --colors=always
+        run: vendor/bin/phpunit --testsuite=Sqlite --coverage-clover=coverage.xml --colors=always
+
+      - name: Upload coverage to Codecov.
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
