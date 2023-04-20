@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests;
 
-use Yiisoft\Cache\Db\Tests\TestCase;
-
 /**
  * @group Mssql
  *
