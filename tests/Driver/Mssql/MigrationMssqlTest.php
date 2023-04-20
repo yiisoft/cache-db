@@ -4,23 +4,29 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Mssql;
 
-use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
+use Yiisoft\Cache\Db\Tests\TestCase;
 
 /**
  * @group Mssql
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class MigrationMssqlTest extends MigrationTest
+final class MigrationMssqlTest extends TestCase
 {
-    protected function setUp(): void
+    public function testCreateMigration(): void
     {
-        parent::setUp();
+        $db = (new MssqlHelper())->createConnection();
+        $result = $this->createMigration($db);
 
-        $this->db = (new MssqlHelper())->createConnection();
+        $this->assertSame(0, $result);
+    }
 
-        // create cache instance
-        $this->dbCache = $this->createDbCache();
+    public function testCreateMigrationWithForce(): void
+    {
+        $db = (new MssqlHelper())->createConnection();
+        $result = $this->createMigration($db, true);
+
+        $this->assertSame(0, $result);
     }
 }

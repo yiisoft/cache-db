@@ -4,35 +4,69 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests;
 
-use PHPUnit\Framework\TestCase as AbstractTestCase;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionObject;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
+use Yiisoft\Config\ConfigInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Di\Container;
+use Yiisoft\Di\ContainerConfig;
 use Yiisoft\Log\Logger;
-use Yiisoft\Yii\Db\Migration\Informer\NullMigrationInformer;
-use Yiisoft\Yii\Db\Migration\MigrationBuilder;
+use Yiisoft\Yii\Console\CommandLoader;
+use Yiisoft\Yii\Runner\Console\ConsoleApplicationRunner;
 
-abstract class TestCase extends AbstractTestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
 
-    protected function createDbCache(): DbCache
+    protected function createMigration(ConnectionInterface $db, bool $force = false): int
     {
-        return new DbCache($this->db, 'test-table');
-    }
+        $runner = new ConsoleApplicationRunner(
+            rootPath: dirname(__DIR__),
+            debug: false,
+            checkEvents: false,
+            paramsGroup: 'params',
+        );
 
-    protected function createMigration(): M202101140204CreateCache
-    {
-        return new M202101140204CreateCache($this->dbCache, new NullMigrationInformer());
-    }
+        $config = $runner->getConfig();
+        $definitions = array_merge(
+            $config->get('di'),
+            [
+                ConnectionInterface::class => $db,
+                DbCache::class => [
+                    '__construct()' => [
+                        'table' => 'test-table',
+                    ],
+                ],
+            ],
+        );
+        $containerConfig = ContainerConfig::create()->withDefinitions(array_merge($definitions));
+        $container = new Container($containerConfig);
+        $runner = $runner->withContainer($container);
+        $container = $runner->getContainer();
 
-    protected function createMigrationBuilder(): MigrationBuilder
-    {
-        return new MigrationBuilder($this->db, new NullMigrationInformer());
+        $this->dbCache = $container->get(DbCache::class);
+
+        $app = new Application();
+
+        $params = $config->get('params');
+
+        $loader = new CommandLoader($container, $params['yiisoft/yii-console']['commands']);
+
+        $app->setCommandLoader($loader);
+        $command = $app->find('cache/migrate');
+
+        $commandCreate = new CommandTester($command);
+
+        return match ($force) {
+            true => $commandCreate->execute(['--force' => true]),
+            default => $commandCreate->execute([]),
+        };
     }
 
     protected function getLogger(): Logger

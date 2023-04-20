@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
-use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
+use Yiisoft\Cache\Db\Tests\TestCase;
 
 /**
  * @group Oracle
  */
-final class MigrationOracleTest extends MigrationTest
+final class MigrationOracleTest extends TestCase
 {
-    protected function setUp(): void
+    public function testCreateMigration(): void
     {
-        parent::setUp();
+        $db = (new OracleHelper())->createConnection();
+        $result = $this->createMigration($db);
 
-        $this->db = (new OracleHelper())->createConnection();
+        $this->assertSame(0, $result);
+    }
 
-        // create cache instance
-        $this->dbCache = $this->createDbCache();
+    public function testCreateMigrationWithForce(): void
+    {
+        $db = (new OracleHelper())->createConnection();
+        $result = $this->createMigration($db, true);
+
+        $this->assertSame(0, $result);
     }
 }

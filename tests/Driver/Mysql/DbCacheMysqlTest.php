@@ -25,12 +25,8 @@ final class DbCacheMysqlTest extends DbCacheTest
         // create connection dbms-specific
         $this->db = (new MysqlHelper())->createConnection();
 
-        // create cache instance
-        $this->dbCache = $this->createDbCache();
-
-        // create migration table
-        $migration = $this->createMigration();
-        $migration->up($this->createMigrationBuilder());
+        // create connection dbms-specific
+        $this->createMigration($this->db);
     }
 
     /**
@@ -39,9 +35,7 @@ final class DbCacheMysqlTest extends DbCacheTest
      */
     protected function tearDown(): void
     {
-        // remove migration table
-        $migration = $this->createMigration();
-        $migration->down($this->createMigrationBuilder());
+        parent::tearDown();
 
         $this->db->close();
     }

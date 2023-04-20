@@ -22,26 +22,15 @@ final class DbCacheSqliteTest extends DbCacheTest
     {
         parent::setUp();
 
-        // create connection dbms-specific
         $this->db = (new SqliteHelper())->createConnection();
 
-        // create cache instance
-        $this->dbCache = $this->createDbCache();
-
-        // create migration table
-        $migration = $this->createMigration();
-        $migration->up($this->createMigrationBuilder());
+        // create connection dbms-specific
+        $this->createMigration($this->db);
     }
 
-    /**
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     */
     protected function tearDown(): void
     {
-        // remove migration table
-        $migration = $this->createMigration();
-        $migration->down($this->createMigrationBuilder());
+        parent::tearDown();
 
         $this->db->close();
     }

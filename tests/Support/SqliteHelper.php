@@ -10,7 +10,6 @@ use Yiisoft\Db\Sqlite\Driver;
 
 final class SqliteHelper extends ConnectionHelper
 {
-    private string $drivername = 'sqlite';
     private string $dsn = 'sqlite:' . __DIR__ . '/../runtime/test.sq3';
     private string $charset = 'UTF8MB4';
 

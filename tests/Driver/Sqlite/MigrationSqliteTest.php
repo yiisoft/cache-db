@@ -4,21 +4,28 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Sqlite;
 
-use Yiisoft\Cache\Db\Tests\MigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\SqliteHelper;
+use Yiisoft\Cache\Db\Tests\TestCase;
+use Yiisoft\Db\Connection\ConnectionInterface;
 
 /**
  * @group Sqlite
  */
-final class MigrationSqliteTest extends MigrationTest
+final class MigrationSqliteTest extends TestCase
 {
-    protected function setUp(): void
+    public function testCreateMigration(): void
     {
-        parent::setUp();
+        $db = (new SqliteHelper())->createConnection();
+        $result = $this->createMigration($db);
 
-        $this->db = (new SqliteHelper())->createConnection();
+        $this->assertSame(0, $result);
+    }
 
-        // create cache instance
-        $this->dbCache = $this->createDbCache();
+    public function testCreateMigrationWithForce(): void
+    {
+        $db = (new SqliteHelper())->createConnection();
+        $result = $this->createMigration($db, true);
+
+        $this->assertSame(0, $result);
     }
 }
