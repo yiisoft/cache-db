@@ -18,7 +18,7 @@ return static function (RectorConfig $rectorConfig): void {
     // skip paths
     $rectorConfig->skip(
         [
-            __DIR__ . '/config'
+            __DIR__ . '/config',
         ],
     );
 
