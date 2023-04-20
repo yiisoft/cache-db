@@ -18,7 +18,7 @@ use Yiisoft\Db\Command\CommandInterface;
 )]
 final class CreateCacheMigration extends Command
 {
-    public function __construct(private DbCache $cache)
+    public function __construct(private DbCache $dbCache)
     {
         parent::__construct();
     }
@@ -31,28 +31,29 @@ final class CreateCacheMigration extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $db = $this->cache->getDb();
+        $db = $this->dbCache->getDb();
         $command = $db->createCommand();
         $schema = $db->getSchema();
+        $table = $this->dbCache->getTable();
 
         /** @psalm-var bool $force */
         $force = $input->getOption('force');
-        $existTable = $schema->getTableSchema($this->cache->getTable(), true);
+        $existTable = $schema->getTableSchema($table, true);
 
         if ($force && $existTable !== null) {
-            $this->dropTable($command, $io);
+            $this->dropTable($command, $table, $io);
         }
 
         if ($force === false && $existTable !== null) {
             $io->title('Checking if table exists.');
-            $io->success('Table ' . $this->cache->getTable() . ' already exists.');
+            $io->success("Table: $table already exists.");
 
             return Command::SUCCESS;
         }
 
         $io->title('Creating cache table migration');
         $command->createTable(
-            $this->cache->getTable(),
+            $table,
             [
                 'id' => $schema->createColumn('string', 128)->notNull(),
                 'expire' => $schema->createColumn('integer'),
@@ -61,18 +62,17 @@ final class CreateCacheMigration extends Command
             ],
         )->execute();
 
-        $io->writeln('<fg=green>>>> Table' . $this->cache->getTable() . ' created.');
-        $io->writeln('');
+        $io->writeln("<fg=green>>>> Table: $table created.");
         $io->success('Migration created successfully.');
 
         return Command::SUCCESS;
     }
 
-    public function dropTable(CommandInterface $command, SymfonyStyle $io): void
+    public function dropTable(CommandInterface $command, string $table, SymfonyStyle $io): void
     {
-        $command->dropTable($this->cache->getTable())->execute();
+        $command->dropTable($table)->execute();
 
         $io->title('Cache table dropped');
-        $io->writeln('<fg=green>>>> Table: ' . $this->cache->getTable() . ' dropped.</>');
+        $io->writeln("<fg=green>>>> Table: $table dropped.");
     }
 }
