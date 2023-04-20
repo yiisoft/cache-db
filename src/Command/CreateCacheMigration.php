@@ -37,12 +37,13 @@ final class CreateCacheMigration extends Command
 
         /** @psalm-var bool $force */
         $force = $input->getOption('force');
+        $existTable = $schema->getTableSchema($this->cache->getTable(), true);
 
-        if ($force) {
+        if ($force && $existTable !== null) {
             $this->dropTable($command, $io);
         }
 
-        if ($force === false && $schema->getTableSchema($this->cache->getTable(), true) !== null) {
+        if ($force === false && $existTable !== null) {
             $io->title('Checking if table exists.');
             $io->success('Table ' . $this->cache->getTable() . ' already exists.');
 
