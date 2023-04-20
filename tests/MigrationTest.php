@@ -25,6 +25,8 @@ abstract class MigrationTest extends TestCase
 
     public function testCreateMigrationWithForce(): void
     {
+        $this->createMigration($this->db);
+
         $result = $this->createMigration($this->db, true);
 
         $this->assertSame(0, $result);

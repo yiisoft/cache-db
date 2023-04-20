@@ -3,7 +3,6 @@
   <php>
     <ini name="error_reporting" value="-1"/>
   </php>
-  <coverage/>
   <testsuites>
     <testsuite name="CacheDb">
       <directory>./tests/Driver</directory>
