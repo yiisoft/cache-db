@@ -505,7 +505,7 @@ abstract class DbCacheTest extends TestCase
     public function testSetMultipleThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
-        $cache->setMultiple(['key-1' => 'value-1', 'key-2' => 'value-2']);
+        $this->assertFalse($cache->setMultiple(['key-1' => 'value-1', 'key-2' => 'value-2']));
 
         /** @psalm-var Logger[] $logger */
         $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
@@ -527,6 +527,31 @@ abstract class DbCacheTest extends TestCase
     {
         $getData = $this->invokeMethod($this->dbCache, 'deleteData', ['', [], 'all']);
         $this->assertNull($getData);
+    }
+
+    public function testGcDeletesExpiredEntriesFromDatabase(): void
+    {
+        $db = $this->dbCache->getDb();
+
+        // Truncate the table
+        $db->createCommand()->truncateTable('{{%test-table}}')->execute();
+
+        // Set up the test data
+        $table = '{{%test-table}}';
+        $expire = time() - 3600; // Set expiration time to an hour ago
+        $data = [
+            ['id' => '1', 'expire' => $expire - 3600], // Expired more than an hour ago
+            ['id' => '2', 'expire' => $expire], // Expired exactly an hour ago
+            ['id' => '3', 'expire' => $expire + 3600], // Expires in an hour
+            ['id' => '4', 'expire' => $expire + 7200], // Expires in two hours
+        ];
+
+        foreach ($data as $row) {
+            $this->dbCache->set($row['id'], 'test', $row['expire']);
+        }
+
+        $deletedEntriesCount = $this->getInaccessibleProperty($this->dbCache, 'deletedEntriesCount');
+        $this->assertSame(0, $deletedEntriesCount);
     }
 
     private function getDataProviderData(): array
