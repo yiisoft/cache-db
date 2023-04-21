@@ -194,9 +194,8 @@ final class DbCache implements CacheInterface
     {
         $keys = $this->iterableToArray($keys);
         $this->validateKeys($keys);
-        $this->deleteData($keys);
 
-        return true;
+        return $this->deleteData($keys);
     }
 
     public function has(string $key): bool
@@ -256,10 +255,10 @@ final class DbCache implements CacheInterface
      *
      * If `true`, the all cache data will be deleted from the database.
      */
-    private function deleteData(array|string|bool $id): void
+    private function deleteData(array|string|bool $id): bool
     {
         if (empty($id)) {
-            return;
+            return false;
         }
 
         try {
@@ -268,9 +267,13 @@ final class DbCache implements CacheInterface
                 ->createCommand()
                 ->delete($this->table, $condition)
                 ->execute();
+
+            return true;
         } catch (Throwable $e) {
             $message = $e->getMessage();
             $this->logger?->log(LogLevel::ERROR, "$this->loggerMessageDelete$message", [__METHOD__]);
+
+            return false;
         }
     }
 
