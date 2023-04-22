@@ -16,11 +16,17 @@ final class PgsqlHelper extends ConnectionHelper
     private string $password = 'root';
     private string $charset = 'UTF8';
 
-    public function createConnection(): ConnectionInterface
+    public function createConnection(bool $reset = true): ConnectionInterface
     {
         $pdoDriver = new Driver($this->dsn, $this->username, $this->password);
         $pdoDriver->charset($this->charset);
 
-        return new Connection($pdoDriver, $this->createSchemaCache());
+        $db = new Connection($pdoDriver, $this->createSchemaCache());
+
+        if ($reset) {
+            DbHelper::loadFixture($db, dirname(__DIR__, 2) . '/src/Migration/schema-pgsql.sql');
+        }
+
+        return $db;
     }
 }

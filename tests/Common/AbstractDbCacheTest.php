@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests;
+namespace Yiisoft\Cache\Db\Tests\Common;
 
 use ArrayIterator;
 use DateInterval;
@@ -11,18 +11,17 @@ use ReflectionObject;
 use stdClass;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\InvalidArgumentException;
-use Yiisoft\Log\Logger;
 
 use function array_keys;
 use function array_map;
 use function is_array;
 use function is_object;
 
-abstract class DbCacheTest extends TestCase
+abstract class AbstractDbCacheTest extends TestCase
 {
     public function testGetters(): void
     {
-        $this->assertSame('{{%test-table}}', $this->dbCache->getTable());
+        $this->assertSame('{{%cache}}', $this->dbCache->getTable());
         $this->assertSame($this->db, $this->dbCache->getDb());
     }
 
@@ -533,31 +532,6 @@ abstract class DbCacheTest extends TestCase
     {
         $getData = $this->invokeMethod($this->dbCache, 'deleteData', [true, [], 'all']);
         $this->assertTrue($getData);
-    }
-
-    public function testGcDeletesExpiredEntriesFromDatabase(): void
-    {
-        $db = $this->dbCache->getDb();
-
-        // Recreate the table.
-        $this->createMigration($db, true);
-
-        $expire = time() - 3600; // Set expiration time to an hour ago
-        $data = [
-            ['id' => '1', 'expire' => $expire - 7200], // Expired more than an hour ago
-            ['id' => '2', 'expire' => $expire], // Expired exactly an hour ago
-            ['id' => '3', 'expire' => $expire + 3600], // Expires in an hour
-            ['id' => '4', 'expire' => $expire + 7200], // Expires in two hours
-        ];
-
-        foreach ($data as $row) {
-            $db->createCommand()->insert('{{%test-table}}', $row)->execute();
-        }
-
-        $this->invokeMethod($this->dbCache, 'gc');
-
-        $deletedEntriesCount = $this->getInaccessibleProperty($this->dbCache, 'deletedEntriesCount');
-        $this->assertSame(2, $deletedEntriesCount);
     }
 
     private function getDataProviderData(): array

@@ -15,11 +15,17 @@ final class MysqlHelper extends ConnectionHelper
     private string $password = '';
     private string $charset = 'UTF8MB4';
 
-    public function createConnection(): ConnectionInterface
+    public function createConnection(bool $reset = true): ConnectionInterface
     {
         $pdoDriver = new Driver($this->dsn, $this->username, $this->password);
         $pdoDriver->charset($this->charset);
 
-        return new Connection($pdoDriver, $this->createSchemaCache());
+        $db = new Connection($pdoDriver, $this->createSchemaCache());
+
+        if ($reset) {
+            DbHelper::loadFixture($db, dirname(__DIR__, 2) . '/src/Migration/schema-mysql.sql');
+        }
+
+        return $db;
     }
 }

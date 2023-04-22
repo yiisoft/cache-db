@@ -37,7 +37,6 @@ final class DbCache implements CacheInterface
 {
     use LoggerAwareTrait;
 
-    private int $deletedEntriesCount = 0;
     private string $loggerMessageDelete = 'Unable to delete cache data: ';
     private string $loggerMessageUpdate = 'Unable to update cache data: ';
 
@@ -307,7 +306,7 @@ final class DbCache implements CacheInterface
     private function gc(): void
     {
         if (random_int(0, 1_000_000) < $this->gcProbability) {
-            $this->deletedEntriesCount = $this->db
+            $this->db
                 ->createCommand()
                 ->delete($this->table, ['AND', ['>', 'expire', 0], ['<', 'expire', time()]])
                 ->execute();

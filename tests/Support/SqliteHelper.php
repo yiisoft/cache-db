@@ -13,11 +13,17 @@ final class SqliteHelper extends ConnectionHelper
     private string $dsn = 'sqlite:' . __DIR__ . '/../runtime/test.sq3';
     private string $charset = 'UTF8MB4';
 
-    public function createConnection(): ConnectionInterface
+    public function createConnection(bool $reset = true): ConnectionInterface
     {
         $pdoDriver = new Driver($this->dsn, '', '');
         $pdoDriver->charset($this->charset);
 
-        return new Connection($pdoDriver, $this->createSchemaCache());
+        $db = new Connection($pdoDriver, $this->createSchemaCache());
+
+        if ($reset) {
+            DbHelper::loadFixture($db, dirname(__DIR__, 2) . '/src/Migration/schema-sqlite.sql');
+        }
+
+        return $db;
     }
 }
