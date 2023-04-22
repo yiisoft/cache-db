@@ -19,6 +19,7 @@ abstract class AbstractMigrationTest extends TestCase
 
         $this->assertSame('cache', $tableSchema->getName());
         $this->assertSame(['id'], $tableSchema->getPrimaryKey());
+        $this->assertSame(['id', 'data', 'expire'], $tableSchema->getColumnNames());
         $this->assertSame('string', $tableSchema->getColumn('id')->getType());
         $this->assertSame(128, $tableSchema->getColumn('id')->getSize());
         $this->assertSame('binary', $tableSchema->getColumn('data')->getType());
