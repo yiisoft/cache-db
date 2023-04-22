@@ -4,8 +4,8 @@
     <ini name="error_reporting" value="-1"/>
   </php>
   <testsuites>
-    <testsuite name="CacheDb">
-      <directory>./tests/Driver</directory>
+    <testsuite name="Sqlite">
+      <directory>./tests/Driver/Sqlite</directory>
     </testsuite>
     <testsuite name="Mssql">
       <directory>./tests/Driver/Mssql</directory>
@@ -18,9 +18,6 @@
     </testsuite>
     <testsuite name="Pgsql">
       <directory>./tests/Driver/Pgsql</directory>
-    </testsuite>
-    <testsuite name="Sqlite">
-      <directory>./tests/Driver/Sqlite</directory>
     </testsuite>
   </testsuites>
   <source>
