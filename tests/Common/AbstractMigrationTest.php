@@ -13,15 +13,15 @@ abstract class AbstractMigrationTest extends TestCase
 {
     public function testVerifyTableStructure(): void
     {
-        $table = $this->db->getTableSchema($this->dbCache->getTable());
+        $tableSchema = $this->db->getTableSchema($this->dbCache->getTable());
 
-        $this->assertNotNull($table);
+        $this->assertNotNull($tableSchema);
 
-        $this->assertSame('cache', $table->getName());
-        $this->assertSame(['id'], $table->getPrimaryKey());
-        $this->assertSame('string', $table->getColumn('id')->getType());
-        $this->assertSame(128, $table->getColumn('id')->getSize());
-        $this->assertSame('binary', $table->getColumn('data')->getType());
-        $this->assertSame('integer', $table->getColumn('expire')->getType());
+        $this->assertSame('cache', $tableSchema->getName());
+        $this->assertSame(['id'], $tableSchema->getPrimaryKey());
+        $this->assertSame('string', $tableSchema->getColumn('id')->getType());
+        $this->assertSame(128, $tableSchema->getColumn('id')->getSize());
+        $this->assertSame('binary', $tableSchema->getColumn('data')->getType());
+        $this->assertSame('integer', $tableSchema->getColumn('expire')->getType());
     }
 }
