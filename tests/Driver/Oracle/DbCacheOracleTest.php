@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
-use Yiisoft\Cache\Db\Tests\DbCacheTest;
+use Yiisoft\Cache\Db\DbCache;
+use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
 use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Exception\NotSupportedException;
@@ -12,7 +13,7 @@ use Yiisoft\Db\Exception\NotSupportedException;
 /**
  * @group Oracle
  */
-final class DbCacheOracleTest extends DbCacheTest
+final class DbCacheOracleTest extends AbstractDbCacheTest
 {
     /**
      * @throws InvalidConfigException
@@ -25,12 +26,8 @@ final class DbCacheOracleTest extends DbCacheTest
         // create connection dbms-specific
         $this->db = (new OracleHelper())->createConnection();
 
-        // create cache instance
-        $this->dbCache = $this->createDbCache();
-
-        // create migration table
-        $migration = $this->createMigration();
-        $migration->up($this->createMigrationBuilder());
+        // create db cache
+        $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
     }
 
     /**
@@ -39,10 +36,10 @@ final class DbCacheOracleTest extends DbCacheTest
      */
     protected function tearDown(): void
     {
-        // remove migration table
-        $migration = $this->createMigration();
-        $migration->down($this->createMigrationBuilder());
+        parent::tearDown();
 
         $this->db->close();
+
+        unset($this->dbCache, $this->db);
     }
 }

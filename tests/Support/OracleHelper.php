@@ -11,18 +11,23 @@ use Yiisoft\Db\Oracle\Driver;
 
 final class OracleHelper extends ConnectionHelper
 {
-    private string $drivername = 'oci';
     private string $dsn = 'oci:dbname=localhost/XE;';
     private string $username = 'system';
-    private string $password = 'oracle';
+    private string $password = 'root';
     private string $charset = 'AL32UTF8';
 
-    public function createConnection(): ConnectionInterface
+    public function createConnection(bool $reset = true): ConnectionInterface
     {
         $pdoDriver = new Driver($this->dsn, $this->username, $this->password);
         $pdoDriver->charset($this->charset);
         $pdoDriver->attributes([PDO::ATTR_STRINGIFY_FETCHES => true]);
 
-        return new Connection($pdoDriver, $this->createSchemaCache());
+        $db = new Connection($pdoDriver, $this->createSchemaCache());
+
+        if ($reset) {
+            DbHelper::loadFixture($db, dirname(__DIR__, 2) . '/src/Migration/schema-oci.sql');
+        }
+
+        return $db;
     }
 }

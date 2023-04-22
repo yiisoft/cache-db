@@ -2,37 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests;
+namespace Yiisoft\Cache\Db\Tests\Common;
 
-use PHPUnit\Framework\TestCase as AbstractTestCase;
 use ReflectionClass;
 use ReflectionObject;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Log\Logger;
-use Yiisoft\Yii\Db\Migration\Informer\NullMigrationInformer;
-use Yiisoft\Yii\Db\Migration\MigrationBuilder;
 
-abstract class TestCase extends AbstractTestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
 
-    protected function createDbCache(): DbCache
+    /**
+     * Asserting two strings equality ignoring line endings.
+     *
+     * @param string $expected The expected string.
+     * @param string $actual The actual string.
+     * @param string $message The message to display if the assertion fails.
+     */
+    public function equalsWithoutLE(string $expected, string $actual, string $message = ''): void
     {
-        return new DbCache($this->db, 'test-table');
-    }
+        $expected = str_replace("\r\n", "\n", $expected);
+        $actual = str_replace("\r\n", "\n", $actual);
 
-    protected function createMigration(): M202101140204CreateCache
-    {
-        return new M202101140204CreateCache($this->dbCache, new NullMigrationInformer());
-    }
-
-    protected function createMigrationBuilder(): MigrationBuilder
-    {
-        return new MigrationBuilder($this->db, new NullMigrationInformer());
+        $this->assertEquals($expected, $actual, $message);
     }
 
     protected function getLogger(): Logger
