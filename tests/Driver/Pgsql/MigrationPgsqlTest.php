@@ -10,6 +10,8 @@ use Yiisoft\Cache\Db\Tests\Support\PgsqlHelper;
 
 /**
  * @group Pgsql
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 final class MigrationPgsqlTest extends AbstractMigrationTest
 {
@@ -22,14 +24,5 @@ final class MigrationPgsqlTest extends AbstractMigrationTest
 
         // create db cache
         $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->db->close();
-
-        unset($this->dbCache, $this->db);
     }
 }

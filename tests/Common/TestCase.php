@@ -16,19 +16,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
 
-    /**
-     * Asserting two strings equality ignoring line endings.
-     *
-     * @param string $expected The expected string.
-     * @param string $actual The actual string.
-     * @param string $message The message to display if the assertion fails.
-     */
-    public function equalsWithoutLE(string $expected, string $actual, string $message = ''): void
+    protected function tearDown(): void
     {
-        $expected = str_replace("\r\n", "\n", $expected);
-        $actual = str_replace("\r\n", "\n", $actual);
+        $this->db->close();
 
-        $this->assertEquals($expected, $actual, $message);
+        unset($this->db, $this->dbCache, $this->logger);
     }
 
     protected function getLogger(): Logger
@@ -57,6 +49,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         $property->setAccessible(true);
 
+        /** @psalm-var mixed $result */
         $result = $property->getValue($object);
 
         if ($revoke) {

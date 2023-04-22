@@ -21,15 +21,8 @@ final class MigrationMssqlTest extends AbstractMigrationTest
 
         // create connection dbms-specific
         $this->db = (new MssqlHelper())->createConnection();
+
+        // create db cache
         $this->dbCache = new DbCache($this->db);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->db->close();
-
-        unset($this->dbCache, $this->db);
     }
 }

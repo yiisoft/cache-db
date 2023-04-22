@@ -11,6 +11,7 @@ use ReflectionObject;
 use stdClass;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\InvalidArgumentException;
+use Yiisoft\Log\Logger;
 
 use function array_keys;
 use function array_map;
@@ -250,6 +251,7 @@ abstract class AbstractDbCacheTest extends TestCase
         $method = $reflection->getMethod('normalizeTtl');
 
         $method->setAccessible(true);
+        /** @psalm-var mixed $result */
         $result = $method->invokeArgs($this->dbCache, [$ttl]);
         $method->setAccessible(false);
 

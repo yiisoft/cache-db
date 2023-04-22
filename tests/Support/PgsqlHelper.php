@@ -5,17 +5,22 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Support;
 
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Pgsql\Connection;
 use Yiisoft\Db\Pgsql\Driver;
 
 final class PgsqlHelper extends ConnectionHelper
 {
-    private string $drivername = 'pgsql';
     private string $dsn = 'pgsql:host=127.0.0.1;dbname=yiitest;port=5432';
     private string $username = 'root';
     private string $password = 'root';
     private string $charset = 'UTF8';
 
+    /**
+     * @throws InvalidConfigException
+     * @throws Exception
+     */
     public function createConnection(bool $reset = true): ConnectionInterface
     {
         $pdoDriver = new Driver($this->dsn, $this->username, $this->password);

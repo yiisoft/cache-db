@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Common;
 
-use Yiisoft\Cache\Db\DbCache;
-
 /**
  * @group Mssql
  *
@@ -13,8 +11,6 @@ use Yiisoft\Cache\Db\DbCache;
  */
 abstract class AbstractMigrationTest extends TestCase
 {
-    protected DbCache $dbCache;
-
     public function testVerifyTableStructure(): void
     {
         $table = $this->db->getTableSchema($this->dbCache->getTable());

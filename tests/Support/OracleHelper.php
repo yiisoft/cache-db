@@ -6,6 +6,8 @@ namespace Yiisoft\Cache\Db\Tests\Support;
 
 use PDO;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Oracle\Connection;
 use Yiisoft\Db\Oracle\Driver;
 
@@ -16,6 +18,10 @@ final class OracleHelper extends ConnectionHelper
     private string $password = 'root';
     private string $charset = 'AL32UTF8';
 
+    /**
+     * @throws InvalidConfigException
+     * @throws Exception
+     */
     public function createConnection(bool $reset = true): ConnectionInterface
     {
         $pdoDriver = new Driver($this->dsn, $this->username, $this->password);

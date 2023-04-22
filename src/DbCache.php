@@ -29,9 +29,7 @@ use function unserialize;
 /**
  * DbCache stores cache data in a database table.
  *
- * Database schema could be initialized by applying migration:
- *
- * {@see \Yiisoft\Cache\Db\Migration\M202101140204CreateCache}.
+ * Database schema can be initialized, you must apply the migration of the SQL file of the implementation to use.
  */
 final class DbCache implements CacheInterface
 {
@@ -44,7 +42,7 @@ final class DbCache implements CacheInterface
      * @param ConnectionInterface $db The database connection instance.
      * @param string $table The name of the database table to store the cache data. Defaults to "cache".
      * @param int $gcProbability The probability (parts per million) that garbage collection (GC) should
-     * be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
+     * Be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
      * This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
      */
     public function __construct(

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Support;
 
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Sqlite\Connection;
 use Yiisoft\Db\Sqlite\Driver;
 
@@ -13,6 +15,10 @@ final class SqliteHelper extends ConnectionHelper
     private string $dsn = 'sqlite:' . __DIR__ . '/../runtime/test.sq3';
     private string $charset = 'UTF8MB4';
 
+    /**
+     * @throws InvalidConfigException
+     * @throws Exception
+     */
     public function createConnection(bool $reset = true): ConnectionInterface
     {
         $pdoDriver = new Driver($this->dsn, '', '');
