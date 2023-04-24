@@ -30,11 +30,11 @@ final class DbHelper
         return true;
     }
 
-    public static function dropTable(ConnectionInterface $db, string $table): void
+    public static function dropTable(ConnectionInterface $db, string $table, bool $force = false): void
     {
         $command = $db->createCommand();
 
-        if ($db->getTableSchema($table, true) !== null) {
+        if ($db->getTableSchema($table, $force) !== null) {
             $command->dropTable($table)->execute();
         }
     }

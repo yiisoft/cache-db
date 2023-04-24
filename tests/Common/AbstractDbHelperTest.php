@@ -26,4 +26,13 @@ abstract class AbstractDbHelperTest extends TestCase
 
         $this->assertNull($this->db->getTableSchema($table, true));
     }
+
+    public function testDroptTableWithForce(): void
+    {
+        $table = '{{%cache}}';
+
+        DbHelper::dropTable($this->db, $table, true);
+
+        $this->assertNull($this->db->getTableSchema($table, true));
+    }
 }
