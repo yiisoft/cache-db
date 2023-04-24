@@ -28,7 +28,7 @@ final class MigrationSqlDumpTest extends AbstractMigrationTest
         $this->db = (new PgsqlHelper())->createConnection();
 
         // create migration
-        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 2) . '/support/migration/schema-pgsql.sql');
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 2) . '/Support/migration/schema-pgsql.sql');
 
         parent::setUp();
     }
