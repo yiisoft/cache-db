@@ -14,7 +14,7 @@ use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbCacheMssqlTest extends AbstractDbCacheTest
+final class DbCacheSqlDumpMssqlTest extends AbstractDbCacheTest
 {
     protected function setUp(): void
     {
@@ -27,7 +27,7 @@ final class DbCacheMssqlTest extends AbstractDbCacheTest
         $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
 
         // create migration
-        DbHelper::createMigration($this->dbCache);
+        DbHelper::createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-mssql.sql');
     }
 
     protected function tearDown(): void

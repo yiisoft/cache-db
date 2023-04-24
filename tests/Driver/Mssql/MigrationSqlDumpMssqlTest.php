@@ -6,7 +6,7 @@ namespace Yiisoft\Cache\Db\Tests\Driver\Mssql;
 
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\DbHelper;
-use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
+use Yiisoft\Cache\Db\Tests\Common\AbstractMigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
 
 /**
@@ -14,9 +14,9 @@ use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbCacheMssqlTest extends AbstractDbCacheTest
+final class MigrationSqlDumpMssqlTest extends AbstractMigrationTest
 {
-    protected function setUp(): void
+    protected function setup(): void
     {
         parent::setUp();
 
@@ -24,10 +24,10 @@ final class DbCacheMssqlTest extends AbstractDbCacheTest
         $this->db = (new MssqlHelper())->createConnection();
 
         // create db cache
-        $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
+        $this->dbCache = new DbCache($this->db);
 
         // create migration
-        DbHelper::createMigration($this->dbCache);
+        DbHelper::createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-mssql.sql');
     }
 
     protected function tearDown(): void

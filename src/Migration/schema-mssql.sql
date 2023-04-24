@@ -1,6 +1,3 @@
-/**
- * Database schema required by yiisoft/cache db for MSSQL.
- */
 IF OBJECT_ID('[dbo].[cache]', 'U') IS NOT NULL DROP TABLE [dbo].[cache];
 
 CREATE TABLE [dbo].[cache] (

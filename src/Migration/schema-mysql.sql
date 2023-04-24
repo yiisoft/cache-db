@@ -1,6 +1,3 @@
-/**
- * Database schema required by yiisoft/cache db for MySQL.
- */
 DROP TABLE IF EXISTS `cache`;
 
 CREATE TABLE `cache` (

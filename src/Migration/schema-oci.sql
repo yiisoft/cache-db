@@ -1,6 +1,3 @@
-/**
- * Database schema required by yiisoft/cache db for Oracle.
- */
 BEGIN EXECUTE IMMEDIATE 'DROP TABLE "cache"'; EXCEPTION WHEN OTHERS THEN IF SQLCODE != -942 THEN RAISE; END IF; END;--
 
 /* STATEMENTS */

@@ -1,6 +1,3 @@
-/**
- * Database schema required by yiisoft/cache db for SQLite.
- */
 DROP TABLE IF EXISTS "cache";
 
 CREATE TABLE "cache" (

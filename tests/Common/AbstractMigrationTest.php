@@ -11,6 +11,18 @@ namespace Yiisoft\Cache\Db\Tests\Common;
  */
 abstract class AbstractMigrationTest extends TestCase
 {
+    public function testVerifyTableIndexes(): void
+    {
+        $schema = $this->db->getSchema();
+
+        /** @psalm-var IndexConstraint[] $indexes */
+        $indexes = $schema->getTableIndexes($this->dbCache->getTable(), true);
+
+        $this->assertSame(['id'], $indexes[0]->getColumnNames());
+        $this->assertTrue($indexes[0]->isUnique());
+        $this->assertTrue($indexes[0]->isPrimary());
+    }
+
     public function testVerifyTableStructure(): void
     {
         $tableSchema = $this->db->getTableSchema($this->dbCache->getTable());
