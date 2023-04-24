@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
-use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Cache\Db\Tests\Common\AbstractMigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
 
@@ -13,7 +12,7 @@ use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class MigrationOracleTest extends AbstractMigrationTest
+final class MigrationSqlDumpOracleTest extends AbstractMigrationTest
 {
     protected function setup(): void
     {
@@ -21,7 +20,7 @@ final class MigrationOracleTest extends AbstractMigrationTest
         $this->db = (new OracleHelper())->createConnection();
 
         // create migration
-        DbHelper::ensureTable($this->db, $this->table);
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-oci.sql');
 
         parent::setUp();
     }

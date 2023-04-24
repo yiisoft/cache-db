@@ -15,8 +15,6 @@ use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
  */
 final class DbCacheMysqlTest extends AbstractDbCacheTest
 {
-    protected string $table = 'mysql_cache';
-
     protected function setUp(): void
     {
         // create connection dbms-specific
@@ -28,6 +26,11 @@ final class DbCacheMysqlTest extends AbstractDbCacheTest
         // create migration
         DbHelper::ensureTable($this->db, $this->table);
 
-        parent::setUp();
+        parent::setup();
+    }
+
+    public function testPrefixTable(): void
+    {
+        $this->assertSame('mysql_cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
     }
 }
