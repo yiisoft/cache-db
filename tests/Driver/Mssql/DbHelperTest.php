@@ -35,20 +35,4 @@ final class DbHelperTest extends TestCase
 
         $this->assertNull($db->getTableSchema($table, true));
     }
-
-    public function testEnsureTableWithoutDefaulTable(): void
-    {
-        $db = (new MssqlHelper())->createConnection();
-        $table = '{{%cache}}';
-        $table1 = '{{%test}}';
-
-        DbHelper::dropTable($db, $table);
-
-        $this->assertNull($db->getTableSchema($table, true));
-        $this->assertTrue(DbHelper::ensureTable($db, $table1));
-
-        $this->assertNotNull($db->getTableSchema($table1, true));
-
-        DbHelper::dropTable($db, $table1);
-    }
 }

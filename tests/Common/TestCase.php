@@ -7,6 +7,7 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 use ReflectionClass;
 use ReflectionObject;
 use Yiisoft\Cache\Db\DbCache;
+use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Log\Logger;
 
@@ -15,6 +16,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
+    protected string $table = '{{%cache}}';
 
     /**
      * Loads the fixture into the database.
@@ -42,8 +44,17 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
+    protected function setup(): void
+    {
+        // create db cache
+        $this->dbCache = new DbCache($this->db, $this->table, gcProbability: 1_000_000);
+    }
+
     protected function tearDown(): void
     {
+        // drop table
+        DbHelper::dropTable($this->db, $this->table);
+
         $this->db->close();
 
         unset($this->db, $this->dbCache, $this->logger);
