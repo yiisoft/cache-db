@@ -54,12 +54,13 @@ final class DbHelper
     {
         $db->open();
 
-        if ($db->getDriverName() === 'oci') {
-            [$drops, $creates] = explode('/* STATEMENTS */', file_get_contents($fixture), 2);
-            $lines = array_merge(
-                explode('--', $drops),
-                explode(';', $creates),
-            );
+        if (
+            $db->getDriverName() === 'oci' &&
+            ($statments = explode('/* STATEMENTS */', file_get_contents($fixture), 2)) &&
+            count($statments) === 2
+        ) {
+            [$drops, $creates] = $statments;
+            $lines = array_merge(explode('--', $drops), explode(';', $creates));
         } else {
             $lines = explode(';', file_get_contents($fixture));
         }
