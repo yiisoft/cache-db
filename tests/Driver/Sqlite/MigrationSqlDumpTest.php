@@ -28,7 +28,7 @@ final class MigrationSqlDumpTest extends AbstractMigrationTest
         $this->db = (new SqliteHelper())->createConnection();
 
         // create migration
-        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-sqlite.sql');
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 2) . '/support/migration/schema-sqlite.sql');
 
         parent::setUp();
     }

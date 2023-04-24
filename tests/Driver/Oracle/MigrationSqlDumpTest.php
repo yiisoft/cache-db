@@ -28,7 +28,7 @@ final class MigrationSqlDumpTest extends AbstractMigrationTest
         $this->db = (new OracleHelper())->createConnection();
 
         // create migration
-        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-oci.sql');
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 2) . '/Support/migration/schema-oci.sql');
 
         parent::setUp();
     }

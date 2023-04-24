@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db;
 
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Schema\SchemaInterface;
 
 final class DbHelper
 {
-    public static function ensureTable(ConnectionInterface $db, string $table): bool
+    public static function ensureTable(ConnectionInterface $db, string $table): void
     {
         $command = $db->createCommand();
         $schema = $db->getSchema();
 
         if ($schema->getTableSchema($table, true) !== null) {
-            return false;
+            return;
         }
 
         $command->createTable(
@@ -26,8 +27,6 @@ final class DbHelper
                 'CONSTRAINT [[PK_cache]] PRIMARY KEY ([[id]])',
             ],
         )->execute();
-
-        return true;
     }
 
     public static function dropTable(ConnectionInterface $db, string $table): void

@@ -28,7 +28,7 @@ final class DbCacheSqlDumpTest extends AbstractDbCacheTest
         $this->db = (new SqliteHelper())->createConnection();
 
         // create migration
-        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-sqlite.sql');
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 2) . '/Support/migration/schema-sqlite.sql');
 
         parent::setUp();
     }

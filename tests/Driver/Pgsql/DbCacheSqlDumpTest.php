@@ -28,7 +28,7 @@ final class DbCacheSqlDumpTest extends AbstractDbCacheTest
         $this->db = (new PgsqlHelper())->createConnection();
 
         // create migration
-        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-pgsql.sql');
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 2) . '/Support/migration/schema-pgsql.sql');
 
         parent::setUp();
     }
