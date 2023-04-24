@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Driver\Mssql;
 
 use PHPUnit\Framework\TestCase;
-use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
 
