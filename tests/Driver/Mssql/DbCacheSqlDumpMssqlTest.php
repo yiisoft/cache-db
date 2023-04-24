@@ -27,7 +27,7 @@ final class DbCacheSqlDumpMssqlTest extends AbstractDbCacheTest
         $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
 
         // create migration
-        DbHelper::createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-mssql.sql');
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-mssql.sql');
     }
 
     protected function tearDown(): void

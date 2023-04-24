@@ -27,7 +27,7 @@ final class MigrationMssqlTest extends AbstractMigrationTest
         $this->dbCache = new DbCache($this->db);
 
         // create migration
-        DbHelper::createMigration($this->dbCache);
+        DbHelper::ensureTable($this->dbCache);
     }
 
     protected function tearDown(): void
@@ -43,12 +43,13 @@ final class MigrationMssqlTest extends AbstractMigrationTest
         DbHelper::dropTable($this->dbCache);
 
         $this->assertNull($this->db->getTableSchema($this->dbCache->getTable(), true));
-        $this->assertTrue(DbHelper::createMigration($this->dbCache));
+        $this->assertTrue(DbHelper::ensureTable($this->dbCache));
     }
 
-    public function testCreateMigrationWithForceTrue(): void
+    public function testDropTable(): void
     {
-        $this->assertNotNull($this->db->getTableSchema($this->dbCache->getTable(), true));
-        $this->assertTrue(DbHelper::createMigration($this->dbCache, true));
+        DbHelper::dropTable($this->dbCache);
+
+        $this->assertNull($this->db->getTableSchema($this->dbCache->getTable(), true));
     }
 }

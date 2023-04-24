@@ -16,6 +16,32 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
 
+    /**
+     * Loads the fixture into the database.
+     *
+     * @throws Exception
+     * @throws InvalidConfigException
+     */
+    protected static function createMigrationFromSqlDump(ConnectionInterface $db, string $fixture): void
+    {
+        $db->open();
+
+        if (
+            $db->getDriverName() === 'oci' &&
+            ($statments = explode('/* STATEMENTS */', file_get_contents($fixture), 2)) &&
+            count($statments) === 2
+        ) {
+            [$drops, $creates] = $statments;
+            $lines = array_merge(explode('--', $drops), explode(';', $creates));
+        } else {
+            $lines = explode(';', file_get_contents($fixture));
+        }
+
+        foreach ($lines as $line) {
+            $db->createCommand(trim($line))->execute();
+        }
+    }
+
     protected function tearDown(): void
     {
         $this->db->close();
