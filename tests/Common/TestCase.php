@@ -6,9 +6,12 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 
 use ReflectionClass;
 use ReflectionObject;
+use Throwable;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Log\Logger;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
@@ -23,17 +26,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @throws Exception
      * @throws InvalidConfigException
+     * @throws Throwable
      */
-    protected static function createMigrationFromSqlDump(ConnectionInterface $db, string $fixture): void
+    protected function createMigrationFromSqlDump(ConnectionInterface $db, string $fixture): void
     {
         $db->open();
 
         if (
             $db->getDriverName() === 'oci' &&
-            ($statments = explode('/* STATEMENTS */', file_get_contents($fixture), 2)) &&
-            count($statments) === 2
+            ($statements = explode('/* STATEMENTS */', file_get_contents($fixture), 2)) &&
+            count($statements) === 2
         ) {
-            [$drops, $creates] = $statments;
+            [$drops, $creates] = $statements;
             $lines = array_merge(explode('--', $drops), explode(';', $creates));
         } else {
             $lines = explode(';', file_get_contents($fixture));

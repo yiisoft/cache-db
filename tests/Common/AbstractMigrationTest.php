@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Common;
 
+use Yiisoft\Db\Constraint\IndexConstraint;
+
 /**
  * @group Mssql
  *
@@ -32,9 +34,9 @@ abstract class AbstractMigrationTest extends TestCase
         $this->assertSame('cache', $tableSchema->getName());
         $this->assertSame(['id'], $tableSchema->getPrimaryKey());
         $this->assertSame(['id', 'data', 'expire'], $tableSchema->getColumnNames());
-        $this->assertSame('string', $tableSchema->getColumn('id')->getType());
-        $this->assertSame(128, $tableSchema->getColumn('id')->getSize());
-        $this->assertSame('binary', $tableSchema->getColumn('data')->getType());
-        $this->assertSame('integer', $tableSchema->getColumn('expire')->getType());
+        $this->assertSame('string', $tableSchema->getColumn('id')?->getType());
+        $this->assertSame(128, $tableSchema->getColumn('id')?->getSize());
+        $this->assertSame('binary', $tableSchema->getColumn('data')?->getType());
+        $this->assertSame('integer', $tableSchema->getColumn('expire')?->getType());
     }
 }

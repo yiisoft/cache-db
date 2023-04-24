@@ -7,14 +7,20 @@ namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
+use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Db\Exception\InvalidConfigException;
 
 /**
  * @group Mysql
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbCacheMysqlTest extends AbstractDbCacheTest
+final class DbCacheTest extends AbstractDbCacheTest
 {
+    /**
+     * @throws Exception
+     * @throws InvalidConfigException
+     */
     protected function setUp(): void
     {
         // create connection dbms-specific
