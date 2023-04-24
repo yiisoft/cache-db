@@ -4,14 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db;
 
-use Yiisoft\Db\Connection\ConnectionInterface;
-use Yiisoft\Db\Exception\Exception;
-use Yiisoft\Db\Exception\InvalidConfigException;
-
-use function explode;
-use function file_get_contents;
-use function trim;
-
 final class DbHelper
 {
     public static function ensureTable(DbCache $dbCache): bool
