@@ -22,7 +22,7 @@ final class DbHelper
             [
                 'id' => $schema->createColumn(SchemaInterface::TYPE_STRING, 128)->notNull(),
                 'data' => $schema->createColumn(SchemaInterface::TYPE_BINARY),
-                'expire' => $schema->createColumn('integer'),
+                'expire' => $schema->createColumn(SchemaInterface::TYPE_INTEGER),
                 'CONSTRAINT [[PK_cache]] PRIMARY KEY ([[id]])',
             ],
         )->execute();
