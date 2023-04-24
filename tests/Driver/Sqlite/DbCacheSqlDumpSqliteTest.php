@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Sqlite;
 
-use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
 use Yiisoft\Cache\Db\Tests\Support\SqliteHelper;
 
@@ -13,23 +12,16 @@ use Yiisoft\Cache\Db\Tests\Support\SqliteHelper;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbCacheSqliteTest extends AbstractDbCacheTest
+final class DbCacheSqlDumpSqliteTest extends AbstractDbCacheTest
 {
     protected function setUp(): void
     {
+        // create connection dbms-specific
         $this->db = (new SqliteHelper())->createConnection();
 
-        // set table prefix
-        $this->db->setTablePrefix('sqlite3_');
-
         // create migration
-        DbHelper::ensureTable($this->db, $this->table);
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-sqlite.sql');
 
         parent::setUp();
-    }
-
-    public function testPrefixTable(): void
-    {
-        $this->assertSame('sqlite3_cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
     }
 }

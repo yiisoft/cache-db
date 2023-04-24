@@ -9,27 +9,18 @@ use Yiisoft\Db\Exception\Exception;
 use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Sqlite\Connection;
 use Yiisoft\Db\Sqlite\Driver;
+use Yiisoft\Db\Sqlite\Dsn;
 
 final class SqliteHelper extends ConnectionHelper
 {
-    private string $dsn = 'sqlite:' . __DIR__ . '/../runtime/test.sq3';
-    private string $charset = 'UTF8MB4';
-
     /**
      * @throws InvalidConfigException
      * @throws Exception
      */
-    public function createConnection(bool $reset = true): ConnectionInterface
+    public function createConnection(): ConnectionInterface
     {
-        $pdoDriver = new Driver($this->dsn, '', '');
-        $pdoDriver->charset($this->charset);
+        $pdoDriver = new Driver((new Dsn('sqlite', __DIR__ . '/runtime/yiitest.sq3'))->asString());
 
-        $db = new Connection($pdoDriver, $this->createSchemaCache());
-
-        if ($reset) {
-            DbHelper::loadFixture($db, dirname(__DIR__, 2) . '/src/Migration/schema-sqlite.sql');
-        }
-
-        return $db;
+        return new Connection($pdoDriver, $this->createSchemaCache());
     }
 }
