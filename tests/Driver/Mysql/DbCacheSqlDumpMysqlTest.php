@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 
-use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
 
@@ -13,20 +12,15 @@ use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbCacheMysqlTest extends AbstractDbCacheTest
+final class DbCacheSqlDumpMysqlTest extends AbstractDbCacheTest
 {
-    protected string $table = 'mysql_cache';
-
     protected function setUp(): void
     {
         // create connection dbms-specific
         $this->db = (new MysqlHelper())->createConnection();
 
-        // set table prefix
-        $this->db->setTablePrefix('mysql_');
-
         // create migration
-        DbHelper::ensureTable($this->db, $this->table);
+        $this->createMigrationFromSqlDump($this->db, dirname(__DIR__, 3) . '/src/Migration/schema-mysql.sql');
 
         parent::setUp();
     }
