@@ -30,6 +30,8 @@ use function unserialize;
  * DbCache stores cache data in a database table.
  *
  * Database schema can be initialized, you must apply the migration of the SQL file of the implementation to use.
+ *
+ * For more details {@see DbHelper::ensureTable()}, {@see DbHelper::dropTable()}.
  */
 final class DbCache implements CacheInterface
 {
