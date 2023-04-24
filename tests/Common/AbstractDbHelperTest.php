@@ -8,16 +8,6 @@ use Yiisoft\Cache\Db\DbHelper;
 
 abstract class AbstractDbHelperTest extends TestCase
 {
-    public function testEnsureTable(): void
-    {
-        $table = '{{%cache}}';
-
-        DbHelper::dropTable($this->db, '{{%cache}}');
-
-        $this->assertNull($this->db->getTableSchema($table, true));
-        $this->assertTrue(DbHelper::ensureTable($this->db, $table));
-    }
-
     public function testDropTable(): void
     {
         $table = '{{%cache}}';
@@ -34,5 +24,23 @@ abstract class AbstractDbHelperTest extends TestCase
         DbHelper::dropTable($this->db, $table, true);
 
         $this->assertNull($this->db->getTableSchema($table, true));
+    }
+
+    public function testEnsureTable(): void
+    {
+        $table = '{{%cache}}';
+
+        DbHelper::dropTable($this->db, '{{%cache}}');
+
+        $this->assertNull($this->db->getTableSchema($table, true));
+        $this->assertTrue(DbHelper::ensureTable($this->db, $table));
+    }
+
+    public function testEnsureTableExists(): void
+    {
+        $table = '{{%cache}}';
+
+        $this->assertTrue(DbHelper::ensureTable($this->db, $table));
+        $this->assertFalse(DbHelper::ensureTable($this->db, $table));
     }
 }
