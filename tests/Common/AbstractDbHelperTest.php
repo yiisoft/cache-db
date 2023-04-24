@@ -21,7 +21,7 @@ abstract class AbstractDbHelperTest extends TestCase
     {
         $table = '{{%cache}}';
 
-        DbHelper::dropTable($this->db, $table, true);
+        DbHelper::dropTable($this->db, $table);
 
         $this->assertNull($this->db->getTableSchema($table, true));
     }
