@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests\Driver\Mssql;
+namespace Yiisoft\Cache\Db\Tests\Driver\Pgsql;
 
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbHelperTest;
-use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
+use Yiisoft\Cache\Db\Tests\Support\PgsqlHelper;
 
 /**
- * @group Mssql
+ * @group Pgsql
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
@@ -17,7 +17,7 @@ final class DbHelperTest extends AbstractDbHelperTest
     protected function setUp(): void
     {
         // create connection dbms-specific
-        $this->db = (new MssqlHelper())->createConnection();
+        $this->db = (new PgsqlHelper())->createConnection();
 
         parent::setUp();
     }

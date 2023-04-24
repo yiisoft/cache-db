@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Pgsql;
 
-use Yiisoft\Cache\Db\DbCache;
+use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
 use Yiisoft\Cache\Db\Tests\Support\PgsqlHelper;
 
@@ -17,12 +17,20 @@ final class DbCachePgsqlTest extends AbstractDbCacheTest
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
         // create connection dbms-specific
         $this->db = (new PgsqlHelper())->createConnection();
 
-        // create db cache
-        $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
+        // set table prefix
+        $this->db->setTablePrefix('pgsql_');
+
+        // create migration
+        DbHelper::ensureTable($this->db, $this->table);
+
+        parent::setUp();
+    }
+
+    public function testPrefixTable(): void
+    {
+        $this->assertSame('pgsql_cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
     }
 }

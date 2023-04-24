@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 
-use PHPUnit\Framework\TestCase;
-use Yiisoft\Cache\Db\DbHelper;
+use Yiisoft\Cache\Db\Tests\Common\AbstractDbHelperTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
 
 /**
@@ -13,30 +12,13 @@ use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbHelperTest extends TestCase
+final class DbHelperTest extends AbstractDbHelperTest
 {
-    public function testEnsureTable(): void
+    protected function setUp(): void
     {
-        $db = (new MysqlHelper())->createConnection();
-        $table = '{{%cache}}';
+        // create connection dbms-specific
+        $this->db = (new MysqlHelper())->createConnection();
 
-        DbHelper::dropTable($db, '{{%cache}}');
-
-        $this->assertNull($db->getTableSchema($table, true));
-        $this->assertTrue(DbHelper::ensureTable($db, $table));
-
-        $db->close();
-    }
-
-    public function testDropTable(): void
-    {
-        $db = (new MysqlHelper())->createConnection();
-        $table = '{{%cache}}';
-
-        DbHelper::dropTable($db, $table);
-
-        $this->assertNull($db->getTableSchema($table, true));
-
-        $db->close();
+        parent::setUp();
     }
 }

@@ -8,7 +8,7 @@ use Yiisoft\Cache\Db\Tests\Common\AbstractMigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
 
 /**
- * @group Mssql
+ * @group Mysql
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
