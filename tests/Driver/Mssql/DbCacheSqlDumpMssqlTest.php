@@ -33,7 +33,7 @@ final class DbCacheSqlDumpMssqlTest extends AbstractDbCacheTest
     protected function tearDown(): void
     {
         // drop table
-        DbHelper::dropTable($this->dbCache);
+        DbHelper::dropTable($this->db, '{{%cache}}');
 
         parent::tearDown();
     }

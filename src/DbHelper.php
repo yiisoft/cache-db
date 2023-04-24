@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db;
 
+use Yiisoft\Db\Connection\ConnectionInterface;
+
 final class DbHelper
 {
-    public static function ensureTable(DbCache $dbCache): bool
+    public static function ensureTable(ConnectionInterface $db, string $table): bool
     {
-        $db = $dbCache->getDb();
         $command = $db->createCommand();
         $schema = $db->getSchema();
-        $table = $dbCache->getTable();
 
         if ($schema->getTableSchema($table, true) !== null) {
             return false;
@@ -30,11 +30,9 @@ final class DbHelper
         return true;
     }
 
-    public static function dropTable(DbCache $dbCache): void
+    public static function dropTable(ConnectionInterface $db, string $table): void
     {
-        $db = $dbCache->getDb();
         $command = $db->createCommand();
-        $table = $dbCache->getTable();
 
         if ($db->getTableSchema($table, true) !== null) {
             $command->dropTable($table)->execute();

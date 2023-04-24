@@ -23,17 +23,17 @@ final class DbCacheMssqlTest extends AbstractDbCacheTest
         // create connection dbms-specific
         $this->db = (new MssqlHelper())->createConnection();
 
+        // create migration
+        DbHelper::ensureTable($this->db, '{{%cache}}');
+
         // create db cache
         $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
-
-        // create migration
-        DbHelper::ensureTable($this->dbCache);
     }
 
     protected function tearDown(): void
     {
         // drop table
-        DbHelper::dropTable($this->dbCache);
+        DbHelper::dropTable($this->db, '{{%cache}}');
 
         parent::tearDown();
     }
