@@ -29,4 +29,21 @@ abstract class AbstractDbHelperTest extends TestCase
 
         $this->assertNotNull($this->db->getTableSchema($table, true));
     }
+
+    public function testEnsureTableExist(): void
+    {
+        $table = '{{%cache}}';
+
+        DbHelper::dropTable($this->db, '{{%cache}}');
+
+        $this->assertNull($this->db->getTableSchema($table, true));
+
+        DbHelper::ensureTable($this->db, $table);
+
+        $this->assertNotNull($this->db->getTableSchema($table));
+
+        DbHelper::ensureTable($this->db, $table);
+
+        $this->assertNotNull($this->db->getTableSchema($table));
+    }
 }
