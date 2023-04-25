@@ -6,12 +6,9 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 
 use ReflectionClass;
 use ReflectionObject;
-use Throwable;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Db\Connection\ConnectionInterface;
-use Yiisoft\Db\Exception\Exception;
-use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Log\Logger;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
