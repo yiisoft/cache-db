@@ -21,33 +21,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected Logger|null $logger = null;
     protected string $table = '{{%cache}}';
 
-    /**
-     * Loads the fixture into the database.
-     *
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws Throwable
-     */
-    protected function createMigrationFromSqlDump(ConnectionInterface $db, string $fixture): void
-    {
-        $db->open();
-
-        if (
-            $db->getDriverName() === 'oci' &&
-            ($statements = explode('/* STATEMENTS */', file_get_contents($fixture), 2)) &&
-            count($statements) === 2
-        ) {
-            [$drops, $creates] = $statements;
-            $lines = array_merge(explode('--', $drops), explode(';', $creates));
-        } else {
-            $lines = explode(';', file_get_contents($fixture));
-        }
-
-        foreach ($lines as $line) {
-            $db->createCommand(trim($line))->execute();
-        }
-    }
-
     protected function setup(): void
     {
         // create db cache
