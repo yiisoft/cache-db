@@ -21,13 +21,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function setup(): void
     {
         // create db cache
-        $this->dbCache = new DbCache($this->db, $this->table, gcProbability: 1_000_000);
+        $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
     }
 
     protected function tearDown(): void
     {
         // drop table
-        DbHelper::dropTable($this->db, $this->table);
+        DbHelper::dropTable($this->db);
 
         $this->db->close();
 

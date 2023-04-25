@@ -30,7 +30,7 @@ final class DbCacheTest extends AbstractDbCacheTest
         $this->db->setTablePrefix('pgsql_');
 
         // create migration
-        DbHelper::ensureTable($this->db, $this->table);
+        DbHelper::ensureTable($this->db);
 
         parent::setUp();
     }

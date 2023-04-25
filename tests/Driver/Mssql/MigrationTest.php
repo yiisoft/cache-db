@@ -27,7 +27,7 @@ final class MigrationTest extends AbstractMigrationTest
         $this->db = (new MssqlHelper())->createConnection();
 
         // create migration
-        DbHelper::ensureTable($this->db, $this->table);
+        DbHelper::ensureTable($this->db);
 
         parent::setUp();
     }

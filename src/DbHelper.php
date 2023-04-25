@@ -9,7 +9,7 @@ use Yiisoft\Db\Schema\SchemaInterface;
 
 final class DbHelper
 {
-    public static function ensureTable(ConnectionInterface $db, string $table): void
+    public static function ensureTable(ConnectionInterface $db, string $table = '{{%cache}}'): void
     {
         $command = $db->createCommand();
         $schema = $db->getSchema();
@@ -29,7 +29,7 @@ final class DbHelper
         )->execute();
     }
 
-    public static function dropTable(ConnectionInterface $db, string $table): void
+    public static function dropTable(ConnectionInterface $db, string $table = '{{%cache}}'): void
     {
         $command = $db->createCommand();
 
