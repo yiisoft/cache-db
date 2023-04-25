@@ -46,4 +46,9 @@ abstract class AbstractDbHelperTest extends TestCase
 
         $this->assertNotNull($this->db->getTableSchema($table));
     }
+
+    public function testPrefixTable(): void
+    {
+        $this->assertSame('cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
+    }
 }
