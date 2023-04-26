@@ -29,9 +29,7 @@ use function unserialize;
 /**
  * DbCache stores cache data in a database table.
  *
- * Database schema could be initialized by applying migration:
- *
- * {@see \Yiisoft\Cache\Db\Migration\M202101140204CreateCache}.
+ * Use {@see Migration::ensureTable()} to initialize database schema.
  */
 final class DbCache implements CacheInterface
 {
@@ -182,7 +180,8 @@ final class DbCache implements CacheInterface
 
             return true;
         } catch (Throwable $e) {
-            $this->logger?->log(LogLevel::ERROR, $this->loggerMessageUpdate . $e->getMessage(), [__METHOD__]);
+            $message = $e->getMessage();
+            $this->logger?->log(LogLevel::ERROR, "$this->loggerMessageUpdate$message", [__METHOD__]);
 
             return false;
         }
@@ -192,9 +191,8 @@ final class DbCache implements CacheInterface
     {
         $keys = $this->iterableToArray($keys);
         $this->validateKeys($keys);
-        $this->deleteData($keys);
 
-        return true;
+        return $this->deleteData($keys);
     }
 
     public function has(string $key): bool
@@ -254,10 +252,10 @@ final class DbCache implements CacheInterface
      *
      * If `true`, the all cache data will be deleted from the database.
      */
-    private function deleteData(array|string|bool $id): void
+    private function deleteData(array|string|bool $id): bool
     {
         if (empty($id)) {
-            return;
+            return false;
         }
 
         try {
@@ -266,8 +264,13 @@ final class DbCache implements CacheInterface
                 ->createCommand()
                 ->delete($this->table, $condition)
                 ->execute();
+
+            return true;
         } catch (Throwable $e) {
-            $this->logger?->log(LogLevel::ERROR, $this->loggerMessageDelete . $e->getMessage(), [__METHOD__]);
+            $message = $e->getMessage();
+            $this->logger?->log(LogLevel::ERROR, "$this->loggerMessageDelete$message", [__METHOD__]);
+
+            return false;
         }
     }
 
@@ -345,8 +348,7 @@ final class DbCache implements CacheInterface
      */
     private function iterableToArray(iterable $iterable): array
     {
-        /** @psalm-suppress RedundantCast */
-        return $iterable instanceof Traversable ? iterator_to_array($iterable) : (array) $iterable;
+        return $iterable instanceof Traversable ? iterator_to_array($iterable) : $iterable;
     }
 
     /**

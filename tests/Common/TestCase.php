@@ -2,37 +2,36 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests;
+namespace Yiisoft\Cache\Db\Tests\Common;
 
-use PHPUnit\Framework\TestCase as AbstractTestCase;
 use ReflectionClass;
 use ReflectionObject;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\Migration\M202101140204CreateCache;
+use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Log\Logger;
-use Yiisoft\Yii\Db\Migration\Informer\NullMigrationInformer;
-use Yiisoft\Yii\Db\Migration\MigrationBuilder;
 
-abstract class TestCase extends AbstractTestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
+    protected string $table = '{{%cache}}';
 
-    protected function createDbCache(): DbCache
+    protected function setup(): void
     {
-        return new DbCache($this->db, 'test-table');
+        // create db cache
+        $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
     }
 
-    protected function createMigration(): M202101140204CreateCache
+    protected function tearDown(): void
     {
-        return new M202101140204CreateCache($this->dbCache, new NullMigrationInformer());
-    }
+        // drop table
+        Migration::dropTable($this->db);
 
-    protected function createMigrationBuilder(): MigrationBuilder
-    {
-        return new MigrationBuilder($this->db, new NullMigrationInformer());
+        $this->db->close();
+
+        unset($this->db, $this->dbCache, $this->logger);
     }
 
     protected function getLogger(): Logger
@@ -61,6 +60,7 @@ abstract class TestCase extends AbstractTestCase
 
         $property->setAccessible(true);
 
+        /** @psalm-var mixed $result */
         $result = $property->getValue($object);
 
         if ($revoke) {

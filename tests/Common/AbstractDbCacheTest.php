@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Cache\Db\Tests;
+namespace Yiisoft\Cache\Db\Tests\Common;
 
 use ArrayIterator;
 use DateInterval;
@@ -18,11 +18,11 @@ use function array_map;
 use function is_array;
 use function is_object;
 
-abstract class DbCacheTest extends TestCase
+abstract class AbstractDbCacheTest extends TestCase
 {
     public function testGetters(): void
     {
-        $this->assertSame('test-table', $this->dbCache->getTable());
+        $this->assertSame($this->table, $this->dbCache->getTable());
         $this->assertSame($this->db, $this->dbCache->getDb());
     }
 
@@ -251,6 +251,7 @@ abstract class DbCacheTest extends TestCase
         $method = $reflection->getMethod('normalizeTtl');
 
         $method->setAccessible(true);
+        /** @psalm-var mixed $result */
         $result = $method->invokeArgs($this->dbCache, [$ttl]);
         $method->setAccessible(false);
 
@@ -402,16 +403,25 @@ abstract class DbCacheTest extends TestCase
     public function testSetThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
-        $cache->set('key', 'value');
+        $this->assertFalse($cache->set('key', 'value'));
 
         /** @psalm-var Logger[] $logger */
         $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
 
+        /** @psalm-var string $context */
+        $context = $this->getInaccessibleProperty($logger[0], 'context');
+
+        $this->assertSame('Yiisoft\\Cache\\Db\\DbCache::set', $context[0]);
+
         /** @psalm-var string $message */
         $message = $this->getInaccessibleProperty($logger[0], 'message');
 
+        /** @psalm-var string $loggerMessageUpdate */
+        $loggerMessageUpdate = $this->getInaccessibleProperty($cache, 'loggerMessageUpdate');
+
         $this->assertCount(1, $logger);
-        $this->assertStringContainsString('Unable to update cache data: ', $message);
+        $this->assertStringContainsString($loggerMessageUpdate, $message);
+        $this->assertStringContainsString('Unable to update cache data: SQLSTATE', $message);
     }
 
     /**
@@ -444,11 +454,20 @@ abstract class DbCacheTest extends TestCase
         /** @psalm-var Logger[] $logger */
         $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
 
+        /** @psalm-var string $context */
+        $context = $this->getInaccessibleProperty($logger[0], 'context');
+
+        $this->assertSame('Yiisoft\\Cache\\Db\\DbCache::deleteData', $context[0]);
+
         /** @psalm-var string $message */
         $message = $this->getInaccessibleProperty($logger[0], 'message');
 
+        /** @psalm-var string $loggerMessageDelete */
+        $loggerMessageDelete = $this->getInaccessibleProperty($cache, 'loggerMessageDelete');
+
         $this->assertCount(1, $logger);
-        $this->assertStringContainsString('Unable to delete cache data: ', $message);
+        $this->assertStringContainsString($loggerMessageDelete, $message);
+        $this->assertStringContainsString('Unable to delete cache data: SQLSTATE[', $message);
     }
 
     /**
@@ -487,7 +506,7 @@ abstract class DbCacheTest extends TestCase
     public function testSetMultipleThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
-        $cache->setMultiple(['key-1' => 'value-1', 'key-2' => 'value-2']);
+        $this->assertFalse($cache->setMultiple(['key-1' => 'value-1', 'key-2' => 'value-2']));
 
         /** @psalm-var Logger[] $logger */
         $logger = $this->getInaccessibleProperty($this->getLogger(), 'messages');
@@ -508,7 +527,13 @@ abstract class DbCacheTest extends TestCase
     public function testDeleteDataEmptyKey(): void
     {
         $getData = $this->invokeMethod($this->dbCache, 'deleteData', ['', [], 'all']);
-        $this->assertNull($getData);
+        $this->assertFalse($getData);
+    }
+
+    public function testDeleteDataTrueKey(): void
+    {
+        $getData = $this->invokeMethod($this->dbCache, 'deleteData', [true, [], 'all']);
+        $this->assertTrue($getData);
     }
 
     private function getDataProviderData(): array
