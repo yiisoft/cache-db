@@ -27,7 +27,7 @@ abstract class AbstractMigrationTest extends TestCase
     {
         $table = '{{%cache}}';
 
-        Migration::dropTable($this->db, '{{%cache}}');
+        Migration::dropTable($this->db);
 
         $this->assertNull($this->db->getTableSchema($table, true));
 
@@ -40,7 +40,7 @@ abstract class AbstractMigrationTest extends TestCase
     {
         $table = '{{%cache}}';
 
-        Migration::dropTable($this->db, '{{%cache}}');
+        Migration::dropTable($this->db);
 
         $this->assertNull($this->db->getTableSchema($table, true));
 

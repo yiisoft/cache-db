@@ -4,11 +4,21 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db;
 
+use Throwable;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Db\Exception\InvalidConfigException;
+use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Db\Schema\SchemaInterface;
 
 final class Migration
 {
+    /**
+     * @throws Exception
+     * @throws NotSupportedException
+     * @throws InvalidConfigException
+     * @throws Throwable
+     */
     public static function ensureTable(ConnectionInterface $db, string $table = '{{%cache}}'): void
     {
         $command = $db->createCommand();
@@ -29,6 +39,11 @@ final class Migration
         )->execute();
     }
 
+    /**
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
+     */
     public static function dropTable(ConnectionInterface $db, string $table = '{{%cache}}'): void
     {
         $command = $db->createCommand();
