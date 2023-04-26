@@ -7,7 +7,7 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 use ReflectionClass;
 use ReflectionObject;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\DbHelper;
+use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Log\Logger;
 
@@ -27,7 +27,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         // drop table
-        DbHelper::dropTable($this->db);
+        Migration::dropTable($this->db);
 
         $this->db->close();
 

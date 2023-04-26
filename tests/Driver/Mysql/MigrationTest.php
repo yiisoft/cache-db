@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 
-use Yiisoft\Cache\Db\DbHelper;
+use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Cache\Db\Tests\Common\AbstractMigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
 use Yiisoft\Db\Exception\Exception;
@@ -27,7 +27,7 @@ final class MigrationTest extends AbstractMigrationTest
         $this->db = (new MysqlHelper())->createConnection();
 
         // create migration
-        DbHelper::ensureTable($this->db);
+        Migration::ensureTable($this->db);
 
         parent::setUp();
     }

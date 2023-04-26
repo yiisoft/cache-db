@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 
-use Yiisoft\Cache\Db\DbHelper;
+use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlHelper;
 use Yiisoft\Db\Exception\Exception;
@@ -30,7 +30,7 @@ final class DbCacheTest extends AbstractDbCacheTest
         $this->db->setTablePrefix('mysql_');
 
         // create migration
-        DbHelper::ensureTable($this->db);
+        Migration::ensureTable($this->db);
 
         parent::setup();
     }

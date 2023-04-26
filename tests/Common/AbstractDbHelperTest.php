@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Common;
 
-use Yiisoft\Cache\Db\DbHelper;
+use Yiisoft\Cache\Db\Migration;
 
 abstract class AbstractDbHelperTest extends TestCase
 {
@@ -12,7 +12,7 @@ abstract class AbstractDbHelperTest extends TestCase
     {
         $table = '{{%cache}}';
 
-        DbHelper::dropTable($this->db, $table);
+        Migration::dropTable($this->db, $table);
 
         $this->assertNull($this->db->getTableSchema($table, true));
     }
@@ -21,11 +21,11 @@ abstract class AbstractDbHelperTest extends TestCase
     {
         $table = '{{%cache}}';
 
-        DbHelper::dropTable($this->db, '{{%cache}}');
+        Migration::dropTable($this->db, '{{%cache}}');
 
         $this->assertNull($this->db->getTableSchema($table, true));
 
-        DbHelper::ensureTable($this->db, $table);
+        Migration::ensureTable($this->db, $table);
 
         $this->assertNotNull($this->db->getTableSchema($table, true));
     }
@@ -34,15 +34,15 @@ abstract class AbstractDbHelperTest extends TestCase
     {
         $table = '{{%cache}}';
 
-        DbHelper::dropTable($this->db, '{{%cache}}');
+        Migration::dropTable($this->db, '{{%cache}}');
 
         $this->assertNull($this->db->getTableSchema($table, true));
 
-        DbHelper::ensureTable($this->db, $table);
+        Migration::ensureTable($this->db, $table);
 
         $this->assertNotNull($this->db->getTableSchema($table));
 
-        DbHelper::ensureTable($this->db, $table);
+        Migration::ensureTable($this->db, $table);
 
         $this->assertNotNull($this->db->getTableSchema($table));
     }

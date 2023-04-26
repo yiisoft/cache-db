@@ -7,7 +7,7 @@ namespace Yiisoft\Cache\Db;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Schema\SchemaInterface;
 
-final class DbHelper
+final class Migration
 {
     public static function ensureTable(ConnectionInterface $db, string $table = '{{%cache}}'): void
     {
