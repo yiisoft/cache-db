@@ -6,7 +6,7 @@ namespace Yiisoft\Cache\Db\Tests\Driver\Sqlite;
 
 use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
-use Yiisoft\Cache\Db\Tests\Support\SqliteHelper;
+use Yiisoft\Cache\Db\Tests\Support\SqliteFactory;
 
 /**
  * @group Sqlite
@@ -18,7 +18,7 @@ final class DbCacheTest extends AbstractDbCacheTest
     protected function setUp(): void
     {
         // create connection dbms-specific
-        $this->db = (new SqliteHelper())->createConnection();
+        $this->db = (new SqliteFactory())->createConnection();
 
         // create migration
         Migration::ensureTable($this->db);

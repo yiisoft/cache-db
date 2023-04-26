@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Support;
 
 use Yiisoft\Db\Connection\ConnectionInterface;
-use Yiisoft\Db\Mssql\Connection;
-use Yiisoft\Db\Mssql\Driver;
-use Yiisoft\Db\Mssql\Dsn;
+use Yiisoft\Db\Mysql\Dsn;
+use Yiisoft\Db\Mysql\Connection;
+use Yiisoft\Db\Mysql\Driver;
 
-final class MssqlHelper extends ConnectionHelper
+final class MysqlFactory extends ConnectionFactory
 {
     public function createConnection(): ConnectionInterface
     {
         $pdoDriver = new Driver(
-            (new Dsn('sqlsrv', 'localhost', 'yiitest'))->asString(),
-            'SA',
-            'YourStrong!Passw0rd',
+            (new Dsn('mysql', '127.0.0.1', 'yiitest', '3306', ['charset' => 'utf8mb4']))->asString(),
+            'root',
+            '',
         );
 
         return new Connection($pdoDriver, $this->createSchemaCache());

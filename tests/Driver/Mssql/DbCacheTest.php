@@ -6,7 +6,7 @@ namespace Yiisoft\Cache\Db\Tests\Driver\Mssql;
 
 use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
-use Yiisoft\Cache\Db\Tests\Support\MssqlHelper;
+use Yiisoft\Cache\Db\Tests\Support\MssqlFactory;
 
 /**
  * @group Mssql
@@ -18,7 +18,7 @@ final class DbCacheTest extends AbstractDbCacheTest
     protected function setUp(): void
     {
         // create connection dbms-specific
-        $this->db = (new MssqlHelper())->createConnection();
+        $this->db = (new MssqlFactory())->createConnection();
 
         // create migration
         Migration::ensureTable($this->db);

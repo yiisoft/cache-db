@@ -6,7 +6,7 @@ namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
 use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
-use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
+use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
 
 /**
  * @group Oracle
@@ -18,7 +18,7 @@ final class DbCacheTest extends AbstractDbCacheTest
     protected function setUp(): void
     {
         // create connection dbms-specific
-        $this->db = (new OracleHelper())->createConnection();
+        $this->db = (new OracleFactory())->createConnection();
 
         // create migration
         Migration::ensureTable($this->db);

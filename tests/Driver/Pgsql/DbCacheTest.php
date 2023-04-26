@@ -6,7 +6,7 @@ namespace Yiisoft\Cache\Db\Tests\Driver\Pgsql;
 
 use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
-use Yiisoft\Cache\Db\Tests\Support\PgsqlHelper;
+use Yiisoft\Cache\Db\Tests\Support\PgsqlFactory;
 
 /**
  * @group Pgsql
@@ -20,7 +20,7 @@ final class DbCacheTest extends AbstractDbCacheTest
     protected function setUp(): void
     {
         // create connection dbms-specific
-        $this->db = (new PgsqlHelper())->createConnection();
+        $this->db = (new PgsqlFactory())->createConnection();
 
         // create migration
         Migration::ensureTable($this->db);

@@ -7,7 +7,7 @@ namespace Yiisoft\Cache\Db\Tests\Support;
 use Yiisoft\Cache\ArrayCache;
 use Yiisoft\Db\Cache\SchemaCache;
 
-abstract class ConnectionHelper
+abstract class ConnectionFactory
 {
     protected function createSchemaCache(): SchemaCache
     {

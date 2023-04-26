@@ -9,7 +9,7 @@ use Yiisoft\Db\Pgsql\Connection;
 use Yiisoft\Db\Pgsql\Driver;
 use Yiisoft\Db\Pgsql\Dsn;
 
-final class PgsqlHelper extends ConnectionHelper
+final class PgsqlFactory extends ConnectionFactory
 {
     public function createConnection(bool $reset = true): ConnectionInterface
     {
