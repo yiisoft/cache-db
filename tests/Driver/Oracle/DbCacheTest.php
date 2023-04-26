@@ -26,17 +26,9 @@ final class DbCacheTest extends AbstractDbCacheTest
         // create connection dbms-specific
         $this->db = (new OracleHelper())->createConnection();
 
-        // set table prefix
-        $this->db->setTablePrefix('oci_');
-
         // create migration
         Migration::ensureTable($this->db);
 
         parent::setUp();
-    }
-
-    public function testPrefixTable(): void
-    {
-        $this->assertSame('oci_cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
     }
 }

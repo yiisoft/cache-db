@@ -25,17 +25,9 @@ final class DbCacheTest extends AbstractDbCacheTest
     {
         $this->db = (new SqliteHelper())->createConnection();
 
-        // set table prefix
-        $this->db->setTablePrefix('sqlite3_');
-
         // create migration
         Migration::ensureTable($this->db);
 
         parent::setUp();
-    }
-
-    public function testPrefixTable(): void
-    {
-        $this->assertSame('sqlite3_cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
     }
 }

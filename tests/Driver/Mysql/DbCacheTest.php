@@ -26,17 +26,9 @@ final class DbCacheTest extends AbstractDbCacheTest
         // create connection dbms-specific
         $this->db = (new MysqlHelper())->createConnection();
 
-        // set table prefix
-        $this->db->setTablePrefix('mysql_');
-
         // create migration
         Migration::ensureTable($this->db);
 
         parent::setup();
-    }
-
-    public function testPrefixTable(): void
-    {
-        $this->assertSame('mysql_cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
     }
 }

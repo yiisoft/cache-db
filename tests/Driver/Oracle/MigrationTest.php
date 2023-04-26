@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
-use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Cache\Db\Tests\Common\AbstractMigrationTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleHelper;
 use Yiisoft\Db\Exception\Exception;
@@ -17,6 +16,8 @@ use Yiisoft\Db\Exception\InvalidConfigException;
  */
 final class MigrationTest extends AbstractMigrationTest
 {
+    protected string $tableWithPrefix = 'oci_cache';
+
     /**
      * @throws Exception
      * @throws InvalidConfigException
@@ -26,8 +27,8 @@ final class MigrationTest extends AbstractMigrationTest
         // create connection dbms-specific
         $this->db = (new OracleHelper())->createConnection();
 
-        // create migration
-        Migration::ensureTable($this->db);
+        // set table prefix
+        $this->db->setTablePrefix('oci_');
 
         parent::setUp();
     }

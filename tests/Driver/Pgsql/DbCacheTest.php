@@ -17,6 +17,8 @@ use Yiisoft\Db\Exception\InvalidConfigException;
  */
 final class DbCacheTest extends AbstractDbCacheTest
 {
+    protected string $tableWithPrefix = 'pgsql_cache';
+
     /**
      * @throws Exception
      * @throws InvalidConfigException
@@ -26,17 +28,9 @@ final class DbCacheTest extends AbstractDbCacheTest
         // create connection dbms-specific
         $this->db = (new PgsqlHelper())->createConnection();
 
-        // set table prefix
-        $this->db->setTablePrefix('pgsql_');
-
         // create migration
         Migration::ensureTable($this->db);
 
         parent::setUp();
-    }
-
-    public function testPrefixTable(): void
-    {
-        $this->assertSame('pgsql_cache', $this->db->getSchema()->getRawTableName('{{%cache}}'));
     }
 }
