@@ -23,6 +23,7 @@ final class DbCacheTest extends AbstractDbCacheTest
      */
     protected function setUp(): void
     {
+        // create connection dbms-specific
         $this->db = (new SqliteHelper())->createConnection();
 
         // create migration
