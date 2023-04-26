@@ -29,7 +29,7 @@ use function unserialize;
 /**
  * DbCache stores cache data in a database table.
  *
- * Database schema can be initialized, you can use the {@see Migration::ensureTable()} method for this.
+ * Use {@see Migration::ensureTable()} to initialize database schema.
  */
 final class DbCache implements CacheInterface
 {
