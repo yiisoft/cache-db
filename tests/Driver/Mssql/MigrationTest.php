@@ -16,8 +16,6 @@ use Yiisoft\Db\Exception\InvalidConfigException;
  */
 final class MigrationTest extends AbstractMigrationTest
 {
-    protected string $tableWithPrefix = 'mssql_cache';
-
     /**
      * @throws Exception
      * @throws InvalidConfigException

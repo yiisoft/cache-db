@@ -14,8 +14,6 @@ use Yiisoft\Db\Constraint\IndexConstraint;
  */
 abstract class AbstractMigrationTest extends TestCase
 {
-    protected string $tableWithPrefix = '';
-
     public function testDropTable(): void
     {
         $table = '{{%cache}}';
@@ -73,11 +71,12 @@ abstract class AbstractMigrationTest extends TestCase
     {
         Migration::ensureTable($this->db);
 
+        $prefix = $this->db->getTablePrefix();
         $tableSchema = $this->db->getTableSchema($this->dbCache->getTable());
 
         $this->assertNotNull($tableSchema);
 
-        $this->assertSame($this->tableWithPrefix, $tableSchema->getName());
+        $this->assertSame($prefix . 'cache', $tableSchema->getName());
         $this->assertSame(['id'], $tableSchema->getPrimaryKey());
         $this->assertSame(['id', 'data', 'expire'], $tableSchema->getColumnNames());
         $this->assertSame('string', $tableSchema->getColumn('id')?->getType());
