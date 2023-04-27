@@ -6,9 +6,12 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 
 use ReflectionClass;
 use ReflectionObject;
+use Throwable;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Exception\Exception;
+use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Log\Logger;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
@@ -24,6 +27,11 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
     }
 
+    /**
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
+     */
     protected function tearDown(): void
     {
         // drop table
