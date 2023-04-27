@@ -26,83 +26,9 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 |  [[db-pgsql]](https://github.com/yiisoft/db-pgsql)  | **8.0 - 8.1** | **9.0 - 15.0**  |  [![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml)   |
 | [[db-sqlite]](https://github.com/yiisoft/db-sqlite) | **8,0 - 8.1** |  **3:latest**   | [![sqlite](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml) |
 
-## Requirements
+## Usage 
 
-- PHP 8.0 or higher.
-- `PDO` PHP extension.
-
-## Installation
-
-The package could be installed with composer:
-
-```
-composer require yiisoft/cache-db --prefer-dist
-```
-
-## Configuration
-
-When creating an instance of `\Yiisoft\Cache\Db\DbCache`, you must pass an instance of the database connection:
-
-```php
-$cache = new \Yiisoft\Cache\Db\DbCache($db, $table, $gcProbability);
-```
-
-- `$db (\Yiisoft\Db\Connection\ConnectionInterface)` - The database connection instance.
-- `$table (string)` - The name of the database table to store the cache data. Defaults to "cache".
-- `$gcProbability (int)` - The probability (parts per million) that garbage collection (GC) should
-  be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
-  This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
-
-## General usage
-
-The package does not contain any additional functionality for interacting with the cache,
-except those defined in the [PSR-16](https://www.php-fig.org/psr/psr-16/) interface.
-
-```php
-$cache = new \Yiisoft\Cache\Db\DbCache($db);
-$parameters = ['user_id' => 42];
-$key = 'demo';
-
-// try retrieving $data from cache
-$data = $cache->get($key);
-
-if ($data === null) {
-    // $data is not found in cache, calculate it from scratch
-    $data = calculateData($parameters);
-    
-    // store $data in cache for an hour so that it can be retrieved next time
-    $cache->set($key, $data, 3600);
-}
-
-// $data is available here
-```
-
-In order to delete value you can use:
-
-```php
-$cache->delete($key);
-// Or all cache
-$cache->clear();
-```
-
-To work with values in a more efficient manner, batch operations should be used:
-
-- `getMultiple()`
-- `setMultiple()`
-- `deleteMultiple()`
-
-This package can be used as a cache handler for the [Yii Caching Library](https://github.com/yiisoft/cache).
-
-## Additional logging
-
-In order to log details about failures you may set a logger instance. It should be `Psr\Log\LoggerInterface::class`. For example, you can use [yiisoft\Log](https://github.com/yiisoft/log):
-
-```php
-$cache = new \Yiisoft\Cache\Db\DbCache($db, $table, $gcProbability);
-$cache->setLogger(new \Yiisoft\Log\Logger());
-```
-
-This allows you to log cache operations, when ocurring errors, etc.
+[Check the documentation](/docs/en/README.md) to learn about usage.
 
 ## Support
 
