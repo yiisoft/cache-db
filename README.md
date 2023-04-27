@@ -8,8 +8,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/cache-db/v/stable.png)](https://packagist.org/packages/yiisoft/cache-db)
 [![Total Downloads](https://poser.pugx.org/yiisoft/cache-db/downloads.png)](https://packagist.org/packages/yiisoft/cache-db)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/cache-db/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/cache-db/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/yiisoft/cache-db/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/cache-db/?branch=master)
+[![codecov](https://codecov.io/gh/yiisoft/cache-db/branch/master/graph/badge.svg?token=H7YALMK1YN)](https://codecov.io/gh/yiisoft/cache-db)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fyiisoft%2Fcache-db%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/yiisoft/cache-db/master)
 [![static analysis](https://github.com/yiisoft/cache-db/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/cache-db/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/cache-db/coverage.svg)](https://shepherd.dev/github/yiisoft/cache-db)
