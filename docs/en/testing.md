@@ -65,7 +65,17 @@ Suites available:
 - Pgsql
 - Sqlite
 
-### Mutation testing
+## Composer require checker
+
+This package uses [composer-require-checker](https://github.com/maglnet/ComposerRequireChecker) to check if all dependencies are correctly defined in `composer.json`.
+
+To run the checker, execute the following command:
+
+```shell
+./vendor/bin/composer-require-checker
+```
+
+## Mutation testing
 
 The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
 [Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
@@ -88,14 +98,4 @@ Use [Rector](https://github.com/rectorphp/rector) to make codebase follow some s
 
 ```shell
 ./vendor/bin/rector
-```
-
-## Composer require checker
-
-This package uses [composer-require-checker](https://github.com/maglnet/ComposerRequireChecker) to check if all dependencies are correctly defined in `composer.json`.
-
-To run the checker, execute the following command:
-
-```shell
-./vendor/bin/composer-require-checker
 ```
