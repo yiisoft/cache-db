@@ -33,7 +33,7 @@ For dropping table you can use:
 Migration::dropTable($db);
 ```
 
-For dropping table custom table name you can use:
+For custom table name you can use:
 
 ```php
 Migration::dropTable($db, '{{%custom_cache_table}}');
