@@ -13,6 +13,32 @@ The package could be installed with composer:
 composer require yiisoft/cache-db --prefer-dist
 ```
 
+## Migration
+
+The package provides a migration that creates the cache table for default `{{%cache}}`. You can use it as follows:
+
+```php
+Migration::ensureTable($db);
+```
+
+For custom table name you can use:
+
+```php
+Migration::ensureTable($db, '{{%custom_cache_table}}');
+```
+
+For dropping table you can use:
+
+```php
+Migration::dropTable($db);
+```
+
+For dropping table custom table name you can use:
+
+```php
+Migration::dropTable($db, '{{%custom_cache_table}}');
+```
+
 ## Configuration
 
 When creating an instance of `\Yiisoft\Cache\Db\DbCache`, you must pass an instance of the database connection,
