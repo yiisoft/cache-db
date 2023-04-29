@@ -9,5 +9,5 @@ CREATE TABLE "cache" (
     "id" VARCHAR2(128) NOT NULL,
     "data" BLOB,
     "expire" INTEGER,
-    CONSTRAINT "cache_PK" PRIMARY KEY ("id") ENABLE
+    CONSTRAINT "PK_cache" PRIMARY KEY ("id") ENABLE
 );
