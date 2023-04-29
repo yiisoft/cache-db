@@ -39,6 +39,14 @@ For custom table name you can use:
 Migration::dropTable($db, '{{%custom_cache_table}}');
 ```
 
+> Note: Additionally you can import the `RAW SQL` directly to create the tables.
+>
+>- [schema-mssql](/docs/en/migration/schema-mssql.sql).
+>- [schema-mysql](/docs/en/migration/schema-mysql.sql).
+>- [schema-oracle](/docs/en/migration/schema-oci.sql).
+>- [schema-pgsql](/docs/en/migration/schema-pgsql.sql).
+>- [schema-sqlite](/docs/en/migration/schema-sqlite.sql).
+
 ## Configuration
 
 When creating an instance of `\Yiisoft\Cache\Db\DbCache`, you must pass an instance of the database connection,
