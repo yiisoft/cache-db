@@ -1,8 +1,6 @@
 /**
  * Database schema required by yiisoft/cache db for MySQL.
  */
-DROP TABLE IF EXISTS `cache`;
-
 CREATE TABLE `cache` (
     `id` VARCHAR(128) NOT NULL,
     `data` BLOB,
