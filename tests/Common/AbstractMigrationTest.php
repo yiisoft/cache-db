@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Common;
 
+use PHPUnit\Framework\TestCase;
 use Throwable;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\Migration;
+use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Constraint\IndexConstraint;
 use Yiisoft\Db\Exception\Exception;
 use Yiisoft\Db\Exception\InvalidConfigException;
@@ -20,6 +22,8 @@ use Yiisoft\Db\Schema\SchemaInterface;
  */
 abstract class AbstractMigrationTest extends TestCase
 {
+    protected ConnectionInterface $db;
+
     /**
      * @throws Exception
      * @throws InvalidConfigException
@@ -31,6 +35,10 @@ abstract class AbstractMigrationTest extends TestCase
         Migration::ensureTable($this->db, '{{%custom_cache}}');
 
         $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}', true));
+
+        Migration::dropTable($this->db, '{{%custom_cache}}');
+
+        $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
 
         Migration::dropTable($this->db, '{{%custom_cache}}');
 
@@ -95,6 +103,10 @@ abstract class AbstractMigrationTest extends TestCase
         $this->assertSame(['id'], $indexes[0]->getColumnNames());
         $this->assertTrue($indexes[0]->isUnique());
         $this->assertTrue($indexes[0]->isPrimary());
+
+        Migration::dropTable($this->db, $dbCache->getTable());
+
+        $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }
 
     /**
@@ -121,5 +133,9 @@ abstract class AbstractMigrationTest extends TestCase
         $this->assertSame(128, $tableSchema->getColumn('id')?->getSize());
         $this->assertSame(SchemaInterface::TYPE_BINARY, $tableSchema->getColumn('data')?->getType());
         $this->assertSame(SchemaInterface::TYPE_INTEGER, $tableSchema->getColumn('expire')?->getType());
+
+        Migration::dropTable($this->db, $dbCache->getTable());
+
+        $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }
 }
