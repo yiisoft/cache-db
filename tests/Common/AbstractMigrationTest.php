@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Common;
 
 use Throwable;
+use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\Migration;
 use Yiisoft\Db\Constraint\IndexConstraint;
 use Yiisoft\Db\Exception\Exception;
@@ -27,13 +28,13 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testDropTable(): void
     {
-        Migration::ensureTable($this->db);
+        Migration::ensureTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNotNull($this->db->getTableSchema('{{%cache}}', true));
+        $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}', true));
 
-        Migration::dropTable($this->db);
+        Migration::dropTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
+        $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
     }
 
     /**
@@ -44,13 +45,13 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testEnsureTable(): void
     {
-        Migration::ensureTable($this->db);
+        Migration::ensureTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNotNull($this->db->getTableSchema('{{%cache}}', true));
+        $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}', true));
 
-        Migration::dropTable($this->db);
+        Migration::dropTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
+        $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
     }
 
     /**
@@ -61,17 +62,17 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testEnsureTableExist(): void
     {
-        Migration::ensureTable($this->db);
+        Migration::ensureTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNotNull($this->db->getTableSchema('{{%cache}}'));
+        $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}'));
 
-        Migration::ensureTable($this->db);
+        Migration::ensureTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNotNull($this->db->getTableSchema('{{%cache}}'));
+        $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}'));
 
-        Migration::dropTable($this->db);
+        Migration::dropTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
+        $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
     }
 
     /**
@@ -82,12 +83,14 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testVerifyTableIndexes(): void
     {
-        Migration::ensureTable($this->db);
+        $dbCache = new DbCache($this->db, '{{%custom_cache}}', 1_000_000);
+
+        Migration::ensureTable($this->db, $dbCache->getTable());
 
         $schema = $this->db->getSchema();
 
         /** @psalm-var IndexConstraint[] $indexes */
-        $indexes = $schema->getTableIndexes($this->dbCache->getTable(), true);
+        $indexes = $schema->getTableIndexes($dbCache->getTable(), true);
 
         $this->assertSame(['id'], $indexes[0]->getColumnNames());
         $this->assertTrue($indexes[0]->isUnique());
@@ -102,14 +105,16 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testVerifyTableStructure(): void
     {
-        Migration::ensureTable($this->db);
+        $dbCache = new DbCache($this->db, '{{%custom_cache}}', 1_000_000);
+
+        Migration::ensureTable($this->db, $dbCache->getTable());
 
         $prefix = $this->db->getTablePrefix();
-        $tableSchema = $this->db->getTableSchema($this->dbCache->getTable());
+        $tableSchema = $this->db->getTableSchema($dbCache->getTable());
 
         $this->assertNotNull($tableSchema);
 
-        $this->assertSame($prefix . 'cache', $tableSchema->getName());
+        $this->assertSame($prefix . 'custom_cache', $tableSchema->getName());
         $this->assertSame(['id'], $tableSchema->getPrimaryKey());
         $this->assertSame(['id', 'data', 'expire'], $tableSchema->getColumnNames());
         $this->assertSame(SchemaInterface::TYPE_STRING, $tableSchema->getColumn('id')?->getType());
