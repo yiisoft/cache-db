@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Driver\Mysql;
 
 use Throwable;
-use Yiisoft\Cache\Db\Migration;
+use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbCacheTest;
 use Yiisoft\Cache\Db\Tests\Support\MysqlFactory;
 use Yiisoft\Db\Exception\Exception;
@@ -31,7 +31,7 @@ final class DbCacheTest extends AbstractDbCacheTest
         $this->db = (new MysqlFactory())->createConnection();
 
         // create migration
-        Migration::ensureTable($this->db);
+        DbHelper::ensureTable($this->db);
 
         parent::setup();
     }

@@ -7,7 +7,7 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\Migration;
+use Yiisoft\Cache\Db\DbHelper;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Constraint\IndexConstraint;
 use Yiisoft\Db\Exception\Exception;
@@ -20,7 +20,7 @@ use Yiisoft\Db\Schema\SchemaInterface;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractMigrationTest extends TestCase
+abstract class AbstractDbHelperTest extends TestCase
 {
     protected ConnectionInterface $db;
 
@@ -32,15 +32,15 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testDropTable(): void
     {
-        Migration::ensureTable($this->db);
+        DbHelper::ensureTable($this->db);
 
         $this->assertNotNull($this->db->getTableSchema('{{%cache}}', true));
 
-        Migration::dropTable($this->db);
+        DbHelper::dropTable($this->db);
 
         $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
 
-        Migration::dropTable($this->db);
+        DbHelper::dropTable($this->db);
 
         $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
     }
@@ -53,15 +53,15 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testDropTableWithCustomTableName(): void
     {
-        Migration::ensureTable($this->db, '{{%custom_cache}}');
+        DbHelper::ensureTable($this->db, '{{%custom_cache}}');
 
         $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}', true));
 
-        Migration::dropTable($this->db, '{{%custom_cache}}');
+        DbHelper::dropTable($this->db, '{{%custom_cache}}');
 
         $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
 
-        Migration::dropTable($this->db, '{{%custom_cache}}');
+        DbHelper::dropTable($this->db, '{{%custom_cache}}');
 
         $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
     }
@@ -74,11 +74,11 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testEnsureTable(): void
     {
-        Migration::ensureTable($this->db);
+        DbHelper::ensureTable($this->db);
 
         $this->assertNotNull($this->db->getTableSchema('{{%cache}}', true));
 
-        Migration::dropTable($this->db);
+        DbHelper::dropTable($this->db);
 
         $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
     }
@@ -91,11 +91,11 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testEnsureTableWithCustomTableName(): void
     {
-        Migration::ensureTable($this->db, '{{%custom_cache}}');
+        DbHelper::ensureTable($this->db, '{{%custom_cache}}');
 
         $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}', true));
 
-        Migration::dropTable($this->db, '{{%custom_cache}}');
+        DbHelper::dropTable($this->db, '{{%custom_cache}}');
 
         $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
     }
@@ -108,15 +108,15 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testEnsureTableExist(): void
     {
-        Migration::ensureTable($this->db);
+        DbHelper::ensureTable($this->db);
 
         $this->assertNotNull($this->db->getTableSchema('{{%cache}}'));
 
-        Migration::ensureTable($this->db, '{{%cache}}');
+        DbHelper::ensureTable($this->db, '{{%cache}}');
 
         $this->assertNotNull($this->db->getTableSchema('{{%cache}}'));
 
-        Migration::dropTable($this->db);
+        DbHelper::dropTable($this->db);
 
         $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
     }
@@ -129,15 +129,15 @@ abstract class AbstractMigrationTest extends TestCase
      */
     public function testEnsureTableExistWithCustomTableName(): void
     {
-        Migration::ensureTable($this->db, '{{%custom_cache}}');
+        DbHelper::ensureTable($this->db, '{{%custom_cache}}');
 
         $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}'));
 
-        Migration::ensureTable($this->db, '{{%custom_cache}}');
+        DbHelper::ensureTable($this->db, '{{%custom_cache}}');
 
         $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}'));
 
-        Migration::dropTable($this->db, '{{%custom_cache}}');
+        DbHelper::dropTable($this->db, '{{%custom_cache}}');
 
         $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
     }
@@ -152,7 +152,7 @@ abstract class AbstractMigrationTest extends TestCase
     {
         $dbCache = new DbCache($this->db, '{{%cache}}', 1_000_000);
 
-        Migration::ensureTable($this->db, $dbCache->getTable());
+        DbHelper::ensureTable($this->db, $dbCache->getTable());
 
         $schema = $this->db->getSchema();
 
@@ -163,7 +163,7 @@ abstract class AbstractMigrationTest extends TestCase
         $this->assertTrue($indexes[0]->isUnique());
         $this->assertTrue($indexes[0]->isPrimary());
 
-        Migration::dropTable($this->db, $dbCache->getTable());
+        DbHelper::dropTable($this->db, $dbCache->getTable());
 
         $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }
@@ -178,7 +178,7 @@ abstract class AbstractMigrationTest extends TestCase
     {
         $dbCache = new DbCache($this->db, '{{%custom_cache}}', 1_000_000);
 
-        Migration::ensureTable($this->db, $dbCache->getTable());
+        DbHelper::ensureTable($this->db, $dbCache->getTable());
 
         $schema = $this->db->getSchema();
 
@@ -189,7 +189,7 @@ abstract class AbstractMigrationTest extends TestCase
         $this->assertTrue($indexes[0]->isUnique());
         $this->assertTrue($indexes[0]->isPrimary());
 
-        Migration::dropTable($this->db, $dbCache->getTable());
+        DbHelper::dropTable($this->db, $dbCache->getTable());
 
         $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }
@@ -204,7 +204,7 @@ abstract class AbstractMigrationTest extends TestCase
     {
         $dbCache = new DbCache($this->db, '{{%cache}}', 1_000_000);
 
-        Migration::ensureTable($this->db, $dbCache->getTable());
+        DbHelper::ensureTable($this->db, $dbCache->getTable());
 
         $prefix = $this->db->getTablePrefix();
         $tableSchema = $this->db->getTableSchema($dbCache->getTable());
@@ -219,7 +219,7 @@ abstract class AbstractMigrationTest extends TestCase
         $this->assertSame(SchemaInterface::TYPE_BINARY, $tableSchema->getColumn('data')?->getType());
         $this->assertSame(SchemaInterface::TYPE_INTEGER, $tableSchema->getColumn('expire')?->getType());
 
-        Migration::dropTable($this->db, $dbCache->getTable());
+        DbHelper::dropTable($this->db, $dbCache->getTable());
 
         $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }
@@ -234,7 +234,7 @@ abstract class AbstractMigrationTest extends TestCase
     {
         $dbCache = new DbCache($this->db, '{{%custom_cache}}', 1_000_000);
 
-        Migration::ensureTable($this->db, $dbCache->getTable());
+        DbHelper::ensureTable($this->db, $dbCache->getTable());
 
         $prefix = $this->db->getTablePrefix();
         $tableSchema = $this->db->getTableSchema($dbCache->getTable());
@@ -249,7 +249,7 @@ abstract class AbstractMigrationTest extends TestCase
         $this->assertSame(SchemaInterface::TYPE_BINARY, $tableSchema->getColumn('data')?->getType());
         $this->assertSame(SchemaInterface::TYPE_INTEGER, $tableSchema->getColumn('expire')?->getType());
 
-        Migration::dropTable($this->db, $dbCache->getTable());
+        DbHelper::dropTable($this->db, $dbCache->getTable());
 
         $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }

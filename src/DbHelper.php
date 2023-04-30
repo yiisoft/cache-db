@@ -11,7 +11,7 @@ use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Db\Schema\SchemaInterface;
 
-final class Migration
+final class DbHelper
 {
     /**
      * @throws Exception
