@@ -64,6 +64,8 @@ DbHelper::dropTable($db);
 
 // Drop table with custom name
 DbHelper::dropTable($db, '{{%custom_cache_table}}');
+```
+
 ## Configuration
 
 When creating an instance of `\Yiisoft\Cache\Db\DbCache`, you must pass an instance of the database connection,
