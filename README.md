@@ -38,7 +38,7 @@ The package could be installed with composer:
 composer require yiisoft/cache-db --prefer-dist
 ```
 
-### Database Preparing
+## Database Preparing
 
 Package provides two way for preparing database:
 
