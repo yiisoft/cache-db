@@ -11,7 +11,7 @@ use Yiisoft\Db\Pgsql\Dsn;
 
 final class PgsqlFactory extends ConnectionFactory
 {
-    public function createConnection(bool $reset = true): ConnectionInterface
+    public function createConnection(): ConnectionInterface
     {
         $pdoDriver = new Driver(
             (new Dsn('pgsql', '127.0.0.1', 'yiitest', '5432'))->asString(),

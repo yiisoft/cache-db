@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Mssql;
 
-use Yiisoft\Cache\Db\Tests\Common\AbstractMigrationTest;
+use Yiisoft\Cache\Db\Tests\Common\AbstractDbHelperTest;
 use Yiisoft\Cache\Db\Tests\Support\MssqlFactory;
 
 /**
@@ -12,7 +12,7 @@ use Yiisoft\Cache\Db\Tests\Support\MssqlFactory;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class MigrationTest extends AbstractMigrationTest
+final class DbHelperTest extends AbstractDbHelperTest
 {
     protected function setup(): void
     {
