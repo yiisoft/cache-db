@@ -24,6 +24,8 @@ final class DbHelper
         $command = $db->createCommand();
         $schema = $db->getSchema();
 
+        self::validateSupportedDatabase($db);
+
         if ($schema->getTableSchema($table, true) !== null) {
             return;
         }
@@ -48,8 +50,24 @@ final class DbHelper
     {
         $command = $db->createCommand();
 
+        self::validateSupportedDatabase($db);
+
         if ($db->getTableSchema($table, true) !== null) {
             $command->dropTable($table)->execute();
+        }
+    }
+
+    private static function validateSupportedDatabase(ConnectionInterface $db): void
+    {
+        $driverName = $db->getDriverName();
+
+        if (!in_array($driverName, ['mysql', 'oci', 'pgsql', 'sqlite', 'sqlsrv'], true)) {
+            throw new NotSupportedException(
+                sprintf(
+                    'Database driver `%s` is not supported.',
+                    $driverName,
+                ),
+            );
         }
     }
 }
