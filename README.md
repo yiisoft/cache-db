@@ -15,7 +15,7 @@
 
 This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-16/) cache.
 
-## Support databases:
+## Supported databases
 
 |                      Packages                       |      PHP      |    Versions     |                                                                        CI-Actions                                                                         |
 |:---------------------------------------------------:|:-------------:|:---------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------:|
