@@ -27,7 +27,7 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 ## Requirements
 
-- The minimum version of PHP required by this package is `8.0`.
+- PHP 8.0 or higher.
 - `PDO` PHP extension.
 
 ## Installation
