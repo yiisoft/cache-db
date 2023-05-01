@@ -44,11 +44,11 @@ Package provides two way for preparing database:
 
 1. Raw SQL. You can use it with the migration package used in your application.
 
-- [MSSQL](/docs/en/migration/schema-mssql.sql),
-- [MySQL / MariaDB](/docs/en/migration/schema-mysql.sql),
-- [Oracle](/docs/en/migration/schema-oci.sql),
-- [PostgreSQL](/docs/en/migration/schema-pgsql.sql),
-- [SQLite](/docs/en/migration/schema-sqlite.sql),
+    - [MSSQL](/docs/en/migration/schema-mssql.sql),
+    - [MySQL / MariaDB](/docs/en/migration/schema-mysql.sql),
+    - [Oracle](/docs/en/migration/schema-oci.sql),
+    - [PostgreSQL](/docs/en/migration/schema-pgsql.sql),
+    - [SQLite](/docs/en/migration/schema-sqlite.sql),
 
 2. `DbHelper` for create/drop cache table (by default `{{%cache}}`).
 
