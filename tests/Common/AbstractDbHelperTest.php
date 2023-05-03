@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Common;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Throwable;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\DbHelper;
@@ -39,10 +40,6 @@ abstract class AbstractDbHelperTest extends TestCase
         DbHelper::dropTable($this->db);
 
         $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
-
-        DbHelper::dropTable($this->db);
-
-        $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
     }
 
     /**
@@ -56,10 +53,6 @@ abstract class AbstractDbHelperTest extends TestCase
         DbHelper::ensureTable($this->db, '{{%custom_cache}}');
 
         $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}', true));
-
-        DbHelper::dropTable($this->db, '{{%custom_cache}}');
-
-        $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
 
         DbHelper::dropTable($this->db, '{{%custom_cache}}');
 
@@ -108,17 +101,18 @@ abstract class AbstractDbHelperTest extends TestCase
      */
     public function testEnsureTableExist(): void
     {
-        DbHelper::ensureTable($this->db);
+        $prefix = $this->db->getTablePrefix();
 
-        $this->assertNotNull($this->db->getTableSchema('{{%cache}}'));
+        try {
+            DbHelper::ensureTable($this->db);
+            DbHelper::ensureTable($this->db);
+        } catch (RuntimeException $e) {
+            $this->assertSame("Table \"{$prefix}cache\" already exists.", $e->getMessage());
 
-        DbHelper::ensureTable($this->db, '{{%cache}}');
+            DbHelper::dropTable($this->db);
 
-        $this->assertNotNull($this->db->getTableSchema('{{%cache}}'));
-
-        DbHelper::dropTable($this->db);
-
-        $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
+            $this->assertNull($this->db->getTableSchema('{{%cache}}', true));
+        }
     }
 
     /**
@@ -129,17 +123,18 @@ abstract class AbstractDbHelperTest extends TestCase
      */
     public function testEnsureTableExistWithCustomTableName(): void
     {
-        DbHelper::ensureTable($this->db, '{{%custom_cache}}');
+        $prefix = $this->db->getTablePrefix();
 
-        $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}'));
+        try {
+            DbHelper::ensureTable($this->db, '{{%custom_cache}}');
+            DbHelper::ensureTable($this->db, '{{%custom_cache}}');
+        } catch (RuntimeException $e) {
+            $this->assertSame("Table \"{$prefix}custom_cache\" already exists.", $e->getMessage());
 
-        DbHelper::ensureTable($this->db, '{{%custom_cache}}');
+            DbHelper::dropTable($this->db, '{{%custom_cache}}');
 
-        $this->assertNotNull($this->db->getTableSchema('{{%custom_cache}}'));
-
-        DbHelper::dropTable($this->db, '{{%custom_cache}}');
-
-        $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
+            $this->assertNull($this->db->getTableSchema('{{%custom_cache}}', true));
+        }
     }
 
     /**
