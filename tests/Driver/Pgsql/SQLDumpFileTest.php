@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Pgsql;
 
-use Yiisoft\Cache\Db\Tests\Common\AbstractDbHelperTest;
+use Throwable;
+use Yiisoft\Cache\Db\Tests\Common\AbstractSQLDumpFileTest;
 use Yiisoft\Cache\Db\Tests\Support\PgsqlFactory;
 
 /**
@@ -12,15 +13,15 @@ use Yiisoft\Cache\Db\Tests\Support\PgsqlFactory;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbHelperTest extends AbstractDbHelperTest
+final class SQLDumpFileTest extends AbstractSQLDumpFileTest
 {
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         // create connection dbms-specific
         $this->db = (new PgsqlFactory())->createConnection();
-
-        // set table prefix
-        $this->db->setTablePrefix('pgsql_');
 
         parent::setUp();
     }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
-use Yiisoft\Cache\Db\Tests\Common\AbstractDbHelperTest;
+use Throwable;
+use Yiisoft\Cache\Db\Tests\Common\AbstractSQLDumpFileTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
 
 /**
@@ -12,15 +13,15 @@ use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-final class DbHelperTest extends AbstractDbHelperTest
+final class SQLDumpFileTest extends AbstractSQLDumpFileTest
 {
-    protected function setup(): void
+    /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
     {
         // create connection dbms-specific
         $this->db = (new OracleFactory())->createConnection();
-
-        // set table prefix
-        $this->db->setTablePrefix('oci_');
 
         parent::setUp();
     }

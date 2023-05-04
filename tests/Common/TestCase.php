@@ -8,10 +8,11 @@ use ReflectionClass;
 use ReflectionObject;
 use Throwable;
 use Yiisoft\Cache\Db\DbCache;
-use Yiisoft\Cache\Db\DbHelper;
+use Yiisoft\Cache\Db\DbSchemaManager;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
 use Yiisoft\Db\Exception\InvalidConfigException;
+use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Log\Logger;
 
 abstract class TestCase extends \PHPUnit\Framework\TestCase
@@ -19,12 +20,25 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
     protected Logger|null $logger = null;
-    protected string $table = '{{%cache}}';
+    protected string $table = '{{%yii_cache}}';
+    protected DbSchemaManager $dbSchemaManager;
 
+    /**
+     * @throws Exception
+     * @throws InvalidConfigException
+     * @throws Throwable
+     * @throws NotSupportedException
+     */
     protected function setup(): void
     {
         // create db cache
         $this->dbCache = new DbCache($this->db, gcProbability: 1_000_000);
+
+        // create db schema manager
+        $this->dbSchemaManager = new DbSchemaManager($this->db);
+
+        // create table
+        $this->dbSchemaManager->ensureTable();
     }
 
     /**
@@ -35,8 +49,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         // drop table
-        DbHelper::dropTable($this->db);
+        $this->dbSchemaManager->ensureNoTable();
 
+        // close db connection
         $this->db->close();
 
         unset($this->db, $this->dbCache, $this->logger);
