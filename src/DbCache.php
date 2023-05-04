@@ -47,7 +47,7 @@ final class DbCache implements CacheInterface
      */
     public function __construct(
         private ConnectionInterface $db,
-        private string $table = '{{%cache}}',
+        private string $table = '{{%yii_cache}}',
         public int $gcProbability = 100
     ) {
     }

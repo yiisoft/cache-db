@@ -38,38 +38,52 @@ The package could be installed with composer:
 composer require yiisoft/cache-db --prefer-dist
 ```
 
+## Create database connection
+
+For more information see [yiisoft/db](https://github.com/yiisoft/db/tree/master/docs/en#create-connection).
+
 ## Database Preparing
 
 Package provides two way for preparing database:
 
 1. Raw SQL. You can use it with the migration package used in your application.
 
-    - [MSSQL](/docs/en/migration/schema-mssql.sql),
-    - [MySQL / MariaDB](/docs/en/migration/schema-mysql.sql),
-    - [Oracle](/docs/en/migration/schema-oci.sql),
-    - [PostgreSQL](/docs/en/migration/schema-pgsql.sql),
-    - [SQLite](/docs/en/migration/schema-sqlite.sql),
+    - Ensure tables:
+        - [MSSQL](/sql/sqlsrv-up.sql),
+        - [MySQL / MariaDB](/sql/mysql-up.sql),
+        - [Oracle](/sql/oci-up.sql),
+        - [PostgreSQL](/sql/pgsql-up.sql)
+        - [SQLite](/sql/sqlite-up.sql)
+    
+    - Ensure no tables:
+        - [MSSQL](/sql/sqlsrv-down.sql),
+        - [MySQL / MariaDB](/sql/mysql-down.sql),
+        - [Oracle](/sql/oci-down.sql),
+        - [PostgreSQL](/sql/pgsql-down.sql)
+        - [SQLite](/sql/sqlite-down.sql)
 
-2. `DbHelper` for create/drop cache table (by default `{{%cache}}`).
+2. `DbSchemaManager` for `ensureTable()`, `ensureNoTable()` methods for cache table (by default `{{%yii_cache}}`).
 
 ```php
-// Create table with default name
-DbHelper::ensureTable($db);
+// Create db schema manager
+$dbSchemaManager = new DbSchemaManager($db);
 
-// Create table with custom name
-DbHelper::ensureTable($db, '{{%custom_cache_table}}');
+// Ensure table with default name
+$dbSchemaManager->ensureTable();
 
-// Drop table with default name
-DbHelper::dropTable($db);
+// Ensure table with custom name
+$dbSchemaManager->ensureTable('{{%custom_cache_table}}');
 
-// Drop table with custom name
-DbHelper::dropTable($db, '{{%custom_cache_table}}');
+// Ensure no table with default name
+$dbSchemaManager->ensureNoTable();
+
+// Ensure no table with custom name
+$dbSchemaManager->ensureNoTable('{{%custom_cache_table}}');
 ```
 
 ## Configuration
 
-When creating an instance of `\Yiisoft\Cache\Db\DbCache`, you must pass an instance of the database connection,
-for more information see [yiisoft/db](https://github.com/yiisoft/db/tree/master/docs/en#create-connection).
+When creating an instance of `\Yiisoft\Cache\Db\DbCache`, you must pass an instance of the database connection.
 
 ```php
 $cache = new \Yiisoft\Cache\Db\DbCache($db, $table, $gcProbability);

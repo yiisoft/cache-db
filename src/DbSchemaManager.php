@@ -11,20 +11,25 @@ use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Db\Schema\SchemaInterface;
 
-final class DbHelper
+final class DbSchemaManager
 {
+    public function __construct(private ConnectionInterface $db)
+    {
+    }
+
     /**
      * @throws Exception
      * @throws NotSupportedException
      * @throws InvalidConfigException
      * @throws Throwable
      */
-    public static function ensureTable(ConnectionInterface $db, string $table = '{{%cache}}'): void
+    public function ensureTable(string $table = '{{%yii_cache}}'): void
     {
-        $command = $db->createCommand();
-        $schema = $db->getSchema();
+        $schema = $this->db->getSchema();
+        $command = $this->db->createCommand();
+        $tableRawName = $schema->getRawTableName($table);
 
-        if ($schema->getTableSchema($table, true) !== null) {
+        if ($this->hasTable($table)) {
             return;
         }
 
@@ -34,7 +39,7 @@ final class DbHelper
                 'id' => $schema->createColumn(SchemaInterface::TYPE_STRING, 128)->notNull(),
                 'data' => $schema->createColumn(SchemaInterface::TYPE_BINARY),
                 'expire' => $schema->createColumn(SchemaInterface::TYPE_INTEGER),
-                'CONSTRAINT [[PK_cache]] PRIMARY KEY ([[id]])',
+                "CONSTRAINT [[PK_$tableRawName]] PRIMARY KEY ([[id]])",
             ],
         )->execute();
     }
@@ -44,12 +49,17 @@ final class DbHelper
      * @throws InvalidConfigException
      * @throws Throwable
      */
-    public static function dropTable(ConnectionInterface $db, string $table = '{{%cache}}'): void
+    public function ensureNoTable(string $table = '{{%yii_cache}}'): void
     {
-        $command = $db->createCommand();
+        $tableRawName = $this->db->getSchema()->getRawTableName($table);
 
-        if ($db->getTableSchema($table, true) !== null) {
-            $command->dropTable($table)->execute();
+        if ($this->hasTable($table)) {
+            $this->db->createCommand()->dropTable($tableRawName)->execute();
         }
+    }
+
+    private function hasTable(string $table): bool
+    {
+        return $this->db->getTableSchema($table, true) !== null;
     }
 }
