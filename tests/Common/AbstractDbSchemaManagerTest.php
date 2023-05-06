@@ -36,6 +36,8 @@ abstract class AbstractDbSchemaManagerTest extends TestCase
     {
         parent::tearDown();
 
+        $this->db->close();
+
         unset($this->db, $this->dbSchemaManager);
     }
 
