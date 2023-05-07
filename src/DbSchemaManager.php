@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db;
 
 use Throwable;
-use Yiisoft\Db\Command\CommandInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
 use Yiisoft\Db\Exception\InvalidConfigException;
@@ -17,13 +16,8 @@ use Yiisoft\Db\Schema\SchemaInterface;
  */
 final class DbSchemaManager
 {
-    private CommandInterface $command;
-    private SchemaInterface $schema;
-
     public function __construct(private ConnectionInterface $db)
     {
-        $this->command = $db->createCommand();
-        $this->schema = $db->getSchema();
     }
 
     /**
@@ -38,18 +32,19 @@ final class DbSchemaManager
      */
     public function ensureTable(string $table = '{{%yii_cache}}'): void
     {
-        $tableRawName = $this->schema->getRawTableName($table);
+        $schema = $this->db->getSchema();
+        $tableRawName = $schema->getRawTableName($table);
 
         if ($this->hasTable($table)) {
             return;
         }
 
-        $this->command->createTable(
+        $this->db->createCommand()->createTable(
             $table,
             [
-                'id' => $this->schema->createColumn(SchemaInterface::TYPE_STRING, 128)->notNull(),
-                'data' => $this->schema->createColumn(SchemaInterface::TYPE_BINARY),
-                'expire' => $this->schema->createColumn(SchemaInterface::TYPE_INTEGER),
+                'id' => $schema->createColumn(SchemaInterface::TYPE_STRING, 128)->notNull(),
+                'data' => $schema->createColumn(SchemaInterface::TYPE_BINARY),
+                'expire' => $schema->createColumn(SchemaInterface::TYPE_INTEGER),
                 "CONSTRAINT [[PK_$tableRawName]] PRIMARY KEY ([[id]])",
             ],
         )->execute();
@@ -66,10 +61,10 @@ final class DbSchemaManager
      */
     public function ensureNoTable(string $table = '{{%yii_cache}}'): void
     {
-        $tableRawName = $this->schema->getRawTableName($table);
+        $tableRawName = $this->db->getSchema()->getRawTableName($table);
 
         if ($this->hasTable($table)) {
-            $this->command->dropTable($tableRawName)->execute();
+            $this->db->createCommand()->dropTable($tableRawName)->execute();
         }
     }
 
