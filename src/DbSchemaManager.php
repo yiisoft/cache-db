@@ -11,6 +11,9 @@ use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Exception\NotSupportedException;
 use Yiisoft\Db\Schema\SchemaInterface;
 
+/**
+ * Manages the cache table schema in the database.
+ */
 final class DbSchemaManager
 {
     public function __construct(private ConnectionInterface $db)
@@ -18,6 +21,10 @@ final class DbSchemaManager
     }
 
     /**
+     * Ensures that the cache table exists in the database.
+     *
+     * @param string $table The name of the cache table. Defaults to '{{%yii_cache}}'.
+     *
      * @throws Exception
      * @throws NotSupportedException
      * @throws InvalidConfigException
@@ -26,14 +33,13 @@ final class DbSchemaManager
     public function ensureTable(string $table = '{{%yii_cache}}'): void
     {
         $schema = $this->db->getSchema();
-        $command = $this->db->createCommand();
         $tableRawName = $schema->getRawTableName($table);
 
         if ($this->hasTable($table)) {
             return;
         }
 
-        $command->createTable(
+        $this->db->createCommand()->createTable(
             $table,
             [
                 'id' => $schema->createColumn(SchemaInterface::TYPE_STRING, 128)->notNull(),
@@ -45,6 +51,10 @@ final class DbSchemaManager
     }
 
     /**
+     * Ensures that the cache table does not exist in the database.
+     *
+     * @param string $table The name of the cache table. Defaults to '{{%yii_cache}}'.
+     *
      * @throws Exception
      * @throws InvalidConfigException
      * @throws Throwable
@@ -58,6 +68,13 @@ final class DbSchemaManager
         }
     }
 
+    /**
+     * Checks if the given table exists in the database.
+     *
+     * @param string $table The name of the table to check.
+     *
+     * @return bool Whether the table exists or not.
+     */
     private function hasTable(string $table): bool
     {
         return $this->db->getTableSchema($table, true) !== null;

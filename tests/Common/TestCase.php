@@ -54,7 +54,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         // close db connection
         $this->db->close();
 
-        unset($this->db, $this->dbCache, $this->logger);
+        unset($this->db, $this->dbCache, $this->dbSchemaManager, $this->logger);
     }
 
     protected function getLogger(): Logger
