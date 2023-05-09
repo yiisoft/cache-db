@@ -6,7 +6,8 @@
         "yii",
         "framework",
         "cache",
-        "psr-16"
+        "psr-16",
+        "db"
     ],
     "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
@@ -18,8 +19,6 @@
         "chat": "https://t.me/yii3en",
         "source": "https://github.com/yiisoft/cache-db"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^8.0",
         "ext-pdo": "*",
@@ -51,11 +50,6 @@
     "autoload-dev": {
         "psr-4": {
             "Yiisoft\\Cache\\Db\\Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
         }
     },
     "config": {
