@@ -20,7 +20,7 @@ on:
       - 'infection.json.dist'
       - 'psalm.xml'
 
-name: mssql
+name: mariadb
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,10 +28,10 @@ concurrency:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }}-mssql-${{ matrix.mssql }}
+    name: PHP ${{ matrix.php }}-${{ matrix.mariadb }}
 
     env:
-      extensions: pdo, pdo_sqlsrv-5.10.1
+      EXTENSIONS: pdo, pdo_mysql
 
     runs-on: ${{ matrix.os }}
 
@@ -45,27 +45,29 @@ jobs:
           - 8.1
           - 8.2
 
-        mssql:
-          - server:2019-latest
-          - server:2022-latest
+        mariadb:
+          - mariadb:10.4
+          - mariadb:10.5
+          - mariadb:10.6
+          - mariadb:10.7
+          - mariadb:10.8
+          - mariadb:10.9
+          - mariadb:latest
 
     services:
-      mssql:
-        image: mcr.microsoft.com/mssql/${{ matrix.mssql }}
+      mysql:
+        image: ${{ matrix.mariadb }}
         env:
-          SA_PASSWORD: YourStrong!Passw0rd
-          ACCEPT_EULA: Y
-          MSSQL_PID: Developer
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: true
+          MARIADB_ROOT_PASSWORD: ''
+          MARIADB_DATABASE: yiitest
         ports:
-          - 1433:1433
-        options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 3306:3306
+        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout.
         uses: actions/checkout@v3
-
-      - name: Create MS SQL Database.
-        run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
 
       - name: Install PHP with extensions.
         uses: shivammathur/setup-php@v2
@@ -74,16 +76,15 @@ jobs:
           extensions: ${{ env.extensions }}
           ini-values: date.timezone='UTC'
           coverage: pcov
-          tools: composer:v2, pecl
 
       - name: Update composer.
         run: composer self-update
 
-      - name: Install db-mssql.
-        run: composer require yiisoft/db-mssql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
+      - name: Install db-mysql.
+        run: composer require yiisoft/db-mysql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
       - name: Run tests with phpunit.
-        run: vendor/bin/phpunit --testsuite=Mssql --coverage-clover=coverage.xml --colors=always
+        run: vendor/bin/phpunit --testsuite=Mysql --coverage-clover=coverage.xml --colors=always
 
       - name: Upload coverage to Codecov.
         if: matrix.php == '8.1'
