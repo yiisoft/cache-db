@@ -10,6 +10,7 @@ on:
       - 'psalm.xml'
 
   push:
+    branches: ['master']
     paths-ignore:
       - 'docs/**'
       - 'README.md'
@@ -20,6 +21,10 @@ on:
       - 'psalm.xml'
 
 name: mysql
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   tests:
@@ -43,13 +48,6 @@ jobs:
         mysql:
           - mysql:5.7
           - mysql:latest
-          - mariadb:10.4
-          - mariadb:10.5
-          - mariadb:10.6
-          - mariadb:10.7
-          - mariadb:10.8
-          - mariadb:10.9
-          - mariadb:latest
 
     services:
       mysql:
