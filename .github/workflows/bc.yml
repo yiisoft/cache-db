@@ -20,8 +20,6 @@ on:
       - 'infection.json.dist'
       - 'psalm.xml'
 
-
-
 name: backwards compatibility
 
 concurrency:
