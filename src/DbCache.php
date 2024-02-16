@@ -95,6 +95,9 @@ final class DbCache implements CacheInterface
         }
 
         try {
+            /**
+             * @psalm-suppress MixedArgumentTypeCoercion `$this->buildDataRow()` next returns `array<string, mixed>`
+             */
             $this->db
                 ->createCommand()
                 ->upsert($this->table, $this->buildDataRow($key, $ttl, $value, true))
@@ -158,7 +161,6 @@ final class DbCache implements CacheInterface
         $values = $this->iterableToArray($values);
         $rows = $keys = [];
 
-        /** @psalm-var mixed $value */
         foreach ($values as $key => $value) {
             $key = (string) $key;
             $this->validateKey($key);
@@ -366,7 +368,6 @@ final class DbCache implements CacheInterface
      */
     private function validateKeys(array $keys): void
     {
-        /** @psalm-var mixed $key */
         foreach ($keys as $key) {
             $this->validateKey($key);
         }
