@@ -34,7 +34,7 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 The package could be installed with composer:
 
-```
+```shell
 composer require yiisoft/cache-db --prefer-dist
 ```
 
@@ -54,7 +54,7 @@ Package provides two way for preparing database:
         - [Oracle](/sql/oci-up.sql),
         - [PostgreSQL](/sql/pgsql-up.sql)
         - [SQLite](/sql/sqlite-up.sql)
-    
+
     - Ensure no tables:
         - [MSSQL](/sql/sqlsrv-down.sql),
         - [MySQL / MariaDB](/sql/mysql-down.sql),
