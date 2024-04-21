@@ -148,7 +148,7 @@ This allows you to log cache operations, when ocurring errors, etc.
 
 ## Documentation
 
-- More information can be found in the [Internals.](docs/internals.md)
+- [Internals](docs/internals.md)
 
 ## Support
 
