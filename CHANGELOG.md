@@ -1,4 +1,4 @@
-# Yii DbCache Change Log
+# Yii Cache Library - DB Handler Change Log
 
 ## 1.0.1 under development
 
