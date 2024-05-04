@@ -32,7 +32,7 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 ## Installation
 
-The package could be installed with composer:
+The package could be installed with [composer](https://getcomposer.org/download/)
 
 ```shell
 composer require yiisoft/cache-db --prefer-dist
