@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
+        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
     </a>
     <h1 align="center">Yii Cache Library - DB Handler</h1>
     <br>
@@ -49,18 +49,18 @@ Package provides two way for preparing database:
 1. Raw SQL. You can use it with the migration package used in your application.
 
     - Ensure tables:
-        - [MSSQL](/sql/sqlsrv-up.sql),
-        - [MySQL / MariaDB](/sql/mysql-up.sql),
-        - [Oracle](/sql/oci-up.sql),
-        - [PostgreSQL](/sql/pgsql-up.sql)
-        - [SQLite](/sql/sqlite-up.sql)
+        - [MSSQL](sql/sqlsrv-up.sql),
+        - [MySQL / MariaDB](sql/mysql-up.sql),
+        - [Oracle](sql/oci-up.sql),
+        - [PostgreSQL](sql/pgsql-up.sql)
+        - [SQLite](sql/sqlite-up.sql)
 
     - Ensure no tables:
-        - [MSSQL](/sql/sqlsrv-down.sql),
-        - [MySQL / MariaDB](/sql/mysql-down.sql),
-        - [Oracle](/sql/oci-down.sql),
-        - [PostgreSQL](/sql/pgsql-down.sql)
-        - [SQLite](/sql/sqlite-down.sql)
+        - [MSSQL](sql/sqlsrv-down.sql),
+        - [MySQL / MariaDB](sql/mysql-down.sql),
+        - [Oracle](sql/oci-down.sql),
+        - [PostgreSQL](sql/pgsql-down.sql)
+        - [SQLite](sql/sqlite-down.sql)
 
 2. `DbSchemaManager` for `ensureTable()`, `ensureNoTable()` methods for cache table (by default `{{%yii_cache}}`).
 
