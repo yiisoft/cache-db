@@ -40,7 +40,7 @@ composer require yiisoft/cache-db
 
 ## Create database connection
 
-For more information see [yiisoft/db](https://github.com/yiisoft/db/tree/master/docs/en#create-connection).
+For more information see [yiisoft/db](https://github.com/yiisoft/db/tree/master/docs/guide/en#create-connection).
 
 ## Database Preparing
 
