@@ -32,15 +32,11 @@ docker compose up -d
 
 ## Unit testing
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+The package is tested with [PHPUnit](https://phpunit.de/).
 
-```shell
-./vendor/bin/phpunit
-```
+### Global testing
 
-## Global testing
-
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+The following steps are required to run the tests.
 
 1. Run all Docker containers for each dbms.
 2. Install the dependencies of the project with composer.
@@ -50,9 +46,9 @@ The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 vendor/bin/phpunit
 ```
 
-## Individual testing
+### Individual testing
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+The following steps are required to run the tests.
 
 1. Run the Docker container for the dbms you want to test.
 2. Install the dependencies of the project with composer.
@@ -87,7 +83,7 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 ./vendor/bin/psalm
 ```
 
-## Rector
+## Code style
 
 Use [Rector](https://github.com/rectorphp/rector) to make codebase follow some specific rules or
 use either newest or any specific version of PHP:
@@ -98,9 +94,8 @@ use either newest or any specific version of PHP:
 
 ## Composer require checker
 
-This package uses [composer-require-checker](https://github.com/maglnet/ComposerRequireChecker) to check if all dependencies are correctly defined in `composer.json`.
-
-To run the checker, execute the following command:
+This package uses [composer-require-checker](https://github.com/maglnet/ComposerRequireChecker) to check if
+all dependencies are correctly defined in `composer.json`. To run the checker, execute the following command:
 
 ```shell
 ./vendor/bin/composer-require-checker
