@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
+        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
     </a>
     <h1 align="center">Yii Cache Library - DB Handler</h1>
     <br>
@@ -32,15 +32,15 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 ## Installation
 
-The package could be installed with composer:
+The package could be installed with [Composer](https://getcomposer.org):
 
 ```shell
-composer require yiisoft/cache-db --prefer-dist
+composer require yiisoft/cache-db
 ```
 
 ## Create database connection
 
-For more information see [yiisoft/db](https://github.com/yiisoft/db/tree/master/docs/en#create-connection).
+For more information see [yiisoft/db](https://github.com/yiisoft/db/tree/master/docs/guide/en#create-connection).
 
 ## Database Preparing
 
@@ -49,18 +49,18 @@ Package provides two way for preparing database:
 1. Raw SQL. You can use it with the migration package used in your application.
 
     - Ensure tables:
-        - [MSSQL](/sql/sqlsrv-up.sql),
-        - [MySQL / MariaDB](/sql/mysql-up.sql),
-        - [Oracle](/sql/oci-up.sql),
-        - [PostgreSQL](/sql/pgsql-up.sql)
-        - [SQLite](/sql/sqlite-up.sql)
+        - [MSSQL](sql/sqlsrv-up.sql),
+        - [MySQL / MariaDB](sql/mysql-up.sql),
+        - [Oracle](sql/oci-up.sql),
+        - [PostgreSQL](sql/pgsql-up.sql)
+        - [SQLite](sql/sqlite-up.sql)
 
     - Ensure no tables:
-        - [MSSQL](/sql/sqlsrv-down.sql),
-        - [MySQL / MariaDB](/sql/mysql-down.sql),
-        - [Oracle](/sql/oci-down.sql),
-        - [PostgreSQL](/sql/pgsql-down.sql)
-        - [SQLite](/sql/sqlite-down.sql)
+        - [MSSQL](sql/sqlsrv-down.sql),
+        - [MySQL / MariaDB](sql/mysql-down.sql),
+        - [Oracle](sql/oci-down.sql),
+        - [PostgreSQL](sql/pgsql-down.sql)
+        - [SQLite](sql/sqlite-down.sql)
 
 2. `DbSchemaManager` for `ensureTable()`, `ensureNoTable()` methods for cache table (by default `{{%yii_cache}}`).
 
@@ -150,10 +150,15 @@ This allows you to log cache operations, when ocurring errors, etc.
 
 - [Internals](docs/internals.md)
 
-## Support
-
 If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
 You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
+
+## License
+
+The Yii Cache Library - DB Handler is free software. It is released under the terms of the BSD License.
+Please see [`LICENSE`](./LICENSE.md) for more information.
+
+Maintained by [Yii Software](https://www.yiiframework.com/).
 
 ## Support the project
 
@@ -166,10 +171,3 @@ You may also check out other [Yii Community Resources](https://www.yiiframework.
 [![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
 [![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
 [![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
-
-## License
-
-The Yii Cache Library - DB Handler is free software. It is released under the terms of the BSD License.
-Please see [`LICENSE`](./LICENSE.md) for more information.
-
-Maintained by [Yii Software](https://www.yiiframework.com/).
