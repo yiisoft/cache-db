@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.0|^8.1|^8.2|^8.3|^8.4|^8.5",
         "ext-pdo": "*",
         "psr/log": "^2.0|^3.0",
         "psr/simple-cache": "^2.0|^3.0",
@@ -43,9 +43,9 @@
         "maglnet/composer-require-checker": "^4.2",
         "phpunit/phpunit": "^9.6|^10.1",
         "rector/rector": "^2.0.3",
-        "roave/infection-static-analysis-plugin": "^1.25|^1.30",
+        "roave/infection-static-analysis-plugin": "^1.42",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.30|^5.22",
+        "vimeo/psalm": "^5.22|^6.13",
         "yiisoft/cache": "^3.0",
         "yiisoft/log": "^2.0"
     },
