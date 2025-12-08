@@ -46,14 +46,14 @@ jobs:
           - 8.2
 
         mssql:
-          - server:2019-latest
+          - server:2019-CU27-ubuntu-20.04
           - server:2022-latest
 
     services:
       mssql:
         image: mcr.microsoft.com/mssql/${{ matrix.mssql }}
         env:
-          SA_PASSWORD: YourStrong!Passw0rd
+          MSSQL_SA_PASSWORD: YourStrong!Passw0rd
           ACCEPT_EULA: Y
           MSSQL_PID: Developer
         ports:
