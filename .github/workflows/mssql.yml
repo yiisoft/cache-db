@@ -47,7 +47,7 @@ jobs:
 
         mssql:
           - server:2019-CU27-ubuntu-20.04
-          - server:2022-CU22-ubuntu-22.04
+          - server:2022-CU22-ubuntu-20.04
 
     services:
       mssql:
@@ -58,7 +58,7 @@ jobs:
           MSSQL_PID: Developer
         ports:
           - 1433:1433
-        options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=4
 
     steps:
       - name: Checkout.
