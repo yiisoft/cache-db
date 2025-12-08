@@ -47,7 +47,7 @@ jobs:
 
         mssql:
           - server:2019-CU27-ubuntu-20.04
-          - server:2022-latest
+          - server:2022-CU22-ubuntu-22.04
 
     services:
       mssql:
