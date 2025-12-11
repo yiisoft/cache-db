@@ -36,6 +36,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      max-parallel: 2
       matrix:
         os:
           - ubuntu-latest
@@ -43,6 +44,8 @@ jobs:
         php:
           - 8.1
           - 8.2
+          - 8.3
+          - 8.4
 
         oracle:
           - 18
