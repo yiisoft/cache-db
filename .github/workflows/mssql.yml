@@ -31,34 +31,37 @@ jobs:
     name: PHP ${{ matrix.php }}-mssql-${{ matrix.mssql }}
 
     env:
-      extensions: pdo, pdo_sqlsrv-5.10.1
+      extensions: pdo, pdo_sqlsrv-5.12
 
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-
         php:
-#          - 8.0
           - 8.1
-#          - 8.2
 
         mssql:
-          - 2019-CU27-ubuntu-20.04
-#          - 2022-CU22-ubuntu-20.04
+          - server: 2022-latest
+            odbc-version: 18
+            flag: "-C"
+
+        include:
+          - php: 8.3
+            mssql:
+              server: 2019-latest
+              odbc-version: 18
+              flag: "-C"
 
     services:
       mssql:
-        image: mcr.microsoft.com/mssql/server:${{ matrix.mssql }}
+        image: mcr.microsoft.com/mssql/server:${{ matrix.mssql.server }}
         env:
-          MSSQL_SA_PASSWORD: YourStrong!Passw0rd
+          SA_PASSWORD: YourStrong!Passw0rd
           ACCEPT_EULA: Y
           MSSQL_PID: Developer
         ports:
           - 1433:1433
-        options: --name=mssql --health-cmd="/opt/mssql-tools/bin/sqlcmd -C -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --name=mssql --health-cmd="/opt/mssql-tools${{ matrix.mssql.odbc-version }}/bin/sqlcmd ${{ matrix.mssql.flag }} -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout.
