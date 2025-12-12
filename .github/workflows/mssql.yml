@@ -28,12 +28,12 @@ concurrency:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }}-mssql-${{ matrix.mssql }}
+    name: PHP ${{ matrix.php }}-mssql-${{ matrix.mssql.server }}
 
     env:
       extensions: pdo, pdo_sqlsrv-5.12
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.mssql.os || 'ubuntu-latest' }}
 
     strategy:
       matrix:
@@ -56,7 +56,7 @@ jobs:
       mssql:
         image: mcr.microsoft.com/mssql/server:${{ matrix.mssql.server }}
         env:
-          SA_PASSWORD: YourStrong!Passw0rd
+          MSSQL_SA_PASSWORD: YourStrong!Passw0rd
           ACCEPT_EULA: Y
           MSSQL_PID: Developer
         ports:
@@ -65,7 +65,7 @@ jobs:
 
     steps:
       - name: Checkout.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Install ODBC driver.
         run: |
@@ -73,7 +73,7 @@ jobs:
           sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
 
       - name: Create MS SQL Database.
-        run: docker exec -i mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
+        run: docker exec -i mssql /opt/mssql-tools${{ matrix.mssql.odbc-version }}/bin/sqlcmd -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
 
       - name: Install PHP with extensions.
         uses: shivammathur/setup-php@v2
