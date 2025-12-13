@@ -33,18 +33,12 @@ jobs:
     env:
       extensions: pdo, pdo_pgsql
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     strategy:
       max-parallel: 2
       matrix:
-        os:
-          - ubuntu-latest
-
         php:
-          - 8.1
-          - 8.2
-          - 8.3
           - 8.4
 
         pgsql:
@@ -55,6 +49,20 @@ jobs:
           - 13
           - 14
           - 15
+          - 16
+          - 17
+          - 18
+          - latest
+
+        include:
+          - php: 8.1
+            pgsql: latest
+          - php: 8.2
+            pgsql: latest
+          - php: 8.3
+            pgsql: latest
+          - php: 8.4
+            pgsql: latest
 
     services:
       postgres:
@@ -82,6 +90,10 @@ jobs:
 
       - name: Update composer.
         run: composer self-update
+
+      - uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
       - name: Install db-pgsql.
         run: composer require yiisoft/db-pgsql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi

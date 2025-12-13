@@ -33,23 +33,27 @@ jobs:
     env:
       extensions: pdo, pdo_oci, oci8
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     strategy:
       max-parallel: 2
       matrix:
-        os:
-          - ubuntu-latest
-
         php:
-          - 8.1
-          - 8.2
-          - 8.3
           - 8.4
 
         oracle:
           - 18
           - 21
+
+        include:
+          - php: 8.1
+            oracle: latest
+          - php: 8.2
+            oracle: latest
+          - php: 8.3
+            oracle: latest
+          - php: 8.4
+            oracle: latest
 
     services:
       oci:
@@ -81,6 +85,10 @@ jobs:
 
       - name: Update composer.
         run: composer self-update
+
+      - uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
       - name: Install db-oracle.
         run: composer require yiisoft/db-oracle --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi

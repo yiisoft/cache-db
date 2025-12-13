@@ -64,6 +64,10 @@ jobs:
       - name: Update composer.
         run: composer self-update
 
+      - uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
+
       - name: Install db-sqlite.
         run: composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
