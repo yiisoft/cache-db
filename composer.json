@@ -34,7 +34,7 @@
         "ext-pdo": "*",
         "psr/log": "^2.0|^3.0",
         "psr/simple-cache": "^2.0|^3.0",
-        "yiisoft/db": "^1.0"
+        "yiisoft/db": "^2.0"
     },
     "suggest": {
         "yiisoft/log": "^2.0"
@@ -47,7 +47,8 @@
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^5.22 || ^6.13.1",
         "yiisoft/cache": "^3.0",
-        "yiisoft/log": "^2.0"
+        "yiisoft/log": "^2.0",
+        "yiisoft/dummy-provider": "^1.0"
     },
     "provide": {
         "psr/simple-cache-implementation": "1.0.0"

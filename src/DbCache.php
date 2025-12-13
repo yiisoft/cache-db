@@ -13,8 +13,8 @@ use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Throwable;
 use Traversable;
-use Yiisoft\Db\Command\Param;
 use Yiisoft\Db\Connection\ConnectionInterface;
+use Yiisoft\Db\Expression\Value\Param;
 use Yiisoft\Db\Query\Query;
 
 use function array_fill_keys;
@@ -174,7 +174,7 @@ final class DbCache implements CacheInterface
             if (!empty($rows) && !$this->isExpiredTtl($ttl)) {
                 $this->db
                     ->createCommand()
-                    ->batchInsert($this->table, ['id', 'expire', 'data'], $rows)
+                    ->insertBatch($this->table, $rows, ['id', 'expire', 'data'])
                     ->execute();
             }
 
@@ -228,7 +228,7 @@ final class DbCache implements CacheInterface
      * Gets the cache data from the database.
      *
      * @param array|string $id One or more IDs for deleting data.
-     * @param array $fields Selectable fields.
+     * @param string[] $fields Selectable fields.
      * @param string $method Method of the returned data ("all", "scalar", "exists").
      *
      * @return mixed The cache data.

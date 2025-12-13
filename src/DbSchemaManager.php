@@ -9,7 +9,6 @@ use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Exception\Exception;
 use Yiisoft\Db\Exception\InvalidConfigException;
 use Yiisoft\Db\Exception\NotSupportedException;
-use Yiisoft\Db\Schema\SchemaInterface;
 
 /**
  * Manages the cache table schema in the database.
@@ -32,19 +31,17 @@ final class DbSchemaManager
      */
     public function ensureTable(string $table = '{{%yii_cache}}'): void
     {
-        $schema = $this->db->getSchema();
-        $tableRawName = $schema->getRawTableName($table);
-
-        if ($this->hasTable($table)) {
+        $tableRawName = $this->db->getQuoter()->getRawTableName($table);
+        if ($this->hasTable($tableRawName)) {
             return;
         }
 
         $this->db->createCommand()->createTable(
             $table,
             [
-                'id' => $schema->createColumn(SchemaInterface::TYPE_STRING, 128)->notNull(),
-                'data' => $schema->createColumn(SchemaInterface::TYPE_BINARY),
-                'expire' => $schema->createColumn(SchemaInterface::TYPE_INTEGER),
+                'id' => $this->db->getColumnBuilderClass()::string(128)->notNull(),
+                'data' => $this->db->getColumnBuilderClass()::binary(),
+                'expire' => $this->db->getColumnBuilderClass()::integer(),
                 "CONSTRAINT [[PK_$tableRawName]] PRIMARY KEY ([[id]])",
             ],
         )->execute();
@@ -61,10 +58,9 @@ final class DbSchemaManager
      */
     public function ensureNoTable(string $table = '{{%yii_cache}}'): void
     {
-        $tableRawName = $this->db->getSchema()->getRawTableName($table);
-
-        if ($this->hasTable($table)) {
-            $this->db->createCommand()->dropTable($tableRawName)->execute();
+        $rawTableName = $this->db->getQuoter()->getRawTableName($table);
+        if ($this->hasTable($rawTableName)) {
+            $this->db->createCommand()->dropTable($rawTableName)->execute();
         }
     }
 
@@ -77,6 +73,6 @@ final class DbSchemaManager
      */
     private function hasTable(string $table): bool
     {
-        return $this->db->getTableSchema($table, true) !== null;
+        return $this->db->getSchema()->hasTable($table, refresh: true);
     }
 }
