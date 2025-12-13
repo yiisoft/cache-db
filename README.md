@@ -19,7 +19,7 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 | Packages | PHP           | Versions                   | CI-Actions |
 |----------|---------------|----------------------------|------------|
-| [[db-mssql]](https://github.com/yiisoft/db-mssql) | **8.1 - 8.5** | **2019 - 2025**            | [![mssql](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml) | |
+| [[db-mssql]](https://github.com/yiisoft/db-mssql) | **8.1 - 8.5** | **2017 - 2025**            | [![mssql](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml) | |
 | [[db-mysql/mariadb]](https://github.com/yiisoft/db-mysql)  | **8.1 - 8.5** | **5.7-9.5**/**10.4-12.10** | [![mysql](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml)   |
 | [[db-oracle]](https://github.com/yiisoft/db-oracle) | **8.1 - 8.5** | **11C - 21C**              | [![oracle](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml) |
 | [[db-pgsql]](https://github.com/yiisoft/db-pgsql)  | **8.1 - 8.5** | **9.0 - 18.0**             | [![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml) |
