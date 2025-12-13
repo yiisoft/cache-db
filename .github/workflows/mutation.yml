@@ -39,11 +39,11 @@ jobs:
           - ubuntu-latest
 
         php:
-          - 8.4
+          - 8.5
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:18
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: root
