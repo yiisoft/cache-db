@@ -40,9 +40,9 @@ final class DbSchemaManager
         $this->db->createCommand()->createTable(
             $table,
             [
-                'id' => ColumnBuilder::string(128)->notNull(),
-                'data' => ColumnBuilder::binary(),
-                'expire' => ColumnBuilder::integer(),
+                'id' => $this->db->getColumnBuilderClass()::string(128)->notNull(),
+                'data' => $this->db->getColumnBuilderClass()::binary(),
+                'expire' => $this->db->getColumnBuilderClass()::integer(),
                 "CONSTRAINT [[PK_$tableRawName]] PRIMARY KEY ([[id]])",
             ],
         )->execute();

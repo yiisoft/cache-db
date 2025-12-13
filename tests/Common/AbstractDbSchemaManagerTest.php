@@ -69,6 +69,8 @@ abstract class AbstractDbSchemaManagerTest extends TestCase
      */
     public function testEnsureTableExist(string $table): void
     {
+        $this->assertNull($this->db->getTableSchema($table, true));
+
         $this->dbSchemaManager->ensureTable($table);
 
         $this->assertNotNull($this->db->getTableSchema($table, true));

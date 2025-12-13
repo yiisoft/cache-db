@@ -14,7 +14,7 @@ final class MysqlFactory extends ConnectionFactory
     public function createConnection(): ConnectionInterface
     {
         $pdoDriver = new Driver(
-            (new Dsn('mysql', '127.0.0.1', 'yiitest', '3306', ['charset' => 'utf8mb4']))->__toString(),
+            new Dsn('mysql', '127.0.0.1', 'yiitest', '3306', ['charset' => 'utf8mb4']),
             'root',
             '',
         );
