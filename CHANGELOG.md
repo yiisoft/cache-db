@@ -2,6 +2,7 @@
 
 ## 1.0.1 under development
 
+- Chg #88: Adapt to `yiisoft/db:2.0` changes, change supported version of `yiisoft/db` to `^2.0` (@batyrmastyr)
 - Chg #91: Change supported PHP versions to `8.1 - 8.4` (@batyrmastyr)
 
 1.0.0 May 09, 2023
