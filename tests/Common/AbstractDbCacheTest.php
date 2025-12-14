@@ -250,10 +250,8 @@ abstract class AbstractDbCacheTest extends TestCase
         $reflection = new ReflectionObject($this->dbCache);
         $method = $reflection->getMethod('normalizeTtl');
 
-        $method->setAccessible(true);
         /** @psalm-var mixed $result */
         $result = $method->invokeArgs($this->dbCache, [$ttl]);
-        $method->setAccessible(false);
 
         $this->assertSameExceptObject($expectedResult, $result);
     }
