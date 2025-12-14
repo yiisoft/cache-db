@@ -80,9 +80,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $property = $class->getProperty($propertyName);
 
         /** @psalm-var mixed $result */
-        $result = $property->getValue($object);
-
-        return $result;
+        return $property->getValue($object);
     }
 
     /**
