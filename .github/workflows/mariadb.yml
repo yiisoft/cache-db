@@ -28,37 +28,46 @@ concurrency:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }}-${{ matrix.mariadb }}
+    name: PHP ${{ matrix.php }}-mariadb-${{ matrix.mariadb }}
 
     env:
       EXTENSIONS: pdo, pdo_mysql
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     strategy:
       max-parallel: 2
       matrix:
-        os:
-          - ubuntu-latest
-
         php:
-          - 8.1
-          - 8.2
-          - 8.3
-          - 8.4
+          - 8.5
 
         mariadb:
-          - mariadb:10.4
-          - mariadb:10.5
-          - mariadb:10.6
-          - mariadb:10.7
-          - mariadb:10.8
-          - mariadb:10.9
-          - mariadb:latest
+          - 10.4
+          - 10.5
+          - 10.6
+          - 10.7
+          - 10.8
+          - 10.9
+          - 10
+          - 11.0
+          - 11
+          - 12.0
+          - 12
+          - latest
+
+        include:
+          - php: 8.1
+            mariadb: latest
+          - php: 8.2
+            mariadb: latest
+          - php: 8.3
+            mariadb: latest
+          - php: 8.4
+            mariadb: latest
 
     services:
       mysql:
-        image: ${{ matrix.mariadb }}
+        image: mariadb:${{ matrix.mariadb }}
         env:
           MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: true
           MARIADB_ROOT_PASSWORD: ''
@@ -81,6 +90,10 @@ jobs:
 
       - name: Update composer.
         run: composer self-update
+
+      - uses: "ramsey/composer-install@v3"
+        with:
+          composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
       - name: Install db-mysql.
         run: composer require yiisoft/db-mysql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi

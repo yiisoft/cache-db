@@ -17,17 +17,17 @@ This package implements database-based [PSR-16](https://www.php-fig.org/psr/psr-
 
 ## Supported databases
 
-| Packages | PHP | Versions | CI-Actions |
-|----------|-----|----------|------------|
-| [[db-mssql]](https://github.com/yiisoft/db-mssql) | **8.0 - 8.2** | **2017 - 2022** | [![mssql](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml) | |
-| [[db-mysql/mariadb]](https://github.com/yiisoft/db-mysql)  | **8.0 - 8.2** |  **5.7-8.0**/**10.4-10.10** | [![mysql](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml)   |
-| [[db-oracle]](https://github.com/yiisoft/db-oracle) | **8.0 - 8.2** |  **11C - 21C** | [![oracle](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml) |
-| [[db-pgsql]](https://github.com/yiisoft/db-pgsql)  | **8.0 - 8.2** | **9.0 - 15.0** | [![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml) |
-| [[db-sqlite]](https://github.com/yiisoft/db-sqlite) | **8.0 - 8.2** |  **3:latest** | [![sqlite](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml) |
+| Packages | PHP           | Versions                   | CI-Actions |
+|----------|---------------|----------------------------|------------|
+| [[db-mssql]](https://github.com/yiisoft/db-mssql) | **8.1 - 8.5** | **2017 - 2025**            | [![mssql](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mssql.yml) | |
+| [[db-mysql/mariadb]](https://github.com/yiisoft/db-mysql)  | **8.1 - 8.5** | **5.7-9.5**/**10.4-12.10** | [![mysql](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/mysql.yml)   |
+| [[db-oracle]](https://github.com/yiisoft/db-oracle) | **8.1 - 8.5** | **11C - 21C**              | [![oracle](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/oracle.yml) |
+| [[db-pgsql]](https://github.com/yiisoft/db-pgsql)  | **8.1 - 8.5** | **9.0 - 18.0**             | [![pgsql](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/pgsql.yml) |
+| [[db-sqlite]](https://github.com/yiisoft/db-sqlite) | **8.1 - 8.5** | **3:latest**               | [![sqlite](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml/badge.svg)](https://github.com/yiisoft/cache-db/actions/workflows/sqlite.yml) |
 
 ## Requirements
 
-- PHP 8.0 or higher.
+- PHP 8.1 - 8.5.
 - `PDO` PHP extension.
 
 ## Installation

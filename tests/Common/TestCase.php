@@ -68,10 +68,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     /**
      * Gets an inaccessible object property.
-     *
-     * @param bool $revoke whether to make property inaccessible after getting.
      */
-    protected function getInaccessibleProperty(object $object, string $propertyName, bool $revoke = true): mixed
+    protected function getInaccessibleProperty(object $object, string $propertyName): mixed
     {
         $class = new ReflectionClass($object);
 
@@ -81,16 +79,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         $property = $class->getProperty($propertyName);
 
-        $property->setAccessible(true);
-
         /** @psalm-var mixed $result */
-        $result = $property->getValue($object);
-
-        if ($revoke) {
-            $property->setAccessible(false);
-        }
-
-        return $result;
+        return $property->getValue($object);
     }
 
     /**
@@ -104,7 +94,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         $reflection = new ReflectionObject($object);
         $method = $reflection->getMethod($method);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $args);
     }
