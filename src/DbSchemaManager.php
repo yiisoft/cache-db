@@ -15,7 +15,7 @@ use Yiisoft\Db\Exception\NotSupportedException;
  */
 final class DbSchemaManager
 {
-    public function __construct(private ConnectionInterface $db)
+    public function __construct(private readonly ConnectionInterface $db)
     {
     }
 
