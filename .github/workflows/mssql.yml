@@ -53,6 +53,11 @@ jobs:
         include:
           - php: 8.4
             mssql:
+              server: 2017-latest
+              odbc-version: ''
+              flag: "-C"
+          - php: 8.4
+            mssql:
               server: 2019-latest
               odbc-version: 18
               flag: "-C"
