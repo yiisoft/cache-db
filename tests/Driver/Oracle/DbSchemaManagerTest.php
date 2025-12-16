@@ -15,9 +15,6 @@ use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
  */
 final class DbSchemaManagerTest extends AbstractDbSchemaManagerTest
 {
-    /**
-     * @throws Throwable
-     */
     protected function setup(): void
     {
         // create connection dbms-specific

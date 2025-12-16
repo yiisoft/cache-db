@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Common;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use Yiisoft\Cache\Db\DbCache;
@@ -40,14 +41,7 @@ abstract class AbstractDbSchemaManagerTest extends TestCase
         unset($this->db, $this->dbSchemaManager);
     }
 
-    /**
-     * @dataProvider tableNameProvider
-     *
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
+    #[DataProvider('tableNameProvider')]
     public function testEnsureTableAndDropTable(string $table): void
     {
         $this->dbSchemaManager->ensureTable($table);
@@ -59,14 +53,7 @@ abstract class AbstractDbSchemaManagerTest extends TestCase
         $this->assertNull($this->db->getTableSchema($table, true));
     }
 
-    /**
-     * @dataProvider tableNameProvider
-     *
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
+    #[DataProvider('tableNameProvider')]
     public function testEnsureTableExist(string $table): void
     {
         $this->assertNull($this->db->getTableSchema($table, true));
@@ -84,14 +71,7 @@ abstract class AbstractDbSchemaManagerTest extends TestCase
         $this->assertNull($this->db->getTableSchema($table, true));
     }
 
-    /**
-     * @dataProvider tableNameProvider
-     *
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
+    #[DataProvider('tableNameProvider')]
     public function testVerifyTableIndexes(string $table): void
     {
         $dbCache = new DbCache($this->db, $table, 1_000_000);
@@ -112,14 +92,7 @@ abstract class AbstractDbSchemaManagerTest extends TestCase
         $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }
 
-    /**
-     * @dataProvider tableNameProvider
-     *
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
+    #[DataProvider('tableNameProvider')]
     public function testVerifyTableStructure(string $table): void
     {
         $dbCache = new DbCache($this->db, $table, 1_000_000);

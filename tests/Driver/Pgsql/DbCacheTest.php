@@ -20,12 +20,6 @@ final class DbCacheTest extends AbstractDbCacheTest
 {
     protected string $tableWithPrefix = 'pgsql_cache';
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
     protected function setUp(): void
     {
         // create connection dbms-specific

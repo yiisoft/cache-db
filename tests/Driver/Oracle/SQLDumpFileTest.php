@@ -15,9 +15,6 @@ use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
  */
 final class SQLDumpFileTest extends AbstractSQLDumpFileTest
 {
-    /**
-     * @throws Throwable
-     */
     protected function setUp(): void
     {
         // create connection dbms-specific

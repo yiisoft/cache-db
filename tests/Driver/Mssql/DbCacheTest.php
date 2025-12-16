@@ -18,12 +18,6 @@ use Yiisoft\Db\Exception\NotSupportedException;
  */
 final class DbCacheTest extends AbstractDbCacheTest
 {
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
     protected function setUp(): void
     {
         // create connection dbms-specific

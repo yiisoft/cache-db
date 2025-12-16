@@ -39,12 +39,6 @@ abstract class AbstractSQLDumpFileTest extends TestCase
         unset($this->db, $this->driverName);
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
     public function testEnsureTableAndDropTable(): void
     {
         $this->loadFromSQLDumpFile(dirname(__DIR__, 2) . "/sql/$this->driverName-up.sql");
@@ -56,12 +50,6 @@ abstract class AbstractSQLDumpFileTest extends TestCase
         $this->assertNull($this->db->getTableSchema('{{%yii_cache}}', true));
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
     public function testVerifyTableIndexes(): void
     {
         $dbCache = new DbCache($this->db, gcProbability: 1_000_000);
@@ -82,12 +70,6 @@ abstract class AbstractSQLDumpFileTest extends TestCase
         $this->assertNull($this->db->getTableSchema($dbCache->getTable(), true));
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws NotSupportedException
-     * @throws Throwable
-     */
     public function testVerifyTableStructure(): void
     {
         $dbCache = new DbCache($this->db, gcProbability: 1_000_000);
@@ -114,10 +96,6 @@ abstract class AbstractSQLDumpFileTest extends TestCase
 
     /**
      * Loads the fixture into the database.
-     *
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws Throwable
      */
     private function loadFromSQLDumpFile(string $fixture): void
     {

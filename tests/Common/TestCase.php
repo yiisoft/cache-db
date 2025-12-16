@@ -23,12 +23,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected string $table = '{{%yii_cache}}';
     protected DbSchemaManager $dbSchemaManager;
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws Throwable
-     * @throws NotSupportedException
-     */
     protected function setup(): void
     {
         // create db cache
@@ -41,11 +35,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $this->dbSchemaManager->ensureTable();
     }
 
-    /**
-     * @throws Exception
-     * @throws InvalidConfigException
-     * @throws Throwable
-     */
     protected function tearDown(): void
     {
         // drop table
