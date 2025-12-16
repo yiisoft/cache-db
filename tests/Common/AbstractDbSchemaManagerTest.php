@@ -6,14 +6,10 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Throwable;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Cache\Db\DbSchemaManager;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Constant\ColumnType;
-use Yiisoft\Db\Exception\Exception;
-use Yiisoft\Db\Exception\InvalidConfigException;
-use Yiisoft\Db\Exception\NotSupportedException;
 
 /**
  * @group Mssql

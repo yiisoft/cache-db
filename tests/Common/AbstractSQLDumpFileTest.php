@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Yiisoft\Cache\Db\Tests\Common;
 
 use PHPUnit\Framework\TestCase;
-use Throwable;
 use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Constant\ColumnType;
-use Yiisoft\Db\Exception\Exception;
-use Yiisoft\Db\Exception\InvalidConfigException;
-use Yiisoft\Db\Exception\NotSupportedException;
 
 /**
  * @group Mssql

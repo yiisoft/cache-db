@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
-use Throwable;
 use Yiisoft\Cache\Db\Tests\Common\AbstractDbSchemaManagerTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
 
