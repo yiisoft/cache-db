@@ -184,7 +184,7 @@ abstract class AbstractDbCacheTest extends TestCase
     public function testGetMultiple(): void
     {
         $data = $this->getDataProviderData();
-        $keys = array_map('strval', array_keys($data));
+        $keys = array_map(strval(...), array_keys($data));
         $this->dbCache->setMultiple($data);
 
         $this->assertSameExceptObject($data, $this->dbCache->getMultiple($keys));
@@ -196,7 +196,7 @@ abstract class AbstractDbCacheTest extends TestCase
     public function testDeleteMultiple(): void
     {
         $data = $this->getDataProviderData();
-        $keys = array_map('strval', array_keys($data));
+        $keys = array_map(strval(...), array_keys($data));
         $this->dbCache->setMultiple($data);
 
         $this->assertSameExceptObject($data, $this->dbCache->getMultiple($keys));
