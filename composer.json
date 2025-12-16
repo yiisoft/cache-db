@@ -43,7 +43,7 @@
         "maglnet/composer-require-checker": "^4.7.1",
         "phpunit/phpunit": "^10.5.60",
         "rector/rector": "^2.2.14",
-        "roave/infection-static-analysis-plugin": "^1.35 || ^1.35",
+        "roave/infection-static-analysis-plugin": "^1.35",
         "spatie/phpunit-watcher": "^1.24",
         "vimeo/psalm": "^5.26.1 || ^6.13.1",
         "yiisoft/cache": "^3.2",
