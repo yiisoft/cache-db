@@ -1,5 +1,9 @@
 # Yii Cache Library - DB Handler Change Log
 
+## 1.1.1 under development
+
+- no changes in this release.
+
 ## 1.1.0 December 17, 2025
 
 - Chg #88: Bump supported version of `yiisoft/db` to `^2.0` (@batyrmastyr)
