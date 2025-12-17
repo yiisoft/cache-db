@@ -6,4 +6,6 @@
 - Chg #91, #94: Change supported PHP versions to `8.1 - 8.5` (@batyrmastyr)
 - Enh #95: Mark `DbSchemaManager::$db` property as readonly (@batyrmastyr)
 
-1.0.0 May 09, 2023
+## 1.0.0 May 09, 2023
+
+- Initial release.

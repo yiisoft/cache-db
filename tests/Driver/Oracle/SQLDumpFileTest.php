@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Cache\Db\Tests\Driver\Oracle;
 
-use Throwable;
 use Yiisoft\Cache\Db\Tests\Common\AbstractSQLDumpFileTest;
 use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
 
@@ -15,9 +14,6 @@ use Yiisoft\Cache\Db\Tests\Support\OracleFactory;
  */
 final class SQLDumpFileTest extends AbstractSQLDumpFileTest
 {
-    /**
-     * @throws Throwable
-     */
     protected function setUp(): void
     {
         // create connection dbms-specific

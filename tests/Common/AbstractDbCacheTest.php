@@ -7,6 +7,7 @@ namespace Yiisoft\Cache\Db\Tests\Common;
 use ArrayIterator;
 use DateInterval;
 use IteratorAggregate;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionObject;
 use stdClass;
 use Yiisoft\Cache\Db\DbCache;
@@ -47,11 +48,7 @@ abstract class AbstractDbCacheTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('dataProvider')]
     public function testSet(string $key, mixed $value): void
     {
         for ($i = 0; $i < 2; $i++) {
@@ -59,22 +56,14 @@ abstract class AbstractDbCacheTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider dataProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('dataProvider')]
     public function testGet(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
         $this->assertSameExceptObject($value, $this->dbCache->get($key, 'default'));
     }
 
-    /**
-     * @dataProvider dataProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('dataProvider')]
     public function testValueInCacheCannotBeChanged(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
@@ -96,11 +85,7 @@ abstract class AbstractDbCacheTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider dataProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('dataProvider')]
     public function testHas(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
@@ -113,19 +98,12 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertFalse($this->dbCache->has('not_exists'));
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testGetNonExistent(): void
     {
         $this->assertNull($this->dbCache->get('non_existent_key'));
     }
 
-    /**
-     * @dataProvider dataProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('dataProvider')]
     public function testDelete(string $key, mixed $value): void
     {
         $this->dbCache->set($key, $value);
@@ -135,11 +113,7 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertNull($this->dbCache->get($key));
     }
 
-    /**
-     * @dataProvider dataProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('dataProvider')]
     public function testClear(string $key): void
     {
         /** @psalm-var array $datum */
@@ -162,11 +136,7 @@ abstract class AbstractDbCacheTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderSetMultiple
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('dataProviderSetMultiple')]
     public function testSetMultiple(?int $ttl): void
     {
         $data = $this->getDataProviderData();
@@ -178,9 +148,6 @@ abstract class AbstractDbCacheTest extends TestCase
         }
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testGetMultiple(): void
     {
         $data = $this->getDataProviderData();
@@ -190,9 +157,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertSameExceptObject($data, $this->dbCache->getMultiple($keys));
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testDeleteMultiple(): void
     {
         $data = $this->getDataProviderData();
@@ -207,9 +171,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertSameExceptObject($emptyData, $this->dbCache->getMultiple($keys));
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testZeroAndNegativeTtl(): void
     {
         $this->dbCache->setMultiple(['a' => 1, 'b' => 2]);
@@ -242,9 +203,7 @@ abstract class AbstractDbCacheTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderNormalizeTtl
-     */
+    #[DataProvider('dataProviderNormalizeTtl')]
     public function testNormalizeTtl(mixed $ttl, mixed $expectedResult): void
     {
         $reflection = new ReflectionObject($this->dbCache);
@@ -286,12 +245,7 @@ abstract class AbstractDbCacheTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider iterableProvider
-     *
-     * @throws InvalidArgumentException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('iterableProvider')]
     public function testValuesAsIterable(array $array, iterable $iterable): void
     {
         $this->dbCache->setMultiple($iterable);
@@ -299,9 +253,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertSameExceptObject($array, $this->dbCache->getMultiple(array_keys($array)));
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testSetWithDateIntervalTtl(): void
     {
         $this->dbCache->set('a', 1, new DateInterval('PT1H'));
@@ -311,9 +262,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertSameExceptObject(['b' => 2], $this->dbCache->getMultiple(['b']));
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testDeleteForCacheItemNotExist(): void
     {
         $this->assertNull($this->dbCache->get('key'));
@@ -329,75 +277,48 @@ abstract class AbstractDbCacheTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testGetThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->get($key);
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testSetThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->set($key, 'value');
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testDeleteThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->delete($key);
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testGetMultipleThrowExceptionForInvalidKeys(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->getMultiple([$key]);
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testDeleteMultipleThrowExceptionForInvalidKeys(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->deleteMultiple([$key]);
     }
 
-    /**
-     * @dataProvider invalidKeyProvider
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
+    #[DataProvider('invalidKeyProvider')]
     public function testHasThrowExceptionForInvalidKey(string $key): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->dbCache->has($key);
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testSetThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
@@ -422,9 +343,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertStringContainsString('Unable to update cache data: SQLSTATE', $message);
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testSetThrowExceptionForFailExecuteCommandWithLoggerCustomMessageUpdate(): void
     {
         $cache = $this->createCacheDbFail();
@@ -441,9 +359,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertStringContainsString('Custom message update: ', $message);
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testDeleteThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
@@ -468,9 +383,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertStringContainsString('Unable to delete cache data: SQLSTATE[', $message);
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testDeleteThrowExceptionForFailExecuteCommandWithLoggerCustomMessageDelete(): void
     {
         $cache = $this->createCacheDbFail();
@@ -498,9 +410,6 @@ abstract class AbstractDbCacheTest extends TestCase
         $this->assertCount(1, $logger);
     }
 
-    /**
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
     public function testSetMultipleThrowExceptionForFailExecuteCommand(): void
     {
         $cache = $this->createCacheDbFail();
