@@ -25,6 +25,7 @@ use function serialize;
 use function strpbrk;
 use function time;
 use function unserialize;
+use function is_resource;
 
 /**
  * DbCache stores cache data in a database table.
@@ -48,9 +49,8 @@ final class DbCache implements CacheInterface
     public function __construct(
         private ConnectionInterface $db,
         private string $table = '{{%yii_cache}}',
-        public int $gcProbability = 100
-    ) {
-    }
+        public int $gcProbability = 100,
+    ) {}
 
     /**
      * Gets an instance of a database connection.

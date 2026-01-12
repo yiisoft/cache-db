@@ -15,9 +15,7 @@ use Yiisoft\Db\Exception\NotSupportedException;
  */
 final class DbSchemaManager
 {
-    public function __construct(private readonly ConnectionInterface $db)
-    {
-    }
+    public function __construct(private readonly ConnectionInterface $db) {}
 
     /**
      * Ensures that the cache table exists in the database.

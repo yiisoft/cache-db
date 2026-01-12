@@ -9,6 +9,8 @@ use Yiisoft\Cache\Db\DbCache;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Constant\ColumnType;
 
+use function dirname;
+
 /**
  * @group Mssql
  *
