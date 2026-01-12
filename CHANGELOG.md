@@ -2,7 +2,7 @@
 
 ## 1.1.1 under development
 
-- Enh #99: Explicitly import functions in "use" section (@mspirkov)
+- Enh #99: Explicitly import classes and functions in "use" section (@mspirkov)
 
 ## 1.1.0 December 17, 2025
 
