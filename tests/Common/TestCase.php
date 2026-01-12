@@ -15,7 +15,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected ConnectionInterface $db;
     protected DbCache $dbCache;
-    protected Logger|null $logger = null;
+    protected ?Logger $logger = null;
     protected string $table = '{{%yii_cache}}';
     protected DbSchemaManager $dbSchemaManager;
 
