@@ -13,19 +13,19 @@ use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Throwable;
 use Traversable;
+use Yiisoft\Cache\Serializer\PhpSerializer;
+use Yiisoft\Cache\Serializer\SerializerInterface;
 use Yiisoft\Db\Connection\ConnectionInterface;
 use Yiisoft\Db\Expression\Value\Param;
 use Yiisoft\Db\Query\Query;
 
 use function array_fill_keys;
+use function is_resource;
 use function is_string;
 use function iterator_to_array;
 use function random_int;
-use function serialize;
 use function strpbrk;
 use function time;
-use function unserialize;
-use function is_resource;
 
 /**
  * DbCache stores cache data in a database table.
@@ -38,11 +38,13 @@ final class DbCache implements CacheInterface
 
     private string $loggerMessageDelete = 'Unable to delete cache data: ';
     private string $loggerMessageUpdate = 'Unable to update cache data: ';
+    private readonly SerializerInterface $serializer;
 
     /**
      * @param ConnectionInterface $db The database connection instance.
      * @param string $table The name of the database table to store the cache data. Defaults to "cache".
      * @param int $gcProbability The probability (parts per million) that garbage collection (GC) should
+     * @param SerializerInterface|null $serializer The custom data serializer. Defaults to PhpSerializer
      * be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
      * This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
      */
@@ -50,7 +52,10 @@ final class DbCache implements CacheInterface
         private ConnectionInterface $db,
         private string $table = '{{%yii_cache}}',
         public int $gcProbability = 100,
-    ) {}
+        ?SerializerInterface $serializer = null,
+    ) {
+        $this->serializer = $serializer ?: new PhpSerializer();
+    }
 
     /**
      * Gets an instance of a database connection.
@@ -75,7 +80,7 @@ final class DbCache implements CacheInterface
         /** @var bool|float|int|string|null $value */
         $value = $this->getData($key, ['data'], 'scalar');
 
-        return $value === false ? $default : unserialize((string) $value);
+        return $value === false ? $default : $this->serializer->unserialize((string) $value);
     }
 
     /**
@@ -142,7 +147,7 @@ final class DbCache implements CacheInterface
             }
 
             /** @psalm-var string */
-            $values[$value['id']] = unserialize((string) $value['data']);
+            $values[$value['id']] = $this->serializer->unserialize((string) $value['data']);
         }
 
         /** @psalm-var iterable<string,mixed> */
@@ -289,7 +294,7 @@ final class DbCache implements CacheInterface
     private function buildDataRow(string $id, ?int $ttl, mixed $value, bool $associative): array
     {
         $expire = $this->isInfinityTtl($ttl) ? null : ((int) $ttl + time());
-        $data = new Param(serialize($value), PDO::PARAM_LOB);
+        $data = new Param($this->serializer->serialize($value), PDO::PARAM_LOB);
 
         if ($associative) {
             return ['id' => $id, 'expire' => $expire, 'data' => $data];

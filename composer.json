@@ -34,7 +34,8 @@
         "ext-pdo": "*",
         "psr/log": "^2.0 || ^3.0",
         "psr/simple-cache": "^2.0 || ^3.0",
-        "yiisoft/db": "^2.0"
+        "yiisoft/db": "^2.0",
+        "yiisoft/cache": "^3.2"
     },
     "suggest": {
         "yiisoft/log": "^2.0"
@@ -47,7 +48,6 @@
         "roave/infection-static-analysis-plugin": "^1.35",
         "spatie/phpunit-watcher": "^1.24",
         "vimeo/psalm": "^5.26.1 || ^6.13.1",
-        "yiisoft/cache": "^3.2",
         "yiisoft/log": "^2.2",
         "yiisoft/dummy-provider": "^1.1"
     },
