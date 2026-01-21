@@ -46,9 +46,7 @@ final class DbCache implements CacheInterface
      * be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
      * This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
      */
-    public function __construct(private ConnectionInterface $db, private string $table = '{{%yii_cache}}', public int $gcProbability = 100, private readonly ?SerializerInterface $serializer = new PhpSerializer())
-    {
-    }
+    public function __construct(private ConnectionInterface $db, private string $table = '{{%yii_cache}}', public int $gcProbability = 100, private readonly ?SerializerInterface $serializer = new PhpSerializer()) {}
 
     /**
      * Gets an instance of a database connection.
