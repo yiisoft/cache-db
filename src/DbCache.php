@@ -38,7 +38,6 @@ final class DbCache implements CacheInterface
 
     private string $loggerMessageDelete = 'Unable to delete cache data: ';
     private string $loggerMessageUpdate = 'Unable to update cache data: ';
-    private readonly SerializerInterface $serializer;
 
     /**
      * @param ConnectionInterface $db The database connection instance.
@@ -47,13 +46,8 @@ final class DbCache implements CacheInterface
      * be performed when storing a piece of data in the cache. Defaults to 100, meaning 0.01% chance.
      * This number should be between 0 and 1000000. A value 0 meaning no GC will be performed at all.
      */
-    public function __construct(
-        private ConnectionInterface $db,
-        private string $table = '{{%yii_cache}}',
-        public int $gcProbability = 100,
-        SerializerInterface|null $serializer = null,
-    ) {
-        $this->serializer = $serializer ?? new PhpSerializer();
+    public function __construct(private ConnectionInterface $db, private string $table = '{{%yii_cache}}', public int $gcProbability = 100, private readonly ?SerializerInterface $serializer = new PhpSerializer())
+    {
     }
 
     /**
