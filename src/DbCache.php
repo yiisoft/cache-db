@@ -52,7 +52,7 @@ final class DbCache implements CacheInterface
         private ConnectionInterface $db,
         private string $table = '{{%yii_cache}}',
         public int $gcProbability = 100,
-        SerializerInterface|null $serializer = null,
+        ?SerializerInterface $serializer = null,
     ) {
         $this->serializer = $serializer ?: new PhpSerializer();
     }
