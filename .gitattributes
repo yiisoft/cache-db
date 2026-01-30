@@ -24,6 +24,8 @@
 
 # Exclude development and metadata files from distribution archive
 *               export-ignore
+/sql/          -export-ignore
+/sql/**        -export-ignore
 /src/          -export-ignore
 /src/**        -export-ignore
 /composer.json -export-ignore
