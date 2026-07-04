@@ -78,7 +78,7 @@ jobs:
 
     steps:
       - name: Checkout.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Install PHP with extensions.
         uses: shivammathur/setup-php@v2
@@ -91,7 +91,7 @@ jobs:
       - name: Update composer.
         run: composer self-update
 
-      - uses: "ramsey/composer-install@v3"
+      - uses: "ramsey/composer-install@v4"
         with:
           composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
@@ -103,7 +103,7 @@ jobs:
 
       - name: Upload coverage to Codecov.
         if: matrix.php == '8.5'
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
