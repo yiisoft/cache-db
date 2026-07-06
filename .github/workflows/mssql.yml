@@ -22,6 +22,9 @@ on:
 
 name: mssql
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -69,7 +72,7 @@ jobs:
 
     services:
       mssql:
-        image: mcr.microsoft.com/mssql/server:${{ matrix.mssql.server }}
+        image: mcr.microsoft.com/mssql/server:${{ matrix.mssql.server }} # zizmor: ignore[unpinned-images]
         env:
           MSSQL_SA_PASSWORD: YourStrong!Passw0rd
           ACCEPT_EULA: Y
@@ -80,7 +83,9 @@ jobs:
 
     steps:
       - name: Checkout.
-        uses: actions/checkout@v7
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+        with:
+          persist-credentials: false
 
       - name: Install ODBC driver.
         run: |
@@ -91,7 +96,7 @@ jobs:
         run: docker exec -i mssql /opt/mssql-tools${{ matrix.mssql.odbc-version }}/bin/sqlcmd ${{ matrix.mssql.flag }} -S localhost -U SA -P 'YourStrong!Passw0rd' -Q 'CREATE DATABASE yiitest'
 
       - name: Install PHP with extensions.
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.extensions }}
@@ -102,7 +107,7 @@ jobs:
       - name: Update composer.
         run: composer self-update
 
-      - uses: "ramsey/composer-install@v4"
+      - uses: "ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f"
         with:
           composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
@@ -114,7 +119,7 @@ jobs:
 
       - name: Upload coverage to Codecov.
         if: matrix.php == '8.4'
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
