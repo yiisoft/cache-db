@@ -1,3 +1,5 @@
+name: Composer require checker
+
 on:
   pull_request:
     paths-ignore:
@@ -21,8 +23,6 @@ on:
       - 'infection.json.dist'
       - 'phpunit.xml.dist'
       - 'psalm.xml'
-
-name: Composer require checker
 
 permissions:
   contents: read

@@ -1,3 +1,5 @@
+name: mutation test
+
 on:
   pull_request:
     paths-ignore:
@@ -17,8 +19,6 @@ on:
       - '.gitignore'
       - '.gitattributes'
       - 'psalm.xml'
-
-name: mutation test
 
 permissions:
   contents: read
@@ -56,13 +56,13 @@ jobs:
         options: --name=postgres --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Checkout.
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
-      - name: Install PHP with extensions.
-        uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45
+      - name: Install PHP with extensions
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: "${{ matrix.php }}"
           extensions: ${{ env.extensions }}
@@ -70,17 +70,15 @@ jobs:
           coverage: pcov
           tools: composer:v2
 
-      - name: Update composer.
-        run: composer self-update
-
-      - uses: "ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f"
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
         with:
           composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
-      - name: Install db-pgsql.
+      - name: Install db-pgsql
         run: composer require yiisoft/db-pgsql --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
-      - name: Run infection.
+      - name: Run infection
         run: |
           vendor/bin/roave-infection-static-analysis-plugin --threads=2 --ignore-msi-with-no-mutations --test-framework-options="--testsuite=Pgsql"
         env:

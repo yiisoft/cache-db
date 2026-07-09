@@ -1,3 +1,5 @@
+name: sqlite
+
 on:
   pull_request:
     paths-ignore:
@@ -19,8 +21,6 @@ on:
       - '.gitattributes'
       - 'infection.json.dist'
       - 'psalm.xml'
-
-name: sqlite
 
 permissions:
   contents: read
@@ -53,13 +53,13 @@ jobs:
           - 8.5
 
     steps:
-      - name: Checkout.
-        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
-      - name: Install PHP with extensions.
-        uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45
+      - name: Install PHP with extensions
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.extensions }}
@@ -67,22 +67,20 @@ jobs:
           coverage: pcov
           tools: composer:v2
 
-      - name: Update composer.
-        run: composer self-update
-
-      - uses: "ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f"
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
         with:
           composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
-      - name: Install db-sqlite.
+      - name: Install db-sqlite
         run: composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
-      - name: Run tests with phpunit.
+      - name: Run tests with phpunit
         run: vendor/bin/phpunit --testsuite=Sqlite --coverage-clover=coverage.xml --colors=always
 
-      - name: Upload coverage to Codecov.
+      - name: Upload coverage to Codecov
         if: matrix.php == '8.5'
-        uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
