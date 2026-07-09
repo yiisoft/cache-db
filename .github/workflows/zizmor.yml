@@ -6,6 +6,8 @@ on:
       - '.github/**.yml'
       - '.github/**.yaml'
   push:
+    branches:
+      - master
     paths: *paths
 
 permissions:
