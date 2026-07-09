@@ -1,3 +1,5 @@
+name: static analysis
+
 on:
   pull_request:
     paths-ignore:
@@ -19,8 +21,6 @@ on:
       - '.gitattributes'
       - 'infection.json.dist'
       - 'phpunit.xml.dist'
-
-name: static analysis
 
 permissions:
   contents: read
@@ -49,27 +49,25 @@ jobs:
           - 8.5
 
     steps:
-      - name: Checkout.
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
-      - name: Install PHP with extensions.
-        uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45
+      - name: Install PHP with extensions
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2, cs2pr
           coverage: pcov
 
-      - name: Update composer.
-        run: composer self-update
-
-      - uses: "ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f"
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
         with:
           composer-options: "--prefer-dist --no-interaction --no-progress --ansi"
 
-      - name: Install dependencies with composer.
+      - name: Install dependencies with composer
         run: composer require yiisoft/db-sqlite --prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi
 
-      - name: Static analysis,
+      - name: Static analysis
         run: vendor/bin/psalm --shepherd --stats --output-format=checkstyle --php-version=${{ matrix.php }} | cs2pr --graceful-warnings --colorize

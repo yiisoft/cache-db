@@ -1,3 +1,5 @@
+name: backwards compatibility
+
 on:
   pull_request:
     paths-ignore:
@@ -19,8 +21,6 @@ on:
       - '.gitattributes'
       - 'infection.json.dist'
       - 'psalm.xml'
-
-name: backwards compatibility
 
 permissions:
   contents: read
